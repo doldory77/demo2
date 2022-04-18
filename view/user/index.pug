@@ -1,0 +1,60 @@
+mixin xx
+    ul
+        li foo
+        li bar
+        li baz
+
+mixin pet(name)
+    li.pet=name
+
+mixin article(title)
+    .article
+        .article-wrapper
+            h1=title
+            if block
+                block
+            else
+                p No content provided
+
+
+doctype html 
+html(lang='ko')
+    head
+        title Pug
+        script(type='text/javascript').
+            var foo = true;
+            var bar = function(a, b){ console.log(a, b) };
+            if (foo) {
+                bar(1+5)
+            }
+        body
+            h1 Pug - node template engine
+            #container.col
+                p You are amazing
+                p
+                    | Pug is a terse and simple
+                    | templating language with a
+                    | strong focus on performance
+                    | and powerful features.
+                P My Name is #{name} and Email is #{email}
+                - for (var x=0; x<3; x++)
+                    li item
+                - var list = ['Uno', 'Dos', 'Tres', 'Cuatro', 'Cinco', 'Seis']
+                    each item in list
+                        li #{item}
+                ul
+                    each val, index in {1:'one', 2:'two', 3:'three'}
+                        li #{index} : #{val}
+
+
+
+                +xx
+                +xx                        
+                ul
+                    +pet('cat')
+                    +pet('dog')
+                    +pet('pig')
+                +article('Hello world')
+                +article('Hello world')
+                    p This is my
+                    p Amazing article
