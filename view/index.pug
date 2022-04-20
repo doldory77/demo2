@@ -7,51 +7,19 @@ html(lang='ko')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
         
         body
-            #header header
-            #lnb
-                ul
-                    - for (let i=0; i<4; i++)
-                        li.mainmenu menu #{i}
-                            ul.depth1
-                                - for (let j=0; j<3; j++)
-                                    li.submenu submenu #{i}-#{j}
             #container
-                h1.titl1 국제시장
-                p.titl2(style='max-width:700px')
-                    | 좋은 타이포그래피를 통해 웹은 더욱 아름답고, 빠르며, 
-                    | 누구나 참여할 수 있는 공간이 될 수 있습니다. 
-                    | Google Fonts는 이 사이트에 수록된 오픈 소스 한글 폰트를 
-                    | 머신 러닝에 기반을 둔 최적화 기술을 통해 시범적으로 제공합니다.
+                header#header
+                nav#topMenu
+                    ul 
+                        li
+                            a.menu(href='#') MENU 1
+                        li
+                            a.menu(href='#') MENU 2
+                        li
+                            a.menu(href='#') MENU 3
+                        li
+                            a.menu(href='#') MENU 4
 
-            #slide.slide
-                .slide-title 슬라이드
-                ul
-                    li 슬라이드 메뉴
-                    li 슬라이드 메뉴
-                    li 슬라이드 메뉴
-                    li 슬라이드 메뉴
-                    li 슬라이드 메뉴
-                    li 슬라이드 메뉴
+                main#main
 
-            script(type='text/javascript').
-                const lnb = $('#lnb').offset().top;
-                $(window).scroll(function(){
-                    const window = $(this).scrollTop();
-                    if (window / lnb * 100 >= 70) {
-                        $('#header').addClass('back');
-                    } else {
-                        $('#header').removeClass('back');
-                    }
-                    if(lnb <= window) {
-                        $('#lnb').addClass('fixed');
-                    } else {
-                        $('#lnb').removeClass('fixed');
-                    }
-                })
-                $('.submenu').click(function(){
-                    if ($("#slide").hasClass('on')) {
-                        $("#slide").removeClass('on');
-                    } else {
-                        $("#slide").addClass('on');
-                    }    
-                });
+                include footer.pug
