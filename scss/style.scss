@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Nanum+Pen+Script:400');
+@import url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800');
+
+$color: #000;
+$size: 1280px;
+$boldWeight: 600;
+$font: "";
+
+@import "reset.scss";
+
+@mixin titl($size: 3.2rem, $font: 'Nanum Gothic') {
+    font-size: $size; 
+    font-family: $font;
+    padding: 5px;
+}
+html { font-size: 62.5%; }
+body { font-size: 1.6rem; }
+.titl1 {
+    @include titl($size: 4.2rem);
+    font-weight: 800;
+}
+.titl2 { 
+    @include titl(3.2rem, 'Nanum Pen Script');
+    line-height: 5.2rem;
+}
+
+h1 { color: $color; }
+p { color: $color; }
+
+.bg { background-color: $color; }
