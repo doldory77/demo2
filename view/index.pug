@@ -13,13 +13,45 @@ html(lang='ko')
                     ul 
                         li
                             a.menu(href='#') MENU 1
+                            ul#subMenu1
+                                li
+                                    a.subMenu(href='#') SUB-MENU 1
+                                li
+                                    a.subMenu(href='#') SUB-MENU 2
+                                li
+                                    a.subMenu(href='#') SUB-MENU 3
+                                li
+                                    a.subMenu(href='#') SUB-MENU 4
+
                         li
                             a.menu(href='#') MENU 2
                         li
                             a.menu(href='#') MENU 3
                         li
                             a.menu(href='#') MENU 4
+                            ul#subMenu1
+                                li
+                                    a.subMenu(href='#') SUB-MENU 1
+                                li
+                                    a.subMenu(href='#') SUB-MENU 2
+                                li
+                                    a.subMenu(href='#') SUB-MENU 3
+                                li
+                                    a.subMenu(href='#') SUB-MENU 4
 
                 main#main
 
                 include footer.pug
+
+            script(type='text/javascript').
+                const menuPosition = $('#topMenu').offset().top;
+                $(window).scroll(() => {
+                    const windowPosition = $(window).scrollTop();
+                    if (menuPosition <= windowPosition) {
+                        $('#topMenu').addClass('fixed');
+                        $('#topMenu > ul').addClass('fixed-1');
+                    } else {
+                        $('#topMenu').removeClass('fixed');
+                        $('#topMenu > ul').removeClass('fixed-1');
+                    }
+                });

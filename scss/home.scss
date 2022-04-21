@@ -1,6 +1,7 @@
 #container {
     width: 80%;
     margin: 0 auto;
+    position: relative;
 
     #header {
         width: 100%;
@@ -8,27 +9,73 @@
         border: 1px dotted #eee
     }
     #topMenu {
-        background-color: darkgray;
-        ul {
+        > ul {
+            background-color: darkgray;
             display: flex;
             justify-content: right;
             align-items: center;
-            li {
+            position: relative;
+            > li {
                 &:nth-child(n+2) {
                     margin-left: 10px;
                 }
+                &:hover {
+                    #subMenu1 {
+                        display: block;
+                    }
+                }
             }
         }
+        #subMenu1 {
+            display: none;
+            background-color: lightgray;
+            position: absolute;
+            margin-left: -45px;
+            box-shadow: 2px 2px 3px 1px rgb(163, 154, 154);
+        }
     }
+    #main {
+        height: 1500px;
+    }
+
     
 }
-.menu {
+@mixin menu() {
     display: block;
     padding: 8px;
     color: #fff;
     font-size: 1.8rem;
     cursor: pointer;
     text-decoration: none;
+    &:hover {
+        color: #000;
+    }
+}
+.menu {
+    @include menu();
+}
+.subMenu {
+    @include menu();
+    color: #000;
+    &:hover {
+        color: #fff;
+    }
+}
+.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+.fixed-1 {
+    width: 80%;
+    margin: 0 auto;
+}
+.fixed-2 {
+    width: 80%;
+    margin: 0 auto;
+    position: fixed;
+    bottom: 0;
 }
 
 // #header {

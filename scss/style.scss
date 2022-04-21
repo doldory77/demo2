@@ -14,7 +14,7 @@ $font: "";
     padding: 5px;
 }
 html { font-size: 62.5%; }
-body { font-size: 1.6rem; }
+body { font-size: 1.6rem; font-family: 'Nanum Gothic'; }
 .titl1 {
     @include titl($size: 4.2rem);
     font-weight: 800;
@@ -28,3 +28,36 @@ h1 { color: $color; }
 p { color: $color; }
 
 .bg { background-color: $color; }
+
+#footer {
+    background-color: darkgray;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    p {
+        font-size: 1.4rem;
+        line-height: 1.8rem;
+        font-weight: 800;
+        color: #fff;
+        &:nth-child(1) {
+            font-size: 1.4rem;
+            padding-bottom: 5px;
+            a {
+                padding: 5px 5px 5px 0;
+                text-decoration: none;
+                &:nth-child(2) {
+                    padding-left: 5px;
+                }
+            }
+        }
+        
+    }
+    #findload {
+        text-decoration: none;
+        border: 2px solid #fff;
+        padding: 8px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+}
