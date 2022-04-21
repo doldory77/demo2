@@ -2,12 +2,35 @@ doctype html
 html(lang='ko')
     head
         title home
+        meta(name='viewport', content='width=device-width,initial-scale=1')
         link(href='css/style.css', rel='stylesheet')
         link(href='css/home.css', rel='stylesheet')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
         
         body
             #container
+                #mMenu
+                    a.menu#mMenuBtn(href='javascript:void(0);') M-MENU
+                    #mMenuBody
+                        ul
+                            li
+                                a.subMenu m-menu1
+                                ul
+                                    li
+                                        a.subMenu1 m-menu1-1
+                                    li
+                                        a.subMenu1 m-menu1-2
+                                    li
+                                        a.subMenu1 m-menu1-3
+                            li
+                                a.subMenu m-menu2
+                                ul
+                                    li
+                                        a.subMenu1 m-menu2-1
+                                    li
+                                        a.subMenu1 m-menu2-2
+                                    li
+                                        a.subMenu1 m-menu2-3
                 header#header
                 nav#topMenu
                     ul 
@@ -50,8 +73,18 @@ html(lang='ko')
                     if (menuPosition <= windowPosition) {
                         $('#topMenu').addClass('fixed');
                         $('#topMenu > ul').addClass('fixed-1');
+                        //- $('#mMenu').addClass('fixed');
                     } else {
                         $('#topMenu').removeClass('fixed');
                         $('#topMenu > ul').removeClass('fixed-1');
+                        //- $('#mMenu').removeClass('fixed');
                     }
                 });
+
+                $('#mMenuBtn').click(() => {
+                    if ($('#mMenuBody').hasClass('mMenuOn')) {
+                        $('#mMenuBody').removeClass('mMenuOn');
+                    } else {
+                        $('#mMenuBody').addClass('mMenuOn');
+                    }
+                })

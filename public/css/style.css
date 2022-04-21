@@ -104,13 +104,15 @@ p {
 }
 #footer p:nth-child(1) {
   font-size: 1.4rem;
-  padding-bottom: 5px;
 }
 #footer p:nth-child(1) a {
   padding: 5px 5px 5px 0;
   text-decoration: none;
 }
-#footer p:nth-child(1) a:nth-child(2) {
+#footer p:nth-child(1) a:link, #footer p:nth-child(1) a:visited, #footer p:nth-child(1) a:hover {
+  color: #fff;
+}
+#footer p:nth-child(1) a:nth-of-type(2) {
   padding-left: 5px;
 }
 #footer #findload {
