@@ -92,9 +92,9 @@ CREATE TABLE board(
 /* Table Name: 파일(이미지,문서 등) */
 /**********************************/
 CREATE TABLE file(
-		src_tbl_nm                    		VARCHAR(30)		 NULL  COMMENT '소스테이블명',
-		rf_key                        		INT(4)		 NULL  COMMENT '키',
-		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT COMMENT '일련번호',
+		src_tbl_nm                    		VARCHAR(30)		 NOT NULL  COMMENT '소스테이블명',
+		rf_key                        		INT(4)		 NOT NULL  COMMENT '키',
+		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
 		file_kind_cd                  		CHAR(4)		 NULL  COMMENT '파일유형코드'
 ) COMMENT='파일(이미지,문서 등)';
 
@@ -102,7 +102,7 @@ CREATE TABLE file(
 /* Table Name: 주소 */
 /**********************************/
 CREATE TABLE address(
-		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT COMMENT '일련번호',
+		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
 		mb_seq_no                     		MEDIUMINT(4)		 NULL  COMMENT '회원일련번호',
 		id                            		VARCHAR(30)		 NULL  COMMENT '아이디',
 		postal_cd                     		VARCHAR(10)		 NULL  COMMENT '우편번호',
@@ -114,7 +114,7 @@ CREATE TABLE address(
 /* Table Name: 연락처 */
 /**********************************/
 CREATE TABLE contact(
-		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT COMMENT '일련번호',
+		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
 		mb_seq_no                     		MEDIUMINT(4)		 NULL  COMMENT '회원일련번호',
 		kind_cd                       		CHAR(4)		 NULL  COMMENT '연락처종류코드',
 		contact_no                    		VARCHAR(20)		 NULL  COMMENT '연락번호',
@@ -134,8 +134,8 @@ CREATE TABLE church_dept_member(
 /* Table Name: 교회역사 */
 /**********************************/
 CREATE TABLE church_history(
-		seq_no                        		INT(4)		 NULL  AUTO_INCREMENT COMMENT '일련번호',
-		dt                            		MEDIUMINT(8)		 NULL  COMMENT '날짜',
+		seq_no                        		INT(4)		 NOT NULL  AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
+		dt                            		CHAR(8)		 NULL  COMMENT '날짜',
 		content                       		VARCHAR(300)		 NULL  COMMENT '내용'
 ) COMMENT='교회역사';
 
@@ -144,7 +144,7 @@ CREATE TABLE church_history(
 /**********************************/
 CREATE TABLE link(
 		src_tbl_nm                    		VARCHAR(30)		 NULL  COMMENT '소스테이블명',
-		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT COMMENT '일련번호',
+		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
 		rf_key                        		INT(4)		 NULL  COMMENT '키',
 		link_nm                       		VARCHAR(100)		 NULL  COMMENT '링크명',
 		link_url                      		VARCHAR(100)		 NULL  COMMENT '링크경로'
@@ -155,27 +155,15 @@ ALTER TABLE code ADD CONSTRAINT IDX_code_PK PRIMARY KEY (cd);
 
 ALTER TABLE menu ADD CONSTRAINT IDX_menu_PK PRIMARY KEY (menu_cd);
 
-ALTER TABLE member ADD CONSTRAINT IDX_member_PK PRIMARY KEY (seq_no);
 ALTER TABLE member ADD CONSTRAINT IDX_member_1 UNIQUE (id);
 
 ALTER TABLE pastor ADD CONSTRAINT IDX_pastor_PK PRIMARY KEY (mb_seq_no);
 
-ALTER TABLE media ADD CONSTRAINT IDX_media_PK PRIMARY KEY (seq_no);
-
-ALTER TABLE church_department ADD CONSTRAINT IDX_church_department_PK PRIMARY KEY (seq_no);
-
-ALTER TABLE board ADD CONSTRAINT IDX_board_PK PRIMARY KEY (board_no);
-
-ALTER TABLE file ADD CONSTRAINT IDX_file_PK PRIMARY KEY (src_tbl_nm, rf_key, seq_no);
-
-ALTER TABLE address ADD CONSTRAINT IDX_address_PK PRIMARY KEY (seq_no);
-
-ALTER TABLE contact ADD CONSTRAINT IDX_contact_PK PRIMARY KEY (seq_no);
+ALTER TABLE file ADD CONSTRAINT IDX_file_1 UNIQUE (src_tbl_nm, rf_key);
 
 ALTER TABLE church_dept_member ADD CONSTRAINT IDX_church_dept_member_PK PRIMARY KEY (mb_seq_no, dept_seq_no);
 
-ALTER TABLE church_history ADD CONSTRAINT IDX_church_history_PK PRIMARY KEY (seq_no);
+ALTER TABLE link ADD CONSTRAINT IDX_link_1 UNIQUE (src_tbl_nm, rf_key);
 
-ALTER TABLE link ADD CONSTRAINT IDX_link_PK PRIMARY KEY (src_tbl_nm, seq_no, rf_key);
-
+show tables;
 
