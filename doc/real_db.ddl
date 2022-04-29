@@ -250,6 +250,10 @@ insert into code (cd, parent_cd, cd_nm) value ('0804', '0800', '새가족 소개
 insert into code (cd, parent_cd, cd_nm) value ('0805', '0800', '칼럼');
 insert into code (cd, parent_cd, cd_nm) value ('0806', '0800', '부서용');
 
+insert into code (cd, parent_cd, cd_nm) value ('0900', '0000', '남여구분코드');
+insert into code (cd, parent_cd, cd_nm) value ('0901', '0900', '남');
+insert into code (cd, parent_cd, cd_nm) value ('0902', '0900', '여');
+
 /* 메뉴 */
 insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0100', '0000', '교회소개');
 insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0101', '0100', '인사말');
@@ -276,3 +280,35 @@ insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0501', '0500', '어
 insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0502', '0500', '청소년부');
 insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0503', '0500', '청년부');
 
+
+select *
+from menu 
+where 1=1 
+	and parent_menu_cd = '0000' 
+order by ord_no;
+
+CREATE TABLE member(
+		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
+		id                            		VARCHAR(30)		 NULL  COMMENT '아이디',
+		name                          		VARCHAR(20)		 NOT NULL COMMENT '이름',
+		passwd                        		VARCHAR(80)		 NOT NULL COMMENT '비밀번호',
+		jikbun_cd                     		CHAR(4)		 NULL  COMMENT '직분',
+		email                         		VARCHAR(30)		 NULL  COMMENT '이메일',
+		reg_dt                        		VARCHAR(8)		 NULL  COMMENT '등록일자',
+		del_yn                        		CHAR(1)		 DEFAULT 'N'		 NULL  COMMENT '삭제여부',
+		mw_cd                         		CHAR(4)		 NULL  COMMENT '남여구분코드'
+) COMMENT='회원(성도)';
+
+insert into member (
+	id,
+	name,
+	passwd,
+	jikbun_cd,
+	mw_cd
+) values (
+	'doldory',
+	'전용재',
+	password('1234'),
+	'0304',
+	'0901'
+);
