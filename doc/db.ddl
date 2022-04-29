@@ -5,6 +5,7 @@ CREATE TABLE code(
 		cd                            		CHAR(4)		 NULL  COMMENT '코드',
 		parent_cd                     		CHAR(4)		 NULL  COMMENT '부모코드',
 		cd_nm                         		VARCHAR(50)		 NULL  COMMENT '코드명',
+		ord_no                        		TINYINT(4)		 DEFAULT 0		 NULL  COMMENT '정렬순번',
 		attr1                         		VARCHAR(50)		 NULL  COMMENT '속성1'
 ) COMMENT='코드';
 
@@ -17,6 +18,7 @@ CREATE TABLE menu(
 		menu_nm                       		VARCHAR(50)		 NULL  COMMENT '메뉴명',
 		url                           		VARCHAR(80)		 NULL  COMMENT '웹경로',
 		level                         		TINYINT(1)		 NULL  COMMENT '레벨',
+		ord_no                        		TINYINT(4)		 DEFAULT 0		 NULL  COMMENT '정렬순번',
 		attr1                         		VARCHAR(50)		 NULL  COMMENT '속성1'
 ) COMMENT='메뉴';
 
@@ -101,7 +103,7 @@ CREATE TABLE file(
 /**********************************/
 CREATE TABLE address(
 		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT COMMENT '일련번호',
-		mb_seq_no                     		MEDIUMINT(4)		 NULL  COMMENT '회원일련번호',
+		mb_seq_no                     		INT(4)		 NULL  COMMENT '회원일련번호',
 		id                            		VARCHAR(30)		 NULL  COMMENT '아이디',
 		postal_cd                     		VARCHAR(10)		 NULL  COMMENT '우편번호',
 		addr                          		VARCHAR(100)		 NULL  COMMENT '주소',
@@ -113,7 +115,7 @@ CREATE TABLE address(
 /**********************************/
 CREATE TABLE contact(
 		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT COMMENT '일련번호',
-		mb_seq_no                     		MEDIUMINT(4)		 NULL  COMMENT '회원일련번호',
+		mb_seq_no                     		INT(4)		 NULL  COMMENT '회원일련번호',
 		kind_cd                       		CHAR(4)		 NULL  COMMENT '연락처종류코드',
 		contact_no                    		VARCHAR(20)		 NULL  COMMENT '연락번호',
 		id                            		VARCHAR(30)		 NULL  COMMENT '아이디'
@@ -147,6 +149,15 @@ CREATE TABLE link(
 		link_nm                       		VARCHAR(100)		 NULL  COMMENT '링크명',
 		link_url                      		VARCHAR(100)		 NULL  COMMENT '링크경로'
 ) COMMENT='링크';
+
+/**********************************/
+/* Table Name: 시스템권한 */
+/**********************************/
+CREATE TABLE sys_auth(
+		mb_seq_no                     		INT(4)		 NULL  COMMENT '회원일련번호',
+		attr1                         		VARCHAR(50)		 NULL  COMMENT '속성1',
+		attr2                         		VARCHAR(100)		 NULL  COMMENT '속성2'
+) COMMENT='시스템권한';
 
 
 ALTER TABLE code ADD CONSTRAINT IDX_code_PK PRIMARY KEY (cd);
@@ -192,4 +203,7 @@ ALTER TABLE church_history ADD CONSTRAINT IDX_church_history_PK PRIMARY KEY (seq
 
 ALTER TABLE link ADD CONSTRAINT IDX_link_PK PRIMARY KEY (src_tbl_nm, seq_no, rf_key);
 ALTER TABLE link ADD CONSTRAINT IDX_link_FK0 FOREIGN KEY (rf_key) REFERENCES media (seq_no);
+
+ALTER TABLE sys_auth ADD CONSTRAINT IDX_sys_auth_PK PRIMARY KEY (mb_seq_no);
+ALTER TABLE sys_auth ADD CONSTRAINT IDX_sys_auth_FK0 FOREIGN KEY (mb_seq_no) REFERENCES member (seq_no);
 

@@ -8,6 +8,7 @@ $font: "";
 $sm: 576px;
 $md: 768px;
 $lg: 992px; 
+$warn: red;
 
 @import "reset.scss";
 
@@ -27,10 +28,7 @@ body { font-size: 1.6rem; font-family: 'Nanum Gothic'; }
     line-height: 5.2rem;
 }
 
-h1 { color: $color; }
-p { color: $color; }
-
-.bg { background-color: $color; }
+.warn { color: $warn; }
 
 #footer {
     background-color: darkgray;

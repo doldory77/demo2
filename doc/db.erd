@@ -1061,7 +1061,7 @@
                             <columnName>mb_seq_no</columnName>
                             <logicalName>회원일련번호</logicalName>
                             <columnType class="net.java.amateras.db.dialect.ColumnType">
-                              <name>MEDIUMINT</name>
+                              <name>INT</name>
                               <logicalName>Integer</logicalName>
                               <supportSize>true</supportSize>
                               <type>4</type>
@@ -1266,6 +1266,98 @@
                     </net.java.amateras.db.visual.model.ForeignKeyModel>
                     <net.java.amateras.db.visual.model.ForeignKeyModel reference="../net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[5]"/>
                     <net.java.amateras.db.visual.model.ForeignKeyModel reference="../../.."/>
+                    <net.java.amateras.db.visual.model.ForeignKeyModel>
+                      <listeners serialization="custom">
+                        <java.beans.PropertyChangeSupport>
+                          <default>
+                            <source class="net.java.amateras.db.visual.model.ForeignKeyModel" reference="../../../.."/>
+                            <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+                          </default>
+                          <null/>
+                        </java.beans.PropertyChangeSupport>
+                      </listeners>
+                      <source class="net.java.amateras.db.visual.model.TableModel">
+                        <listeners serialization="custom">
+                          <java.beans.PropertyChangeSupport>
+                            <default>
+                              <source class="net.java.amateras.db.visual.model.TableModel" reference="../../../.."/>
+                              <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+                            </default>
+                            <null/>
+                          </java.beans.PropertyChangeSupport>
+                        </listeners>
+                        <constraint>
+                          <height>-1</height>
+                          <width>-1</width>
+                          <x>1377</x>
+                          <y>31</y>
+                        </constraint>
+                        <sourceConnections>
+                          <net.java.amateras.db.visual.model.ForeignKeyModel reference="../../.."/>
+                        </sourceConnections>
+                        <targetConnections/>
+                        <error></error>
+                        <linkedPath></linkedPath>
+                        <tableName>sys_auth</tableName>
+                        <logicalName>시스템권한</logicalName>
+                        <description></description>
+                        <columns>
+                          <net.java.amateras.db.visual.model.ColumnModel>
+                            <columnName>mb_seq_no</columnName>
+                            <logicalName>회원일련번호</logicalName>
+                            <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../../../../net.java.amateras.db.visual.model.ForeignKeyModel[2]/source/columns/net.java.amateras.db.visual.model.ColumnModel[2]/columnType"/>
+                            <size>4</size>
+                            <notNull>false</notNull>
+                            <primaryKey>true</primaryKey>
+                            <description></description>
+                            <autoIncrement>false</autoIncrement>
+                            <defaultValue></defaultValue>
+                          </net.java.amateras.db.visual.model.ColumnModel>
+                          <net.java.amateras.db.visual.model.ColumnModel>
+                            <columnName>attr1</columnName>
+                            <logicalName>속성1</logicalName>
+                            <columnType class="net.java.amateras.db.dialect.ColumnType">
+                              <name>VARCHAR</name>
+                              <logicalName>String</logicalName>
+                              <supportSize>true</supportSize>
+                              <type>12</type>
+                            </columnType>
+                            <size>50</size>
+                            <notNull>false</notNull>
+                            <primaryKey>false</primaryKey>
+                            <description></description>
+                            <autoIncrement>false</autoIncrement>
+                            <defaultValue></defaultValue>
+                          </net.java.amateras.db.visual.model.ColumnModel>
+                          <net.java.amateras.db.visual.model.ColumnModel>
+                            <columnName>attr2</columnName>
+                            <logicalName>속성2</logicalName>
+                            <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../net.java.amateras.db.visual.model.ColumnModel[2]/columnType"/>
+                            <size>100</size>
+                            <notNull>false</notNull>
+                            <primaryKey>false</primaryKey>
+                            <description></description>
+                            <autoIncrement>false</autoIncrement>
+                            <defaultValue></defaultValue>
+                          </net.java.amateras.db.visual.model.ColumnModel>
+                        </columns>
+                        <indices/>
+                        <backgroundColor>
+                          <red>255</red>
+                          <green>255</green>
+                          <blue>206</blue>
+                        </backgroundColor>
+                        <sql></sql>
+                      </source>
+                      <target class="net.java.amateras.db.visual.model.TableModel" reference="../../.."/>
+                      <foreignKeyName>sys_auth_FK_1</foreignKeyName>
+                      <references>
+                        <entry>
+                          <net.java.amateras.db.visual.model.ColumnModel reference="../../../../net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[5]/references/entry/net.java.amateras.db.visual.model.ColumnModel"/>
+                          <net.java.amateras.db.visual.model.ColumnModel reference="../../../source/columns/net.java.amateras.db.visual.model.ColumnModel"/>
+                        </entry>
+                      </references>
+                    </net.java.amateras.db.visual.model.ForeignKeyModel>
                   </targetConnections>
                   <error></error>
                   <linkedPath></linkedPath>
@@ -1488,6 +1580,22 @@
           <defaultValue></defaultValue>
         </net.java.amateras.db.visual.model.ColumnModel>
         <net.java.amateras.db.visual.model.ColumnModel>
+          <columnName>ord_no</columnName>
+          <logicalName>정렬순번</logicalName>
+          <columnType class="net.java.amateras.db.dialect.ColumnType">
+            <name>TINYINT</name>
+            <logicalName>Integer</logicalName>
+            <supportSize>true</supportSize>
+            <type>-6</type>
+          </columnType>
+          <size>4</size>
+          <notNull>false</notNull>
+          <primaryKey>false</primaryKey>
+          <description></description>
+          <autoIncrement>false</autoIncrement>
+          <defaultValue>0</defaultValue>
+        </net.java.amateras.db.visual.model.ColumnModel>
+        <net.java.amateras.db.visual.model.ColumnModel>
           <columnName>attr1</columnName>
           <logicalName>속성1</logicalName>
           <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../../targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel/target/columns/net.java.amateras.db.visual.model.ColumnModel[8]/columnType"/>
@@ -1520,8 +1628,8 @@
       <constraint>
         <height>-1</height>
         <width>-1</width>
-        <x>1255</x>
-        <y>38</y>
+        <x>1156</x>
+        <y>21</y>
       </constraint>
       <sourceConnections/>
       <targetConnections/>
@@ -1592,6 +1700,22 @@
           <defaultValue></defaultValue>
         </net.java.amateras.db.visual.model.ColumnModel>
         <net.java.amateras.db.visual.model.ColumnModel>
+          <columnName>ord_no</columnName>
+          <logicalName>정렬순번</logicalName>
+          <columnType class="net.java.amateras.db.dialect.ColumnType">
+            <name>TINYINT</name>
+            <logicalName>Integer</logicalName>
+            <supportSize>true</supportSize>
+            <type>-6</type>
+          </columnType>
+          <size>4</size>
+          <notNull>false</notNull>
+          <primaryKey>false</primaryKey>
+          <description></description>
+          <autoIncrement>false</autoIncrement>
+          <defaultValue>0</defaultValue>
+        </net.java.amateras.db.visual.model.ColumnModel>
+        <net.java.amateras.db.visual.model.ColumnModel>
           <columnName>attr1</columnName>
           <logicalName>속성1</logicalName>
           <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../../../net.java.amateras.db.visual.model.TableModel/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel/target/columns/net.java.amateras.db.visual.model.ColumnModel[8]/columnType"/>
@@ -1623,58 +1747,58 @@
       </listeners>
       <constraint>
         <height>941</height>
-        <width>139</width>
+        <width>232</width>
         <x>17</x>
         <y>19</y>
       </constraint>
       <sourceConnections/>
       <targetConnections/>
-      <content>교역자유형코드&#xd;
- - 담임목사&#xd;
- - 부담임목사&#xd;
- - 전도사&#xd;
- - 시무장로&#xd;
- - 직원&#xd;
- - 평신도 default&#xd;
+      <content>교역자유형코드 0100&#xd;
+ - 담임목사 0101&#xd;
+ - 부담임목사 0102&#xd;
+ - 전도사 0103&#xd;
+ - 시무장로 0104&#xd;
+ - 직원 0105&#xd;
+ - 평신도 default 0106&#xd;
 &#xd;
-파일유형코드&#xd;
- - 이미지&#xd;
- - 썸네일&#xd;
- - 문서&#xd;
- - 압축파일&#xd;
- - 기타&#xd;
+파일유형코드 0200&#xd;
+ - 이미지 0201&#xd;
+ - 썸네일 0202&#xd;
+ - 문서 0203&#xd;
+ - 압축파일 0204&#xd;
+ - 기타 0205&#xd;
 &#xd;
-직분코드&#xd;
- - 장로&#xd;
- - 권사&#xd;
- - 안수집사&#xd;
- - 집사&#xd;
+직분코드 0300&#xd;
+ - 장로 0301&#xd;
+ - 권사 0302&#xd;
+ - 안수집사 0304&#xd;
+ - 집사 0305&#xd;
 &#xd;
-연락처종류코드&#xd;
- - 집전화번호&#xd;
- - 직장전화번호&#xd;
- - 핸드폰번호&#xd;
+연락처종류코드 0400&#xd;
+ - 집전화번호 0401&#xd;
+ - 직장전화번호 0402&#xd;
+ - 핸드폰번호 0403&#xd;
 &#xd;
-미디어종류코드&#xd;
- - 주일설교&#xd;
- - 특별영상&#xd;
- - 특별집회&#xd;
- - 찬양대1&#xd;
- - 찬양대2&#xd;
- - 주일학교1&#xd;
- - 주일학교2&#xd;
+미디어종류코드 0500&#xd;
+ - 주일설교 0501&#xd;
+ - 특별영상 0502&#xd;
+ - 특별집회 0503&#xd;
+ - 찬양대 0504&#xd;
+ - 주일학교 0506&#xd;
+ - 찬양대2 0507&#xd;
+ - 주일학교2 0508&#xd;
 &#xd;
-부서종류코드&#xd;
- - 새신자반&#xd;
- - 찬양대&#xd;
- - 유아부&#xd;
- - 유치부&#xd;
- - 유년부&#xd;
- - 초등부&#xd;
- - 소년부&#xd;
- - 중등부&#xd;
- - 고등부&#xd;
- - 청년부 &#xd;
+부서종류코드 0600&#xd;
+ - 새신자반 0601&#xd;
+ - 찬양대 0602&#xd;
+ - 유아부 0603&#xd;
+ - 유치부 0604&#xd;
+ - 유년부 0605&#xd;
+ - 초등부 0606&#xd;
+ - 소년부 0607&#xd;
+ - 중등부 0608&#xd;
+ - 고등부 0609&#xd;
+ - 청년부  0610&#xd;
 </content>
     </net.java.amateras.db.visual.model.NoteModel>
     <net.java.amateras.db.visual.model.TableModel reference="../net.java.amateras.db.visual.model.TableModel/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/target"/>
@@ -1718,27 +1842,27 @@
       </listeners>
       <constraint>
         <height>348</height>
-        <width>146</width>
-        <x>165</x>
-        <y>19</y>
+        <width>227</width>
+        <x>20</x>
+        <y>986</y>
       </constraint>
       <sourceConnections/>
       <targetConnections/>
-      <content>교회부서담당코드&#xd;
- - 교역자&#xd;
- - 부장&#xd;
- - 교사&#xd;
- - 지휘&#xd;
- - 반주&#xd;
- - 부서원&#xd;
+      <content>교회부서담당코드 0700&#xd;
+ - 교역자 0701&#xd;
+ - 부장 0702&#xd;
+ - 교사 0703&#xd;
+ - 지휘 0704&#xd;
+ - 반주 0705&#xd;
+ - 부서원 0706&#xd;
 &#xd;
-게시판종류코드&#xd;
- - 교회소식&#xd;
- - 교회행사&#xd;
- - 주보&#xd;
- - 새가족 소개&#xd;
- - 칼럼&#xd;
- - 부서용</content>
+게시판종류코드 0800&#xd;
+ - 교회소식 0801&#xd;
+ - 교회행사 0802&#xd;
+ - 주보 0803&#xd;
+ - 새가족 소개 0804&#xd;
+ - 칼럼 0805&#xd;
+ - 부서용 0806</content>
     </net.java.amateras.db.visual.model.NoteModel>
     <net.java.amateras.db.visual.model.TableModel reference="../net.java.amateras.db.visual.model.TableModel/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel/target"/>
     <net.java.amateras.db.visual.model.TableModel reference="../net.java.amateras.db.visual.model.TableModel/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[4]/target"/>
@@ -1785,7 +1909,12 @@
         <net.java.amateras.db.visual.model.ColumnModel>
           <columnName>dt</columnName>
           <logicalName>날짜</logicalName>
-          <columnType class="net.java.amateras.db.dialect.ColumnType" reference="../../../../net.java.amateras.db.visual.model.TableModel/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/source/columns/net.java.amateras.db.visual.model.ColumnModel[2]/columnType"/>
+          <columnType class="net.java.amateras.db.dialect.ColumnType">
+            <name>MEDIUMINT</name>
+            <logicalName>Integer</logicalName>
+            <supportSize>true</supportSize>
+            <type>4</type>
+          </columnType>
           <size>8</size>
           <notNull>false</notNull>
           <primaryKey>false</primaryKey>
@@ -1835,6 +1964,51 @@
       <content>교육부서&#xd;
 찬양대&#xd;
 전도대 등</content>
+    </net.java.amateras.db.visual.model.NoteModel>
+    <net.java.amateras.db.visual.model.TableModel reference="../net.java.amateras.db.visual.model.TableModel/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel/source/sourceConnections/net.java.amateras.db.visual.model.ForeignKeyModel[2]/target/targetConnections/net.java.amateras.db.visual.model.ForeignKeyModel[6]/source"/>
+    <net.java.amateras.db.visual.model.NoteModel>
+      <listeners serialization="custom">
+        <java.beans.PropertyChangeSupport>
+          <default>
+            <source class="net.java.amateras.db.visual.model.NoteModel" reference="../../../.."/>
+            <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+          </default>
+          <null/>
+        </java.beans.PropertyChangeSupport>
+      </listeners>
+      <constraint>
+        <height>506</height>
+        <width>214</width>
+        <x>299</x>
+        <y>897</y>
+      </constraint>
+      <sourceConnections/>
+      <targetConnections/>
+      <content>교회소개 0100&#xd;
+ - 인사말 0101&#xd;
+ - 섬기는 사람들 0102&#xd;
+ - 예배안내 0103&#xd;
+ - 오시는 길 0104&#xd;
+&#xd;
+교회소식 0200&#xd;
+ - 교회소식 0201&#xd;
+ - 교회행사 0202&#xd;
+ - 새가족 소개 0203&#xd;
+&#xd;
+교회방송 0300&#xd;
+ - 주일설교 0301&#xd;
+ - 특별영상 0302&#xd;
+ - 찬양대 0303&#xd;
+&#xd;
+선교와 봉사 0400&#xd;
+ - 선교사역 0401&#xd;
+ - 찬양대 0402&#xd;
+&#xd;
+교회학교 및 교육 0500&#xd;
+ - 어린이부 0501&#xd;
+ - 청소년부 0502&#xd;
+ - 청년부 0503&#xd;
+</content>
     </net.java.amateras.db.visual.model.NoteModel>
   </children>
   <dommains/>

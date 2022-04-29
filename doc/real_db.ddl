@@ -7,6 +7,7 @@ CREATE TABLE code(
 		cd                            		CHAR(4)		 NULL  COMMENT '코드',
 		parent_cd                     		CHAR(4)		 NULL  COMMENT '부모코드',
 		cd_nm                         		VARCHAR(50)		 NULL  COMMENT '코드명',
+		ord_no                        		TINYINT(4)		 DEFAULT 0		 NULL  COMMENT '정렬순번',
 		attr1                         		VARCHAR(50)		 NULL  COMMENT '속성1'
 ) COMMENT='코드';
 
@@ -19,6 +20,7 @@ CREATE TABLE menu(
 		menu_nm                       		VARCHAR(50)		 NULL  COMMENT '메뉴명',
 		url                           		VARCHAR(80)		 NULL  COMMENT '웹경로',
 		level                         		TINYINT(1)		 NULL  COMMENT '레벨',
+		ord_no                        		TINYINT(4)		 DEFAULT 0		 NULL  COMMENT '정렬순번',
 		attr1                         		VARCHAR(50)		 NULL  COMMENT '속성1'
 ) COMMENT='메뉴';
 
@@ -150,6 +152,15 @@ CREATE TABLE link(
 		link_url                      		VARCHAR(100)		 NULL  COMMENT '링크경로'
 ) COMMENT='링크';
 
+/**********************************/
+/* Table Name: 시스템권한 */
+/**********************************/
+CREATE TABLE sys_auth(
+		mb_seq_no                     		INT(4)		 NULL  COMMENT '회원일련번호',
+		attr1                         		VARCHAR(50)		 NULL  COMMENT '속성1',
+		attr2                         		VARCHAR(100)		 NULL  COMMENT '속성2'
+) COMMENT='시스템권한';
+
 
 ALTER TABLE code ADD CONSTRAINT IDX_code_PK PRIMARY KEY (cd);
 
@@ -165,5 +176,103 @@ ALTER TABLE church_dept_member ADD CONSTRAINT IDX_church_dept_member_PK PRIMARY 
 
 ALTER TABLE link ADD CONSTRAINT IDX_link_1 UNIQUE (src_tbl_nm, rf_key);
 
-show tables;
+ALTER TABLE sys_auth ADD CONSTRAINT IDX_sys_auth_PK PRIMARY KEY (mb_seq_no);
+
+
+/* 코드 */
+insert into code (cd, parent_cd, cd_nm) value ('0100', '0000', '교역자유형코드');
+insert into code (cd, parent_cd, cd_nm) value ('0101', '0100', '담임목사');
+insert into code (cd, parent_cd, cd_nm) value ('0102', '0100', '부담임목사');
+insert into code (cd, parent_cd, cd_nm) value ('0103', '0100', '협동목사');
+insert into code (cd, parent_cd, cd_nm) value ('0104', '0100', '전도사');
+insert into code (cd, parent_cd, cd_nm) value ('0105', '0100', '시무장로');
+insert into code (cd, parent_cd, cd_nm) value ('0106', '0100', '직원');
+insert into code (cd, parent_cd, cd_nm) value ('0107', '0100', '평신도');
+
+insert into code (cd, parent_cd, cd_nm) value ('0200', '0000', '파일유형코드');
+insert into code (cd, parent_cd, cd_nm) value ('0201', '0200', '이미지');
+insert into code (cd, parent_cd, cd_nm) value ('0202', '0200', '썸네일');
+insert into code (cd, parent_cd, cd_nm) value ('0203', '0200', '문서');
+insert into code (cd, parent_cd, cd_nm) value ('0204', '0200', '압축파일');
+insert into code (cd, parent_cd, cd_nm) value ('0205', '0200', '기타');
+
+insert into code (cd, parent_cd, cd_nm) value ('0300', '0000', '직분코드');
+insert into code (cd, parent_cd, cd_nm) value ('0301', '0300', '장로');
+insert into code (cd, parent_cd, cd_nm) value ('0302', '0300', '권사');
+insert into code (cd, parent_cd, cd_nm) value ('0303', '0300', '안수집사');
+insert into code (cd, parent_cd, cd_nm) value ('0304', '0300', '집사');
+insert into code (cd, parent_cd, cd_nm) value ('0305', '0300', '기타');
+
+insert into code (cd, parent_cd, cd_nm) value ('0400', '0000', '연락처종류코드');
+insert into code (cd, parent_cd, cd_nm) value ('0401', '0400', '집전화번호');
+insert into code (cd, parent_cd, cd_nm) value ('0402', '0400', '직장전화번호');
+insert into code (cd, parent_cd, cd_nm) value ('0403', '0400', '핸드폰번호');
+
+insert into code (cd, parent_cd, cd_nm) value ('0500', '0000', '미디어종류코드');
+insert into code (cd, parent_cd, cd_nm) value ('0501', '0500', '주일설교');
+insert into code (cd, parent_cd, cd_nm) value ('0502', '0500', '특별영상');
+insert into code (cd, parent_cd, cd_nm) value ('0503', '0500', '특별집회');
+insert into code (cd, parent_cd, cd_nm) value ('0504', '0500', '찬양대');
+insert into code (cd, parent_cd, cd_nm) value ('0505', '0500', '주일학교');
+insert into code (cd, parent_cd, cd_nm) value ('0506', '0500', '찬양대2');
+insert into code (cd, parent_cd, cd_nm) value ('0507', '0500', '주일학교2');
+
+insert into code (cd, parent_cd, cd_nm) value ('0600', '0000', '부서종류코드');
+insert into code (cd, parent_cd, cd_nm) value ('0601', '0600', '새신자반');
+insert into code (cd, parent_cd, cd_nm) value ('0602', '0600', '찬양대');
+insert into code (cd, parent_cd, cd_nm) value ('0603', '0600', '유아부');
+insert into code (cd, parent_cd, cd_nm) value ('0604', '0600', '유치부');
+insert into code (cd, parent_cd, cd_nm) value ('0605', '0600', '유아유치부');
+insert into code (cd, parent_cd, cd_nm) value ('0606', '0600', '유년부');
+insert into code (cd, parent_cd, cd_nm) value ('0607', '0600', '초등부');
+insert into code (cd, parent_cd, cd_nm) value ('0608', '0600', '소년부');
+insert into code (cd, parent_cd, cd_nm) value ('0609', '0600', '어린이부');
+insert into code (cd, parent_cd, cd_nm) value ('0610', '0600', '중등부');
+insert into code (cd, parent_cd, cd_nm) value ('0611', '0600', '고등부');
+insert into code (cd, parent_cd, cd_nm) value ('0612', '0600', '중고등부');
+insert into code (cd, parent_cd, cd_nm) value ('0613', '0600', '청소년부');
+insert into code (cd, parent_cd, cd_nm) value ('0614', '0600', '청년부');
+
+insert into code (cd, parent_cd, cd_nm) value ('0700', '0000', '부서담당자코드');
+insert into code (cd, parent_cd, cd_nm) value ('0701', '0700', '교역자');
+insert into code (cd, parent_cd, cd_nm) value ('0702', '0700', '부장');
+insert into code (cd, parent_cd, cd_nm) value ('0703', '0700', '교사');
+insert into code (cd, parent_cd, cd_nm) value ('0704', '0700', '지휘');
+insert into code (cd, parent_cd, cd_nm) value ('0705', '0700', '반주');
+insert into code (cd, parent_cd, cd_nm) value ('0706', '0700', '부서원');
+insert into code (cd, parent_cd, cd_nm) value ('0707', '0700', '기타');
+
+insert into code (cd, parent_cd, cd_nm) value ('0800', '0000', '게시판종류코드');
+insert into code (cd, parent_cd, cd_nm) value ('0801', '0800', '교회소식');
+insert into code (cd, parent_cd, cd_nm) value ('0802', '0800', '교회행사');
+insert into code (cd, parent_cd, cd_nm) value ('0803', '0800', '주보');
+insert into code (cd, parent_cd, cd_nm) value ('0804', '0800', '새가족 소개');
+insert into code (cd, parent_cd, cd_nm) value ('0805', '0800', '칼럼');
+insert into code (cd, parent_cd, cd_nm) value ('0806', '0800', '부서용');
+
+/* 메뉴 */
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0100', '0000', '교회소개');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0101', '0100', '인사말');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0102', '0100', '섬기는 사람들');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0103', '0100', '예배안내');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0104', '0100', '오시는 길');
+
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0200', '0000', '교회소식');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0201', '0200', '교회소식');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0202', '0200', '교회행사');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0203', '0200', '새가족 소개');
+
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0300', '0000', '교회방송');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0301', '0300', '주일설교');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0302', '0300', '특별영상');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0303', '0300', '찬양대');
+
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0400', '0000', '선교와 봉사');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0401', '0400', '선교사역');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0402', '0400', '찬양대');
+
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0500', '0000', '교회학교 및 교육');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0501', '0500', '어린이부');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0502', '0500', '청소년부');
+insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0503', '0500', '청년부');
 

@@ -77,16 +77,8 @@ body {
   line-height: 5.2rem;
 }
 
-h1 {
-  color: #000;
-}
-
-p {
-  color: #000;
-}
-
-.bg {
-  background-color: #000;
+.warn {
+  color: red;
 }
 
 #footer {

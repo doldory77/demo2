@@ -1,22 +1,41 @@
-var express = require('express')
-var path = require('path')
-var app = express();
+const express = require('express')
+const session = require('express-session')
+const path = require('path')
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(session({
+    HttpOnly: true,
+    secure: false,
+    secret: 'aabbccddee',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {maxAge: 24000 * 60 * 60}
+}));
+
 const mysql = require('mysql')
-var dbconfig = require('./config/database.js')
-var pool = mysql.createPool(dbconfig)
+const dbconfig = require('./config/database.js')
+const pool = mysql.createPool(dbconfig)
 const mapper = require('mybatis-mapper')
-mapper.createMapper(['./mapper/test.xml'])
+mapper.createMapper(['./mapper/test.xml', './mapper/sys.xml'])
+
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'view'))
 if (app.get('env') === 'development') {
     app.locals.pretty = true;
 }
 
-var module_user = require('./module/user/index')
+const user_router = require('./module/user/index')
+const sys_router = require('./module/sys/index')
+app.use('/user', user_router);
+app.use('/sys', sys_router);
 
-app.use('/user', module_user);
+
 app.use(express.static('public'));
 global.appRoot = path.resolve(__dirname);
+global.sqlMap = mapper;
+global.dbPool = pool;
+global.format = { language: 'sql', indent: '  ' }
 
 app.get('/', (req, res) => {
     // res.sendFile(__dirname + "/public/main.html")
@@ -25,12 +44,11 @@ app.get('/', (req, res) => {
 
 app.get('/main', (req, res) => {
     // res.sendFile(__dirname + "/public/main.html")
-    var param = { cd:'0001' }
-    var format = { language: 'sql', indent: '  ' }
-    var query = mapper.getStatement('test', 'test', param, format)
+    let param = { cd:'0001' }
+    let query = global.sqlMap.getStatement('test', 'test', param, global.format)
     console.log(query)
 
-    pool.getConnection((err, conn) => {
+    global.dbPool.getConnection((err, conn) => {
         if (!err) {
             conn.query(query, (error, rows, fields) => {
                 if (error) throw error;
