@@ -312,3 +312,30 @@ insert into member (
 	'0304',
 	'0901'
 );
+
+CREATE TABLE contact(
+		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
+		mb_seq_no                     		MEDIUMINT(4)		 NULL  COMMENT '회원일련번호',
+		kind_cd                       		CHAR(4)		 NULL  COMMENT '연락처종류코드',
+		contact_no                    		VARCHAR(20)		 NULL  COMMENT '연락번호',
+		id                            		VARCHAR(30)		 NULL  COMMENT '아이디'
+) COMMENT='연락처';
+
+select * from member;
+
+select seq_no from member where id = 'x2';
+
+
+select last_insert_id();
+
+insert into contact (
+	mb_seq_no, 
+	kind_cd, 
+	contact_no
+) value (
+	#{mb_seq_no}, 
+	#{kind_cd},
+	#{contact_no}
+)
+
+select * from contact

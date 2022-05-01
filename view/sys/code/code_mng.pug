@@ -1,0 +1,22 @@
+doctype html 
+html(lang='ko')
+    head
+        title admin login
+        meta(name='viewport', content='width=device-width,initial-scale=1')
+        link(href='/css/style.css', rel='stylesheet')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+
+    body
+        #mmain
+            form(action='/sys/code_process', enctype='multipart/form-data', method='post')
+                .rows    
+                    .row
+                        label 이름
+                        input(type='text', value='전용재', name='name')
+                    .row
+                        input(type='file', name='file1')
+                    .row
+                        input(type='file', name='file2')
+                    .row
+                        input(type='submit', value='저장')
+                    
