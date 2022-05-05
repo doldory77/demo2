@@ -4,7 +4,6 @@ const router = express.Router();
 const formidable = require('formidable')
 const fs = require('fs')
 const path = require('path')
-const form = formidable({multiples: true, uploadDir: path.join(__dirname, 'upload')})
 
 /** 세션체크 */
 router.use((req, res, next) => {
@@ -46,11 +45,61 @@ router.post('/sys_login_process', (req, res) => {
 })
 
 router.get('/code_mng', (req, res) => {
-    res.render('sys/code/code_mng')
+    
+    // global.dbPool.getConnection((err, conn) => {
+    //     if (!err) {
+    //         let sql = global.sqlMap.getStatement('sys', 'selectCodeByParentCd', {parent_cd:'0000'}, global.format)
+    //         console.log(sql)
+    //         conn.query(sql, (error, result) => {
+    //             if (error) console.error(error)
+    //             res.render('sys/code/code_mng', {parentCode: result})    
+    //         })
+    //     } else {
+    //         console.error(err)
+    //         res.render('sys/code/code_mng', {parentCode: []})
+    //     }
+    // })
+    xx(req, res)
+})
+
+router.post('/code_mng', (req, res) => {
+    xx(req, res)
+})
+
+function xx(req, res) {
+    global.dbPool.getConnection((err, conn) => {
+        if (!err) {
+            let sql = global.sqlMap.getStatement('sys', 'selectCodeByParentCd', {parent_cd:'0000'}, global.format)
+            console.log(sql)
+            conn.query(sql, (error, result) => {
+                if (error) console.error(error)
+                res.render('sys/code/code_mng', {parentCode: result})    
+            })
+        } else {
+            console.error(err)
+            res.render('sys/code/code_mng', {parentCode: []})
+        }
+    })
+}
+
+router.post('/child_code', (req, res) => {
+    global.dbPool.getConnection((err, conn) => {
+        if (!err) {
+            let sql = global.sqlMap.getStatement('sys', 'selectCodeByParentCd', {parent_cd:req.body.parent_cd}, global.format)
+            console.log(sql)
+            conn.query(sql, (error, result) => {
+                if (error) console.error(error)
+                res.json(Object.assign({code:'0', msg:'success'}, {childCode: result})
+                )
+            })
+        } else {
+            console.error(err)
+            res.json({code:'-1', msg:'err'})
+        }
+    })
 })
 
 router.post('/code_process', (req, res) => {
-    console.log('xxxxxxxxxxxxx')
     var form = new formidable.IncomingForm();
     form.multiples = true
     form.keepExtensions = true
@@ -65,20 +114,7 @@ router.post('/code_process', (req, res) => {
 })
 
 router.get('/menu_mng', (req, res) => {
-    // let param = { parent_menu_cd:'0000' }
-    // let query = global.sqlMap.getStatement('sys', 'selectMenu', param, global.format)
-    // console.log(query)
 
-    // global.dbPool.getConnection((err, conn) => {
-    //     if (!err) {
-    //         conn.query(query, (error, rows, fields) => {
-    //             if (error) throw error;
-    //             console.log('menu info is: ', rows)
-    //             res.render('sys/menu/menu_mng', {rows})
-    //         })
-    //     }
-    //     conn.release()
-    // })
     let param = {
         id: 'x2',
         name: 'xxx',

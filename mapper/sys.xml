@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="sys">  
+<mapper namespace="sys">
+  <select id="selectCodeByParentCd">
+    select cd, cd_nm, ord_no from code where parent_cd = #{parent_cd} order by ord_no
+  </select>
+    
   <select id="selectMenu">
     select *
     from menu 

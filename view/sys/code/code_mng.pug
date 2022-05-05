@@ -5,18 +5,120 @@ html(lang='ko')
         meta(name='viewport', content='width=device-width,initial-scale=1')
         link(href='/css/style.css', rel='stylesheet')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+        style.
+            .main {width: 80%; margin:0 auto;}
+            table {width: 100%; border: 1px solid #eee; border-collapse: collapse;}
+            th,td {padding: 3px; border: 1px solid darkgray;}
+            th {background-color: #e2e2e2;}
+            a {cursor: pointer;}
+            #head, .row {display: flex;}
+            #head {background-color: #eee;}
+            #head div, .row div {border: 1px solid darkgray; display:flex; justify-content:center; align-item:center; padding: 3px;}
+            #head div:nth-child(1), .row div:nth-child(1) {flex-grow:0; flex-basis:120px;}
+            #head div:nth-child(2), .row div:nth-child(2) {flex-grow:1}
+            #head div:nth-child(3), .row div:nth-child(3) {flex-grow:0; flex-basis:80px;}
+            #body {height:100px; overflow-y:scroll; -ms-overflow-style: none}
+            #body::-webkit-scrollbar {display: none;}
+            #new {display:none;}
 
+        script.
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '상위코드':
+                        $('#new').css('display','block')
+                        break;
+                    case '신규상위코드저장':
+                        $('form#hiddenForm').submit()
+                        break;
+                    default:
+                }
+            }
+            //- let getChildCode = (e) => {
+            //-     let parent_cd = $(e).closest('.row').data('cd');
+            //-     console.log($(e).closest('.row').data('cd'));
+            //-     $.ajax({
+            //-         url: '/sys/child_code',
+            //-         async: true,
+            //-         type: 'POST',
+            //-         data: {parent_cd},
+            //-         dataType: 'json',
+            //-         success:(data, statusText, jqXHR) => {
+            //-             console.log(data)
+            //-             console.log(statusText)
+            //-             console.log(jqXHR)
+            //-         },
+            //-         error:(jqXHR, textStatus, errorThrown) => {
+            //-             console.log(jqXHR)
+            //-             console.log(textStatus)
+            //-             console.log(errorThrown)
+            //-         }
+            //-     })
+            //- }
+            
+            
     body
-        #mmain
-            form(action='/sys/code_process', enctype='multipart/form-data', method='post')
-                .rows    
-                    .row
-                        label 이름
-                        input(type='text', value='전용재', name='name')
-                    .row
-                        input(type='file', name='file1')
-                    .row
-                        input(type='file', name='file2')
-                    .row
-                        input(type='submit', value='저장')
+        .main
+            #box
+                div
+                    span 상위코드
+                    button#add(data-text='상위코드', onclick='buttonClick(this)') 추가
+                #head
+                    div 코드
+                    div 코드명
+                    div 순번
+                #body
+                    - for (let i=0; i<parentCode.length; i++)
+                        .row(data-cd= parentCode[i].cd)
+                            div
+                                a(onclick='getChildCode(this)')= parentCode[i].cd
+                            div
+                                a(onclick='getChildCode(this)')= parentCode[i].cd_nm
+                            div
+                                a(onclick='getChildCode(this)')= parentCode[i].ord_no 
+                #new
+                    div
+                        label 코드:
+                        input(type='text' id='new_p_cd')
+                    div
+                        label 코드명:
+                        input(type='text' id='new_p_cd_nm')
+                    div
+                        label 순번:
+                        input(type='text' id='new_p_ord_no')
+                    div
+                        button 취소
+                        button(data-text='신규상위코드저장', onclick='buttonClick(this)') 저장
+
+                form#hiddenForm(action='/sys/code_mng', enctype='application/x-www-form-urlencoded', method='post')
+                    input(type='hidden', name='selected_parent_cd', value='')
+                    input(type='hidden', name='mod_p_cd', value='')
+                    input(type='hidden', name='mod_p_cd_nm', value='')
+                    input(type='hidden', name='mod_p_ord_no', value='')
+                    input(type='hidden', name='new_p_cd', value='')
+                    input(type='hidden', name='new_p_cd_nm', value='')
+                    input(type='hidden', name='new_p_ord_no', value='')
+                    input(type='hidden', name='selected_child_cd', value='')
+                    input(type='hidden', name='mod_c_cd', value='')
+                    input(type='hidden', name='mod_c_parent_cd', value='')
+                    input(type='hidden', name='mod_c_cd_nm', value='')
+                    input(type='hidden', name='mod_c_ord_no', value='')
+                    input(type='hidden', name='new_c_cd', value='')
+                    input(type='hidden', name='new_c_cd_nm', value='')
+                    input(type='hidden', name='new_c_parent_cd', value='')
+                    input(type='hidden', name='new_c_ord_no', value='')
+                    
+                    
+            //- form(action='/sys/code_process', enctype='multipart/form-data', method='post')
+            //-     .rows    
+            //-         .row
+            //-             label 이름
+            //-             input(type='text', value='전용재', name='name')
+            //-         .row
+            //-             input(type='file', name='file1')
+            //-         .row
+            //-             input(type='file', name='file2')
+            //-         .row
+            //-             input(type='submit', value='저장')
                     
