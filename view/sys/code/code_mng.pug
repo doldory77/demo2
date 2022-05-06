@@ -19,7 +19,10 @@ html(lang='ko')
             #head div:nth-child(3), .row div:nth-child(3) {flex-grow:0; flex-basis:80px;}
             #body {height:100px; overflow-y:scroll; -ms-overflow-style: none}
             #body::-webkit-scrollbar {display: none;}
-            #new {display:none;}
+            #new {display:none; border: 1px solid #eee; padding:10px; margin-top:10px;}
+            #mod {display:none; border: 1px solid #eee; padding:10px; margin-top:10px;}
+            #new_c {display:none; border: 1px solid #eee; padding:10px; margin-top:10px;}
+            #mod_c {display:none; border: 1px solid #eee; padding:10px; margin-top:10px;}
 
         script.
             let buttonClick = (e) => {
@@ -29,15 +32,106 @@ html(lang='ko')
                     case '상위코드':
                         $('#new').css('display','block')
                         break;
-                    case '신규상위코드저장':
+                    case '상위코드수정':
+                        let tag = $(e).closest('div.row').data('tag')
+                        $('input[name="selected_parent_cd"]').val(tag.cd)
+                        $('input[name="submit_mode"]').val('mod_parent_init')
                         $('form#hiddenForm').submit()
+                        //- $('input[id="mod_p_cd"]').val(tag.cd)
+                        //- $('input[id="mod_p_cd_nm"]').val(tag.cd_nm)
+                        //- $('input[id="mod_p_ord_no"]').val(tag.ord_no)
+                        //- $('#mod').css('display','block')
+                        //- getChildCode(tag.cd)
+
+                        break;
+                    case '상위코드수정저장':
+                        $('input[name="submit_mode"]').val('mod_parent_save')
+                        $('input[name="mod_p_cd"]').val($('input[id="mod_p_cd"]').val())
+                        $('input[name="mod_p_cd_nm"]').val($('input[id="mod_p_cd_nm"]').val())
+                        $('input[name="mod_p_ord_no"]').val($('input[id="mod_p_ord_no"]').val())
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '상위코드수정취소':
+                        $('input[name="submit_mode"]').val('')
+                        $('input[name="mod_p_cd_nm"]').val('')
+                        $('input[name="mod_p_ord_no"]').val('')
+                        $('input[id="mod_p_cd"]').val('')
+                        $('input[id="mod_p_cd_nm"]').val('')
+                        $('input[id="mod_p_ord_no"]').val('')
+                        $('#mod').css('display','none')
+                        break;
+                    case '신규상위코드저장':
+                        $('input[name="submit_mode"]').val('new_parent_save')
+                        $('input[name="new_p_cd"]').val($('input[id="new_p_cd"]').val())
+                        $('input[name="new_p_cd_nm"]').val($('input[id="new_p_cd_nm"]').val())
+                        $('input[name="new_p_ord_no"]').val($('input[id="new_p_ord_no"]').val())
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '신규상위코드저장취소':
+                        $('#new').css('display','none')
+                        $('input[name="submit_mode"]').val('')
+                        $('input[name="new_p_cd"]').val('')
+                        $('input[name="new_p_cd_nm"]').val('')
+                        $('input[name="new_p_ord_no"]').val('')
+                        $('input[id="new_p_cd"]').val('')
+                        $('input[id="new_p_cd_nm"]').val('')
+                        $('input[id="new_p_ord_no"]').val('')
                         break;
                     default:
                 }
             }
-            //- let getChildCode = (e) => {
-            //-     let parent_cd = $(e).closest('.row').data('cd');
-            //-     console.log($(e).closest('.row').data('cd'));
+
+            let button2Click = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '하위코드':
+                        $('#new_c').css('display','block')
+                        break;
+                    case '상위코드수정':
+                        let tag = $(e).closest('div.row').data('tag')
+                        $('input[id="mod_c_cd"]').val(tag.cd)
+                        $('input[id="mod_c_cd_nm"]').val(tag.cd_nm)
+                        $('input[id="mod_c_ord_no"]').val(tag.ord_no)
+                        $('#mod_c').css('display','block')
+                        break;
+                    case '하위코드수정저장':
+                        $('input[name="submit_mode"]').val('mod_child_save')
+                        $('input[name="mod_c_cd"]').val($('input[id="mod_c_cd"]').val())
+                        $('input[name="mod_c_cd_nm"]').val($('input[id="mod_c_cd_nm"]').val())
+                        $('input[name="mod_c_ord_no"]').val($('input[id="mod_c_ord_no"]').val())
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '하위코드수정취소':
+                        $('input[name="submit_mode"]').val('')
+                        $('input[name="mod_c_cd_nm"]').val('')
+                        $('input[name="mod_c_ord_no"]').val('')
+                        $('input[id="mod_c_cd"]').val('')
+                        $('input[id="mod_c_cd_nm"]').val('')
+                        $('input[id="mod_c_ord_no"]').val('')
+                        $('#mod').css('display','none')
+                        break;
+                    case '신규하위코드저장':
+                        $('input[name="submit_mode"]').val('new_child_save')
+                        $('input[name="new_c_cd"]').val($('input[id="new_c_cd"]').val())
+                        $('input[name="new_c_cd_nm"]').val($('input[id="new_c_cd_nm"]').val())
+                        $('input[name="new_c_ord_no"]').val($('input[id="new_c_ord_no"]').val())
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '신규하위코드저장취소':
+                        $('#new_c').css('display','none')
+                        $('input[name="submit_mode"]').val('')
+                        $('input[name="new_c_cd"]').val('')
+                        $('input[name="new_c_cd_nm"]').val('')
+                        $('input[name="new_c_ord_no"]').val('')
+                        $('input[id="new_c_cd"]').val('')
+                        $('input[id="new_c_cd_nm"]').val('')
+                        $('input[id="new_c_ord_no"]').val('')
+                        break;
+                    default:
+                }
+            }
+            //- let getChildCode = (parent_cd) => {
             //-     $.ajax({
             //-         url: '/sys/child_code',
             //-         async: true,
@@ -48,6 +142,7 @@ html(lang='ko')
             //-             console.log(data)
             //-             console.log(statusText)
             //-             console.log(jqXHR)
+
             //-         },
             //-         error:(jqXHR, textStatus, errorThrown) => {
             //-             console.log(jqXHR)
@@ -70,29 +165,91 @@ html(lang='ko')
                     div 순번
                 #body
                     - for (let i=0; i<parentCode.length; i++)
-                        .row(data-cd= parentCode[i].cd)
+                        .row(data-tag= parentCode[i])
                             div
-                                a(onclick='getChildCode(this)')= parentCode[i].cd
+                                a(data-text='상위코드수정', onclick='buttonClick(this)')= parentCode[i].cd
                             div
-                                a(onclick='getChildCode(this)')= parentCode[i].cd_nm
+                                a= parentCode[i].cd_nm
                             div
-                                a(onclick='getChildCode(this)')= parentCode[i].ord_no 
+                                a= parentCode[i].ord_no
+
+                if selectedParentCd[0].cd != ''
+                 #mod(style='display:block')
+                    div
+                        label 코드:
+                        input(type='text', id='mod_p_cd', readonly, value= selectedParentCd[0].cd)
+                    div
+                        label 코드명:
+                        input(type='text', id='mod_p_cd_nm', value= selectedParentCd[0].cd_nm)
+                    div
+                        label 순번:
+                        input(type='text', id='mod_p_ord_no', value= selectedParentCd[0].ord_no)
+                    div
+                        button(data-text='상위코드수정취소', onclick='buttonClick(this)') 취소
+                        button(data-text='상위코드수정저장', onclick='buttonClick(this)') 수정  
+                
                 #new
                     div
                         label 코드:
-                        input(type='text' id='new_p_cd')
+                        input(type='text', id='new_p_cd')
                     div
                         label 코드명:
-                        input(type='text' id='new_p_cd_nm')
+                        input(type='text', id='new_p_cd_nm')
                     div
                         label 순번:
-                        input(type='text' id='new_p_ord_no')
+                        input(type='text', id='new_p_ord_no')
                     div
-                        button 취소
+                        button(data-text='신규상위코드저장취소', onclick='buttonClick(this)') 취소
                         button(data-text='신규상위코드저장', onclick='buttonClick(this)') 저장
+                
+                div(style='margin-top:20px;')
+                    span 하위코드
+                    button#add(data-text='하위코드', onclick='button2Click(this)') 추가
+                #head
+                    div 코드
+                    div 코드명
+                    div 순번
+                #body
+                    - for (let i=0; i<childCode.length; i++)
+                        .row(data-tag= childCode[i])
+                            div
+                                a(data-text='하위코드수정', onclick='button2Click(this)')= childCode[i].cd
+                            div
+                                a= childCode[i].cd_nm
+                            div
+                                a= childCode[i].ord_no
+
+                #new_c
+                    div
+                        label 코드:
+                        input(type='text', id='new_c_cd')
+                    div
+                        label 코드명:
+                        input(type='text', id='new_c_cd_nm')
+                    div
+                        label 순번:
+                        input(type='text', id='new_c_ord_no')
+                    div
+                        button(data-text='신규하위코드저장취소', onclick='button2Click(this)') 취소
+                        button(data-text='신규하위코드저장', onclick='button2Click(this)') 저장
+
+                #mod_c
+                    div
+                        label 코드:
+                        input(type='text', id='mod_c_cd', readonly, value= selectedParentCd[0].cd)
+                    div
+                        label 코드명:
+                        input(type='text', id='mod_c_cd_nm', value= selectedParentCd[0].cd_nm)
+                    div
+                        label 순번:
+                        input(type='text', id='mod_c_ord_no', value= selectedParentCd[0].ord_no)
+                    div
+                        button(data-text='하위코드수정취소', onclick='button2Click(this)') 취소
+                        button(data-text='하위코드수정저장', onclick='button2Click(this)') 수정
 
                 form#hiddenForm(action='/sys/code_mng', enctype='application/x-www-form-urlencoded', method='post')
-                    input(type='hidden', name='selected_parent_cd', value='')
+                    input(type='hidden', name='submit_mode', value='')
+                    input(type='hidden', name='selected_parent_cd', value=selectedParentCd[0].cd)
                     input(type='hidden', name='mod_p_cd', value='')
                     input(type='hidden', name='mod_p_cd_nm', value='')
                     input(type='hidden', name='mod_p_ord_no', value='')
@@ -108,6 +265,7 @@ html(lang='ko')
                     input(type='hidden', name='new_c_cd_nm', value='')
                     input(type='hidden', name='new_c_parent_cd', value='')
                     input(type='hidden', name='new_c_ord_no', value='')
+                    
                     
                     
             //- form(action='/sys/code_process', enctype='multipart/form-data', method='post')

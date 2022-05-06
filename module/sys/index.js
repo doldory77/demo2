@@ -3,7 +3,9 @@ const express = require('express');
 const router = express.Router();
 const formidable = require('formidable')
 const fs = require('fs')
-const path = require('path')
+const path = require('path');
+const { resolve } = require('path');
+const { query } = require('../cmmn/cmmn')
 
 /** 세션체크 */
 router.use((req, res, next) => {
@@ -45,41 +47,48 @@ router.post('/sys_login_process', (req, res) => {
 })
 
 router.get('/code_mng', (req, res) => {
-    
-    // global.dbPool.getConnection((err, conn) => {
-    //     if (!err) {
-    //         let sql = global.sqlMap.getStatement('sys', 'selectCodeByParentCd', {parent_cd:'0000'}, global.format)
-    //         console.log(sql)
-    //         conn.query(sql, (error, result) => {
-    //             if (error) console.error(error)
-    //             res.render('sys/code/code_mng', {parentCode: result})    
-    //         })
-    //     } else {
-    //         console.error(err)
-    //         res.render('sys/code/code_mng', {parentCode: []})
-    //     }
-    // })
-    xx(req, res)
+    processCodeMng({}, res)
 })
 
 router.post('/code_mng', (req, res) => {
-    xx(req, res)
+    processCodeMng(Object.assign({}, req.body), res)
 })
 
-function xx(req, res) {
-    global.dbPool.getConnection((err, conn) => {
-        if (!err) {
-            let sql = global.sqlMap.getStatement('sys', 'selectCodeByParentCd', {parent_cd:'0000'}, global.format)
-            console.log(sql)
-            conn.query(sql, (error, result) => {
-                if (error) console.error(error)
-                res.render('sys/code/code_mng', {parentCode: result})    
-            })
-        } else {
-            console.error(err)
-            res.render('sys/code/code_mng', {parentCode: []})
-        }
-    })
+async function processCodeMng(params, res) {
+    console.log('params: ', params)
+    let selectedParentCd = [{cd:''}]
+    let newParams = {}
+    if (params && params.submit_mode == 'new_parent_save') {
+        // 신규상위코드 저장
+        newParams.cd = params.new_p_cd
+        newParams.parent_cd = '0000'
+        newParams.cd_nm = params.new_p_cd_nm
+        newParams.ord_no = params.new_p_ord_no
+        await query('sys', 'insertCode', newParams)
+    } else if (params && params.submit_mode == 'mod_parent_save') {
+        // 상위코드수정 저장
+        newParams.cd = params.mod_p_cd
+        newParams.cd_nm = params.mod_p_cd_nm
+        newParams.ord_no = params.mod_p_ord_no
+        await query('sys', 'updateCode', newParams)
+    } else if (params && params.submit_mode == 'new_child_save') {
+
+    } else if (params && params.submit_mode == 'mod_child_save') {
+
+    }
+
+    let parentCode = await query('sys', 'selectCodeByParentCd', {parent_cd:'0000'})
+    if (params && params.selected_parent_cd) {
+        newParams.parent_cd = params.selected_parent_cd
+        selectedParentCd = await query('sys', 'selectCodeByCd', {cd:params.selected_parent_cd})
+        console.log('selectedParentCd: ', selectedParentCd)
+    } else {
+        newParams.parent_cd = parentCode[0].cd
+    }
+    let childCode = await query('sys', 'selectCodeByParentCd', {parent_cd:newParams.parent_cd})
+
+    res.render('sys/code/code_mng', {parentCode, childCode, selectedParentCd})
+    
 }
 
 router.post('/child_code', (req, res) => {

@@ -4,6 +4,10 @@
   <select id="selectCodeByParentCd">
     select cd, cd_nm, ord_no from code where parent_cd = #{parent_cd} order by ord_no
   </select>
+
+  <select id="selectCodeByCd">
+    select cd, parent_cd, cd_nm, ord_no from code where cd = #{cd}
+  </select>
     
   <select id="selectMenu">
     select *
@@ -33,6 +37,31 @@
       #{mw_cd}
     )  
   </insert>
+
+  <insert id="insertCode">
+    insert into code (
+      cd,
+      parent_cd,
+      <if test="ord_no != null and ord_no != ''"> 
+      ord_no,
+      </if>
+      cd_nm
+    ) values (
+      #{cd},
+      #{parent_cd},
+      <if test="ord_no != null and ord_no != ''"> 
+      #{ord_no},
+      </if>
+      #{cd_nm}
+    )  
+  </insert>
+  
+  <update id="updateCode">
+    update code set
+      cd_nm = #{cd_nm},
+      ord_no = #{ord_no}
+    where cd = #{cd}
+  </update>
 
   <select id="selectMemberNoById">
     select seq_no from member where id = #{id}
