@@ -6,23 +6,38 @@ html(lang='ko')
         link(href='/css/style.css', rel='stylesheet')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
         style.
+            
             .main {width: 80%; margin:0 auto;}
+            .center-text {text-align: center;}
+            .m-title {font-size: 1.8rem; font-weight: 700; padding: 10px;}
+            .s-title {font-size: 1.6rem; font-weight: 600; padding: 5px;}
+            .tool-bar {display:flex; justify-content: center; align-items: center;padding: 5px 0;}
+            .tool-bar button:last-child {margin-left:10px;}
+            .flex-side {justify-content: space-between;}
+            .flex-left {justify-content: start;}
+            .flex-right {justify-content: end;}
+            .flex-label100 {flex-basis: 100px;}
+            .abs-top-right {display: inline-block;position: absolute;top: 10px; right: 10px;}
             table {width: 100%; border: 1px solid #eee; border-collapse: collapse;}
             th,td {padding: 3px; border: 1px solid darkgray;}
             th {background-color: #e2e2e2;}
             a {cursor: pointer;}
+            #box {min-width:420px;}
+            .input-box {border: 1px solid #eee; padding:10px; border-radius: 3px; position: relative; margin-top: 20px;}
+            .input-box-title {display: inline-block; position: absolute; top: -12px; left: 24px}
             #head, .row {display: flex;}
-            #head {background-color: #eee;}
+            #head {background-color: #eee; font-weight: 700;}
             #head div, .row div {border: 1px solid darkgray; display:flex; justify-content:center; align-item:center; padding: 3px;}
+            .row div:nth-child(2) {justify-content:start;}
             #head div:nth-child(1), .row div:nth-child(1) {flex-grow:0; flex-basis:120px;}
             #head div:nth-child(2), .row div:nth-child(2) {flex-grow:1}
             #head div:nth-child(3), .row div:nth-child(3) {flex-grow:0; flex-basis:80px;}
             #body {height:100px; overflow-y:scroll; -ms-overflow-style: none}
             #body::-webkit-scrollbar {display: none;}
-            #new {display:none; border: 1px solid #eee; padding:10px; margin-top:10px;}
-            #mod {display:none; border: 1px solid #eee; padding:10px; margin-top:10px;}
-            #new_c {display:none; border: 1px solid #eee; padding:10px; margin-top:10px;}
-            #mod_c {display:none; border: 1px solid #eee; padding:10px; margin-top:10px;}
+            #new {display:none;}
+            #mod {display:none;}
+            #new_c {display:none;}
+            #mod_c {display:none;}
 
         script.
             let buttonClick = (e) => {
@@ -37,12 +52,6 @@ html(lang='ko')
                         $('input[name="selected_parent_cd"]').val(tag.cd)
                         $('input[name="submit_mode"]').val('mod_parent_init')
                         $('form#hiddenForm').submit()
-                        //- $('input[id="mod_p_cd"]').val(tag.cd)
-                        //- $('input[id="mod_p_cd_nm"]').val(tag.cd_nm)
-                        //- $('input[id="mod_p_ord_no"]').val(tag.ord_no)
-                        //- $('#mod').css('display','block')
-                        //- getChildCode(tag.cd)
-
                         break;
                     case '상위코드수정저장':
                         $('input[name="submit_mode"]').val('mod_parent_save')
@@ -87,9 +96,12 @@ html(lang='ko')
                 switch (text) {
                     case '하위코드':
                         $('#new_c').css('display','block')
+                        $('input[id="new_c_parent_cd"]').val($('input[name="selected_parent_cd"]').val())
                         break;
-                    case '상위코드수정':
+                    case '하위코드수정':
                         let tag = $(e).closest('div.row').data('tag')
+                        console.log(tag)
+                        $('input[id="mod_c_parent_cd"]').val($('input[name="selected_parent_cd"]').val())
                         $('input[id="mod_c_cd"]').val(tag.cd)
                         $('input[id="mod_c_cd_nm"]').val(tag.cd_nm)
                         $('input[id="mod_c_ord_no"]').val(tag.ord_no)
@@ -97,6 +109,7 @@ html(lang='ko')
                         break;
                     case '하위코드수정저장':
                         $('input[name="submit_mode"]').val('mod_child_save')
+                        $('input[name="mod_c_parent_cd"]').val($('input[id="mod_c_parent_cd"]').val())
                         $('input[name="mod_c_cd"]').val($('input[id="mod_c_cd"]').val())
                         $('input[name="mod_c_cd_nm"]').val($('input[id="mod_c_cd_nm"]').val())
                         $('input[name="mod_c_ord_no"]').val($('input[id="mod_c_ord_no"]').val())
@@ -104,15 +117,19 @@ html(lang='ko')
                         break;
                     case '하위코드수정취소':
                         $('input[name="submit_mode"]').val('')
+                        $('input[name="mod_c_parent_cd"]').val('')
+                        $('input[name="mod_c_cd"]').val('')
                         $('input[name="mod_c_cd_nm"]').val('')
                         $('input[name="mod_c_ord_no"]').val('')
+                        $('input[id="mod_c_parent_cd"]').val('')
                         $('input[id="mod_c_cd"]').val('')
                         $('input[id="mod_c_cd_nm"]').val('')
                         $('input[id="mod_c_ord_no"]').val('')
-                        $('#mod').css('display','none')
+                        $('#mod_c').css('display','none')
                         break;
                     case '신규하위코드저장':
                         $('input[name="submit_mode"]').val('new_child_save')
+                        $('input[name="new_c_parent_cd"]').val($('input[id="new_c_parent_cd"]').val())
                         $('input[name="new_c_cd"]').val($('input[id="new_c_cd"]').val())
                         $('input[name="new_c_cd_nm"]').val($('input[id="new_c_cd_nm"]').val())
                         $('input[name="new_c_ord_no"]').val($('input[id="new_c_ord_no"]').val())
@@ -124,9 +141,11 @@ html(lang='ko')
                         $('input[name="new_c_cd"]').val('')
                         $('input[name="new_c_cd_nm"]').val('')
                         $('input[name="new_c_ord_no"]').val('')
+                        $('input[name="new_c_parent_cd"]').val('')
                         $('input[id="new_c_cd"]').val('')
                         $('input[id="new_c_cd_nm"]').val('')
                         $('input[id="new_c_ord_no"]').val('')
+                        $('input[id="new_c_parent_cd"]').val('')
                         break;
                     default:
                 }
@@ -155,10 +174,12 @@ html(lang='ko')
             
     body
         .main
+            h2(class='m-title center-text') 코드관리
+            hr
             #box
-                div
-                    span 상위코드
-                    button#add(data-text='상위코드', onclick='buttonClick(this)') 추가
+                div(class='tool-bar flex-side')
+                    span.s-title 상위코드
+                    button#add(data-text='상위코드', onclick='buttonClick(this)') +
                 #head
                     div 코드
                     div 코드명
@@ -174,37 +195,39 @@ html(lang='ko')
                                 a= parentCode[i].ord_no
 
                 if selectedParentCd[0].cd != ''
-                 #mod(style='display:block')
-                    div
-                        label 코드:
+                 #mod.input-box(style='display:block')
+                    div(class='input-box-title s-title') 수정
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 코드:
                         input(type='text', id='mod_p_cd', readonly, value= selectedParentCd[0].cd)
-                    div
-                        label 코드명:
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 코드명:
                         input(type='text', id='mod_p_cd_nm', value= selectedParentCd[0].cd_nm)
-                    div
-                        label 순번:
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 순번:
                         input(type='text', id='mod_p_ord_no', value= selectedParentCd[0].ord_no)
-                    div
+                    div.abs-top-right
                         button(data-text='상위코드수정취소', onclick='buttonClick(this)') 취소
                         button(data-text='상위코드수정저장', onclick='buttonClick(this)') 수정  
                 
-                #new
-                    div
-                        label 코드:
+                #new.input-box
+                    div(class='input-box-title s-title') 추가
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 코드:
                         input(type='text', id='new_p_cd')
-                    div
-                        label 코드명:
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 코드명:
                         input(type='text', id='new_p_cd_nm')
-                    div
-                        label 순번:
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 순번:
                         input(type='text', id='new_p_ord_no')
-                    div
+                    div.abs-top-right
                         button(data-text='신규상위코드저장취소', onclick='buttonClick(this)') 취소
                         button(data-text='신규상위코드저장', onclick='buttonClick(this)') 저장
                 
-                div(style='margin-top:20px;')
-                    span 하위코드
-                    button#add(data-text='하위코드', onclick='button2Click(this)') 추가
+                div(class='tool-bar flex-side', style='margin-top:20px;')
+                    span.s-title 하위코드
+                    button#add(data-text='하위코드', onclick='button2Click(this)') +
                 #head
                     div 코드
                     div 코드명
@@ -219,31 +242,39 @@ html(lang='ko')
                             div
                                 a= childCode[i].ord_no
 
-                #new_c
-                    div
-                        label 코드:
+                #new_c.input-box
+                    div(class='input-box-title s-title') 추가
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 상위코드:
+                        input(type='text', id='new_c_parent_cd')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 코드:
                         input(type='text', id='new_c_cd')
-                    div
-                        label 코드명:
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 코드명:
                         input(type='text', id='new_c_cd_nm')
-                    div
-                        label 순번:
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 순번:
                         input(type='text', id='new_c_ord_no')
-                    div
+                    div.abs-top-right
                         button(data-text='신규하위코드저장취소', onclick='button2Click(this)') 취소
                         button(data-text='신규하위코드저장', onclick='button2Click(this)') 저장
 
-                #mod_c
-                    div
-                        label 코드:
-                        input(type='text', id='mod_c_cd', readonly, value= selectedParentCd[0].cd)
-                    div
-                        label 코드명:
-                        input(type='text', id='mod_c_cd_nm', value= selectedParentCd[0].cd_nm)
-                    div
-                        label 순번:
-                        input(type='text', id='mod_c_ord_no', value= selectedParentCd[0].ord_no)
-                    div
+                #mod_c.input-box
+                    div(class='input-box-title s-title') 수정
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 상위코드:
+                        input(type='text', id='mod_c_parent_cd')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 코드:
+                        input(type='text', id='mod_c_cd', readonly)
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 코드명:
+                        input(type='text', id='mod_c_cd_nm')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 순번:
+                        input(type='text', id='mod_c_ord_no')
+                    div.abs-top-right
                         button(data-text='하위코드수정취소', onclick='button2Click(this)') 취소
                         button(data-text='하위코드수정저장', onclick='button2Click(this)') 수정
 

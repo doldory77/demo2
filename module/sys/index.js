@@ -56,7 +56,7 @@ router.post('/code_mng', (req, res) => {
 
 async function processCodeMng(params, res) {
     console.log('params: ', params)
-    let selectedParentCd = [{cd:''}]
+    let selectedParentCd = [{cd:'0100'}]
     let newParams = {}
     if (params && params.submit_mode == 'new_parent_save') {
         // 신규상위코드 저장
@@ -72,9 +72,19 @@ async function processCodeMng(params, res) {
         newParams.ord_no = params.mod_p_ord_no
         await query('sys', 'updateCode', newParams)
     } else if (params && params.submit_mode == 'new_child_save') {
-
+        // 신규하위코드 저장
+        newParams.cd = params.new_c_cd
+        newParams.parent_cd = params.new_c_parent_cd
+        newParams.cd_nm = params.new_c_cd_nm
+        newParams.ord_no = params.new_c_ord_no
+        await query('sys', 'insertCode', newParams)
     } else if (params && params.submit_mode == 'mod_child_save') {
-
+        // 하위코드수정 저장
+        newParams.cd = params.mod_c_cd
+        newParams.cd_nm = params.mod_c_cd_nm
+        newParams.ord_no = params.mod_c_ord_no
+        newParams.parent_cd = params.mod_c_parent_cd
+        await query('sys', 'updateCode', newParams)
     }
 
     let parentCode = await query('sys', 'selectCodeByParentCd', {parent_cd:'0000'})
