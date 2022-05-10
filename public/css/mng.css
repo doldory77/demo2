@@ -1,0 +1,102 @@
+@import url("https://fonts.sandbox.google.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+.material-symbols-rounded {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+}
+
+.main {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.m-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  padding: 10px;
+}
+
+.s-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding: 5px;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.tool-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.tool-bar button:last-child {
+  margin-left: 10px;
+}
+
+.tool-bar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+}
+
+.flex-side {
+  justify-content: space-between;
+}
+
+.flex-left {
+  justify-content: start;
+}
+
+.flex-right {
+  justify-content: end;
+}
+
+.flex-label100 {
+  flex-basis: 100px;
+}
+
+.abs-top-right {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.input-box {
+  border: 1px solid #eee;
+  padding: 10px;
+  border-radius: 3px;
+  position: relative;
+  margin-top: 20px;
+}
+
+.input-box-title {
+  display: inline-block;
+  position: absolute;
+  top: -12px;
+  left: 24px;
+}
+
+table {
+  width: 100%;
+  border: 1px solid #eee;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 3px;
+  border: 1px solid darkgray;
+}
+
+th {
+  background-color: #e2e2e2;
+}
+
+a {
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=mng.css.map */

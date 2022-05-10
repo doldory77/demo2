@@ -3,28 +3,12 @@ html(lang='ko')
     head
         title admin login
         meta(name='viewport', content='width=device-width,initial-scale=1')
+        link(rel='stylesheet', href='https://fonts.sandbox.google.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200')
         link(href='/css/style.css', rel='stylesheet')
+        link(href='/css/mng.css', rel='stylesheet')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
         style.
-            
-            .main {width: 80%; margin:0 auto;}
-            .center-text {text-align: center;}
-            .m-title {font-size: 1.8rem; font-weight: 700; padding: 10px;}
-            .s-title {font-size: 1.6rem; font-weight: 600; padding: 5px;}
-            .tool-bar {display:flex; justify-content: center; align-items: center;padding: 5px 0;}
-            .tool-bar button:last-child {margin-left:10px;}
-            .flex-side {justify-content: space-between;}
-            .flex-left {justify-content: start;}
-            .flex-right {justify-content: end;}
-            .flex-label100 {flex-basis: 100px;}
-            .abs-top-right {display: inline-block;position: absolute;top: 10px; right: 10px;}
-            table {width: 100%; border: 1px solid #eee; border-collapse: collapse;}
-            th,td {padding: 3px; border: 1px solid darkgray;}
-            th {background-color: #e2e2e2;}
-            a {cursor: pointer;}
             #box {min-width:420px;}
-            .input-box {border: 1px solid #eee; padding:10px; border-radius: 3px; position: relative; margin-top: 20px;}
-            .input-box-title {display: inline-block; position: absolute; top: -12px; left: 24px}
             #head, .row {display: flex;}
             #head {background-color: #eee; font-weight: 700;}
             #head div, .row div {border: 1px solid darkgray; display:flex; justify-content:center; align-item:center; padding: 3px;}
@@ -179,7 +163,8 @@ html(lang='ko')
             #box
                 div(class='tool-bar flex-side')
                     span.s-title 상위코드
-                    button#add(data-text='상위코드', onclick='buttonClick(this)') +
+                    button#add.tool-bar-btn(data-text='상위코드', onclick='buttonClick(this)')
+                        span(class="material-symbols-rounded") add_circle
                 #head
                     div 코드
                     div 코드명
