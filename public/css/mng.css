@@ -3,6 +3,29 @@
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
 }
 
+.mng-head-menus {
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mng-head-menus .mng-head-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 120px;
+  padding: 5px 10px;
+  border: 1px solid #e2e2e2;
+  text-decoration: none;
+}
+.mng-head-menus .mng-head-menu:active {
+  color: black;
+}
+.mng-head-menus .mng-head-menu.selected {
+  background-color: #eee;
+  font-weight: 700;
+}
+
 .main {
   width: 80%;
   margin: 0 auto;
@@ -40,6 +63,12 @@
   border: none;
   cursor: pointer;
   display: flex;
+}
+
+.flex-flex-center {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }
 
 .flex-side {

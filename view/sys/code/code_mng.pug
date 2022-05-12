@@ -1,12 +1,8 @@
 doctype html 
 html(lang='ko')
     head
-        title admin login
-        meta(name='viewport', content='width=device-width,initial-scale=1')
-        link(rel='stylesheet', href='https://fonts.sandbox.google.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200')
-        link(href='/css/style.css', rel='stylesheet')
-        link(href='/css/mng.css', rel='stylesheet')
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+        title 코드관리
+        include ../cmmn.pug
         style.
             #box {min-width:420px;}
             #head, .row {display: flex;}
@@ -157,6 +153,7 @@ html(lang='ko')
             
             
     body
+        include ../cmmn_menu.pug
         .main
             h2(class='m-title center-text') 코드관리
             hr
@@ -164,7 +161,7 @@ html(lang='ko')
                 div(class='tool-bar flex-side')
                     span.s-title 상위코드
                     button#add.tool-bar-btn(data-text='상위코드', onclick='buttonClick(this)')
-                        span(class="material-symbols-rounded") add_circle
+                        span(class="material-symbols-rounded") add_box
                 #head
                     div 코드
                     div 코드명
@@ -193,7 +190,7 @@ html(lang='ko')
                         input(type='text', id='mod_p_ord_no', value= selectedParentCd[0].ord_no)
                     div.abs-top-right
                         button(data-text='상위코드수정취소', onclick='buttonClick(this)') 취소
-                        button(data-text='상위코드수정저장', onclick='buttonClick(this)') 수정  
+                        button(data-text='상위코드수정저장', onclick='buttonClick(this)') 저장
                 
                 #new.input-box
                     div(class='input-box-title s-title') 추가
@@ -212,7 +209,8 @@ html(lang='ko')
                 
                 div(class='tool-bar flex-side', style='margin-top:20px;')
                     span.s-title 하위코드
-                    button#add(data-text='하위코드', onclick='button2Click(this)') +
+                    button#add.tool-bar-btn(data-text='하위코드', onclick='button2Click(this)')
+                        span(class="material-symbols-rounded") add_box
                 #head
                     div 코드
                     div 코드명

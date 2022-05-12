@@ -339,3 +339,15 @@ insert into contact (
 )
 
 select * from contact
+
+delimiter $$
+drop function if exists fun_cd_nm; 
+create function fun_cd_nm(
+	p_cd char(4)
+) returns varchar(50)
+begin
+	declare return_value varchar(50);
+	select cd_nm into return_value from code where cd = p_cd;
+	return return_value;
+end $$
+delimiter ;

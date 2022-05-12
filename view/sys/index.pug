@@ -1,19 +1,13 @@
 doctype html 
 html(lang='ko')
     head
-        title admin login
-        meta(name='viewport', content='width=device-width,initial-scale=1')
-        link(href='/css/style.css', rel='stylesheet')
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+        title 관리자 Home
+        include cmmn.pug
 
     body
-        #mian
-            h1 Welcom #{userId}
-            .menus
-                .menu
-                    a(href='/sys/code_mng') 코드관리
-                .menu
-                    a(href='/sys/menu_mng') 메뉴관리
-                .menu
-                    a(href='') 회원관리
+        include cmmn_menu.pug
+        .main
+            h2(class='m-title center-text') [#{userId}] 환영합니다.
+            hr
+            
                     

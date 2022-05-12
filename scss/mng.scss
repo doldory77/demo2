@@ -6,13 +6,35 @@
     'GRAD' 0,
     'opsz' 48
 }
+.mng-head-menus {
+    padding: 10px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    .mng-head-menu {
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        min-width: 120px;
+        padding: 5px 10px;
+        border: 1px solid #e2e2e2;
+        text-decoration: none;
+        &:active {color: black;}
+        &.selected {
+            background-color: #eee;
+            font-weight: 700;
+        }
+    }
+}
+
 .main {width: 80%; margin:0 auto;}
 .m-title {font-size: 1.8rem; font-weight: 700; padding: 10px;}
 .s-title {font-size: 1.6rem; font-weight: 600; padding: 5px;}
 .center-text {text-align: center;}
 .tool-bar {display:flex; justify-content: center; align-items: center;padding: 5px 0;}
 .tool-bar button:last-child {margin-left:10px;}
-.tool-bar-btn {background: none; border: none; cursor: pointer; display: flex;}
+.tool-bar-btn {background:none; border: none; cursor: pointer; display: flex;}
+.flex-flex-center {display:flex !important; justify-content: center; align-items: center;}
 .flex-side {justify-content: space-between;}
 .flex-left {justify-content: start;}
 .flex-right {justify-content: end;}

@@ -1,0 +1,54 @@
+doctype html 
+html(lang='ko')
+    head
+        title 회원관리
+        include ../cmmn.pug
+        style.
+            #box {min-width:420px;}
+            #head, .row {display: flex;}
+            #head {background-color: #eee; font-weight: 700;}
+            #head div, .row div {
+                border: 1px solid darkgray; 
+                display:flex; 
+                justify-content:center; 
+                align-item:center; 
+                padding: 3px;
+            }
+            .row div:nth-child(2) {justify-content:start;}
+            #head div:nth-child(1), .row div:nth-child(1) {flex-grow:0; flex-basis:30%;}
+            #head div:nth-child(2), .row div:nth-child(2) {flex-grow:0; flex-basis:30%;}
+            #head div:nth-child(3), .row div:nth-child(3) {flex-grow:0; flex-basis:10%;}
+            #head div:nth-child(4), .row div:nth-child(4) {flex-grow:0; flex-basis:10%;}
+            #head div:nth-child(5), .row div:nth-child(5) {flex-grow:0; flex-basis:30%;}
+            #head div:nth-child(6), .row div:nth-child(6) {flex-grow:0; flex-basis:10%;}
+            
+            #body {min-height:100px; max-height:300px; overflow-y:scroll; -ms-overflow-style: none}
+            #body::-webkit-scrollbar {display: none;}
+
+    body
+        include ../cmmn_menu.pug
+        .main
+            h2(class='m-title center-text') 회원관리
+            hr
+            #box
+                div(class='tool-bar flex-side')
+                    span.s-title 회원정보
+                    button#add.tool-bar-btn(data-text='회원추가', onclick='buttonClick(this)')
+                        span(class="material-symbols-rounded") add_box
+                #head
+                    div 아이디
+                    div 이름
+                    div 직분
+                    div 성별
+                    div 등록일
+                    div 삭제여부
+                #body
+                    - for (let i=0; i<member.length; i++)
+                        .row(data-tag= member[i])
+                            div
+                                a(data-text='회원상세', onclick='buttonClick(this)')= member[i].id
+                            div= member[i].name
+                            div= member[i].jikbun_cd_nm
+                            div= member[i].mw_cd_nm
+                            div= member[i].reg_dt
+                            div= member[i].del_yn

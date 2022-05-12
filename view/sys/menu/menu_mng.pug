@@ -1,11 +1,262 @@
 doctype html 
 html(lang='ko')
     head
-        title admin login
-        meta(name='viewport', content='width=device-width,initial-scale=1')
-        link(href='/css/style.css', rel='stylesheet')
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+        title 메뉴관리
+        include ../cmmn.pug
+        style.
+            #box {min-width:420px;}
+            #head, .row {display: flex;}
+            #head {background-color: #eee; font-weight: 700;}
+            #head div, .row div {border: 1px solid darkgray; display:flex; justify-content:center; align-item:center; padding: 3px;}
+            .row div:nth-child(2) {justify-content:start;}
+            #head div:nth-child(1), .row div:nth-child(1) {flex-grow:0; flex-basis:120px;}
+            #head div:nth-child(2), .row div:nth-child(2) {flex-grow:1}
+            #head div:nth-child(3), .row div:nth-child(3) {flex-grow:0; flex-basis:80px;}
+            #body {height:100px; overflow-y:scroll; -ms-overflow-style: none}
+            #body::-webkit-scrollbar {display: none;}
+            #new {display:none;}
+            #mod {display:none;}
+            #new_c {display:none;}
+            #mod_c {display:none;}
 
+        script.
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '상위코드':
+                        $('#new').css('display','block')
+                        break;
+                    case '상위코드수정':
+                        let tag = $(e).closest('div.row').data('tag')
+                        $('input[name="selected_parent_cd"]').val(tag.cd)
+                        $('input[name="submit_mode"]').val('mod_parent_init')
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '상위코드수정저장':
+                        $('input[name="submit_mode"]').val('mod_parent_save')
+                        $('input[name="mod_p_cd"]').val($('input[id="mod_p_cd"]').val())
+                        $('input[name="mod_p_cd_nm"]').val($('input[id="mod_p_cd_nm"]').val())
+                        $('input[name="mod_p_ord_no"]').val($('input[id="mod_p_ord_no"]').val())
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '상위코드수정취소':
+                        $('input[name="submit_mode"]').val('')
+                        $('input[name="mod_p_cd_nm"]').val('')
+                        $('input[name="mod_p_ord_no"]').val('')
+                        $('input[id="mod_p_cd"]').val('')
+                        $('input[id="mod_p_cd_nm"]').val('')
+                        $('input[id="mod_p_ord_no"]').val('')
+                        $('#mod').css('display','none')
+                        break;
+                    case '신규상위코드저장':
+                        $('input[name="submit_mode"]').val('new_parent_save')
+                        $('input[name="new_p_cd"]').val($('input[id="new_p_cd"]').val())
+                        $('input[name="new_p_cd_nm"]').val($('input[id="new_p_cd_nm"]').val())
+                        $('input[name="new_p_ord_no"]').val($('input[id="new_p_ord_no"]').val())
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '신규상위코드저장취소':
+                        $('#new').css('display','none')
+                        $('input[name="submit_mode"]').val('')
+                        $('input[name="new_p_cd"]').val('')
+                        $('input[name="new_p_cd_nm"]').val('')
+                        $('input[name="new_p_ord_no"]').val('')
+                        $('input[id="new_p_cd"]').val('')
+                        $('input[id="new_p_cd_nm"]').val('')
+                        $('input[id="new_p_ord_no"]').val('')
+                        break;
+                    default:
+                }
+            }
+
+            let button2Click = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '하위코드':
+                        $('#new_c').css('display','block')
+                        $('input[id="new_c_parent_cd"]').val($('input[name="selected_parent_cd"]').val())
+                        break;
+                    case '하위코드수정':
+                        let tag = $(e).closest('div.row').data('tag')
+                        console.log(tag)
+                        $('input[id="mod_c_parent_cd"]').val($('input[name="selected_parent_cd"]').val())
+                        $('input[id="mod_c_cd"]').val(tag.cd)
+                        $('input[id="mod_c_cd_nm"]').val(tag.cd_nm)
+                        $('input[id="mod_c_ord_no"]').val(tag.ord_no)
+                        $('#mod_c').css('display','block')
+                        break;
+                    case '하위코드수정저장':
+                        $('input[name="submit_mode"]').val('mod_child_save')
+                        $('input[name="mod_c_parent_cd"]').val($('input[id="mod_c_parent_cd"]').val())
+                        $('input[name="mod_c_cd"]').val($('input[id="mod_c_cd"]').val())
+                        $('input[name="mod_c_cd_nm"]').val($('input[id="mod_c_cd_nm"]').val())
+                        $('input[name="mod_c_ord_no"]').val($('input[id="mod_c_ord_no"]').val())
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '하위코드수정취소':
+                        $('input[name="submit_mode"]').val('')
+                        $('input[name="mod_c_parent_cd"]').val('')
+                        $('input[name="mod_c_cd"]').val('')
+                        $('input[name="mod_c_cd_nm"]').val('')
+                        $('input[name="mod_c_ord_no"]').val('')
+                        $('input[id="mod_c_parent_cd"]').val('')
+                        $('input[id="mod_c_cd"]').val('')
+                        $('input[id="mod_c_cd_nm"]').val('')
+                        $('input[id="mod_c_ord_no"]').val('')
+                        $('#mod_c').css('display','none')
+                        break;
+                    case '신규하위코드저장':
+                        $('input[name="submit_mode"]').val('new_child_save')
+                        $('input[name="new_c_parent_cd"]').val($('input[id="new_c_parent_cd"]').val())
+                        $('input[name="new_c_cd"]').val($('input[id="new_c_cd"]').val())
+                        $('input[name="new_c_cd_nm"]').val($('input[id="new_c_cd_nm"]').val())
+                        $('input[name="new_c_ord_no"]').val($('input[id="new_c_ord_no"]').val())
+                        $('form#hiddenForm').submit()
+                        break;
+                    case '신규하위코드저장취소':
+                        $('#new_c').css('display','none')
+                        $('input[name="submit_mode"]').val('')
+                        $('input[name="new_c_cd"]').val('')
+                        $('input[name="new_c_cd_nm"]').val('')
+                        $('input[name="new_c_ord_no"]').val('')
+                        $('input[name="new_c_parent_cd"]').val('')
+                        $('input[id="new_c_cd"]').val('')
+                        $('input[id="new_c_cd_nm"]').val('')
+                        $('input[id="new_c_ord_no"]').val('')
+                        $('input[id="new_c_parent_cd"]').val('')
+                        break;
+                    default:
+                }
+            }
+            
     body
-        #mmain
-            h1 Menu Management Page
+        include ../cmmn_menu.pug
+        .main
+            h2(class='m-title center-text') 메뉴관리
+            hr
+            #box
+                div(class='tool-bar flex-side')
+                    span.s-title 상위메뉴
+                    button#add.tool-bar-btn(data-text='상위메뉴', onclick='buttonClick(this)')
+                        span(class="material-symbols-rounded") add_box
+                #head
+                    div 메뉴코드
+                    div 메뉴명
+                    div 순번
+                #body
+                    - for (let i=0; i<parentMenu.length; i++)
+                        .row(data-tag= parentMenu[i])
+                            div
+                                a(data-text='상위메뉴수정', onclick='buttonClick(this)')= parentMenu[i].menu_cd
+                            div
+                                a= parentMenu[i].menu_nm
+                            div
+                                a= parentMenu[i].ord_no
+
+                if selectedParentMenu[0].menu_cd != ''
+                 #mod.input-box(style='display:block')
+                    div(class='input-box-title s-title') 수정
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴코드:
+                        input(type='text', id='mod_p_cd', readonly, value= selectedParentMenu[0].menu_cd)
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴명:
+                        input(type='text', id='mod_p_cd_nm', value= selectedParentMenu[0].menu_nm)
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴순번:
+                        input(type='text', id='mod_p_ord_no', value= selectedParentMenu[0].ord_no)
+                    div.abs-top-right
+                        button(data-text='상위메뉴수정취소', onclick='buttonClick(this)') 취소
+                        button(data-text='상위메뉴수정저장', onclick='buttonClick(this)') 저장
+                
+                #new.input-box
+                    div(class='input-box-title s-title') 추가
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴코드:
+                        input(type='text', id='new_p_cd')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴명:
+                        input(type='text', id='new_p_cd_nm')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴순번:
+                        input(type='text', id='new_p_ord_no')
+                    div.abs-top-right
+                        button(data-text='신규상위메뉴저장취소', onclick='buttonClick(this)') 취소
+                        button(data-text='신규상위메뉴저장', onclick='buttonClick(this)') 저장
+                
+                div(class='tool-bar flex-side', style='margin-top:20px;')
+                    span.s-title 하위메뉴
+                    button#add.tool-bar-btn(data-text='하위메뉴', onclick='button2Click(this)')
+                        span(class="material-symbols-rounded") add_box
+                #head
+                    div 메뉴코드
+                    div 메뉴명
+                    div 메뉴순번
+                #body
+                    - for (let i=0; i<childMenu.length; i++)
+                        .row(data-tag= childMenu[i])
+                            div
+                                a(data-text='하위메뉴수정', onclick='button2Click(this)')= childMenu[i].menu_cd
+                            div
+                                a= childMenu[i].menu_nm
+                            div
+                                a= childMenu[i].ord_no
+
+                #new_c.input-box
+                    div(class='input-box-title s-title') 추가
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 상위메뉴코드:
+                        input(type='text', id='new_c_parent_cd')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴코드:
+                        input(type='text', id='new_c_cd')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴명:
+                        input(type='text', id='new_c_cd_nm')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴순번:
+                        input(type='text', id='new_c_ord_no')
+                    div.abs-top-right
+                        button(data-text='신규하위메뉴저장취소', onclick='button2Click(this)') 취소
+                        button(data-text='신규하위메뉴저장', onclick='button2Click(this)') 저장
+
+                #mod_c.input-box
+                    div(class='input-box-title s-title') 수정
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 상위메뉴코드:
+                        input(type='text', id='mod_c_parent_cd')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴코드:
+                        input(type='text', id='mod_c_cd', readonly)
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴명:
+                        input(type='text', id='mod_c_cd_nm')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 메뉴순번:
+                        input(type='text', id='mod_c_ord_no')
+                    div.abs-top-right
+                        button(data-text='하위메뉴수정취소', onclick='button2Click(this)') 취소
+                        button(data-text='하위메뉴수정저장', onclick='button2Click(this)') 수정
+
+                form#hiddenForm(action='/sys/menu_mng', enctype='application/x-www-form-urlencoded', method='post')
+                    input(type='hidden', name='submit_mode', value='')
+                    input(type='hidden', name='selected_parent_menu_cd', value=selectedParentMenu[0].menu_cd)
+                    input(type='hidden', name='mod_p_menu_cd', value='')
+                    input(type='hidden', name='mod_p_menu_nm', value='')
+                    input(type='hidden', name='mod_p_ord_no', value='')
+                    input(type='hidden', name='new_p_menu_cd', value='')
+                    input(type='hidden', name='new_p_menu_nm', value='')
+                    input(type='hidden', name='new_p_ord_no', value='')
+                    input(type='hidden', name='selected_child_menu_cd', value='')
+                    input(type='hidden', name='mod_c_menu_cd', value='')
+                    input(type='hidden', name='mod_c_parent_menu_cd', value='')
+                    input(type='hidden', name='mod_c_menu_nm', value='')
+                    input(type='hidden', name='mod_c_ord_no', value='')
+                    input(type='hidden', name='new_c_menu_cd', value='')
+                    input(type='hidden', name='new_c_menu_nm', value='')
+                    input(type='hidden', name='new_c_parent_menu_cd', value='')
+                    input(type='hidden', name='new_c_ord_no', value='')
+
+                    

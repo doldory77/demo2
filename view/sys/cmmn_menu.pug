@@ -1,0 +1,13 @@
+.mng-head-menus
+    a.mng-head-menu(href='/sys') 관리자 Home
+    a.mng-head-menu(href='/sys/code_mng') 코드관리
+    a.mng-head-menu(href='/sys/menu_mng') 메뉴관리
+    a.mng-head-menu(href='/sys/member_mng') 회원관리
+
+script.
+    $('.mng-head-menus a').each((idx, el) => {
+        if ($(el).text() == $('title').text()) {
+            $(el).closest('.mng-head-menu').addClass('selected')
+        }
+    })
+    
