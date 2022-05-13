@@ -351,3 +351,16 @@ begin
 	return return_value;
 end $$
 delimiter ;
+
+delimiter $$
+drop function if exists fun_fmt_date; 
+create function fun_fmt_date(
+	p_date varchar(8)
+) returns varchar(10)
+begin
+	declare return_value varchar(10);
+	
+	select if(p_date is null, null, concat(substr(p_date, 1, 4),'-',substr(p_date, 5, 2),'-',substr(p_date, 7))) into return_value;
+	return return_value;
+end $$
+delimiter ;

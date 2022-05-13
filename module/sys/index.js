@@ -243,12 +243,38 @@ router.get('/member_mng', (req, res) => {
 })
 
 router.post('/member_mng', (req, res) => {
-    viewMember({}, res)
+    viewMember(Object.assign({}, req.body), res)
 })
 
 async function viewMember(params, res) {
-    let member = await query('sys', 'selectMember', {seq_no:''})
-    res.render('sys/member/member_mng', {member})
+    console.log('params: ', params)
+    newParams = {seq_no:''}
+    if (params.chk_id_or_name && params.slt_id_or_name == '1') {
+        newParams.name = params.id_or_name
+    } else if (params.chk_id_or_name && params.slt_id_or_name == '2') {
+        newParams.id = params.id_or_name
+    }
+    if (params.chk_jikbun) {
+        newParams.jikbun_cd = params.slt_jikbun
+    }
+    if (params.chk_mw) {
+        newParams.mw_cd = params.slt_mw
+    }
+    if (params.chk_reg_dt) {
+        newParams.start_reg_dt = params.start_reg_dt
+        newParams.end_reg_dt = params.end_reg_dt
+    }
+    let member = await query('sys', 'selectMember', newParams)
+    let jikbun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0300'})
+    let mwgubun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0900'})
+    res.render('sys/member/member_mng', {member, jikbun, mwgubun, params})
 }
+
+router.get('/member_dtl', (req, res) => {
+    (async function(){
+        let mem = await query('sys', 'selectMember', {seq_no:req.query.seq_no})
+        res.render('sys/member/member_dtl', {mem:mem[0]||{}})
+    })()
+})
 
 module.exports = router;

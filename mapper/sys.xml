@@ -46,13 +46,31 @@
       a.jikbun_cd,
       fun_cd_nm(a.jikbun_cd) as jikbun_cd_nm, 
       a.email,
-      a.reg_dt,
+      fun_fmt_date(a.reg_dt) as reg_dt,
       a.del_yn,
       fun_cd_nm(a.mw_cd) as mw_cd_nm
     from member a
     where 1=1
       <if test="seq_no != null and seq_no != ''"> 
       and a.seq_no = #{seq_no}
+      </if>
+      <if test="id != null and id != ''"> 
+      and a.id = #{id}
+      </if>
+      <if test="name != null and name != ''"> 
+      and a.name = #{name}
+      </if>
+      <if test="jikbun_cd != null and jikbun_cd != ''"> 
+      and a.jikbun_cd = #{jikbun_cd}
+      </if>
+      <if test="mw_cd != null and mw_cd != ''"> 
+      and a.mw_cd = #{mw_cd}
+      </if>
+      <if test="start_reg_dt != null and start_reg_dt != ''"> 
+      and a.reg_dt <![CDATA[ >= ]]> #{start_reg_dt}
+      </if>
+      <if test="end_reg_dt != null and end_reg_dt != ''"> 
+      and a.reg_dt <![CDATA[ <= ]]> #{end_reg_dt}
       </if>
   </select>
 

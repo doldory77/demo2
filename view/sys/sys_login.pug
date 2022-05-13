@@ -1,23 +1,27 @@
 doctype html 
 html(lang='ko')
     head
-        title admin login
-        meta(name='viewport', content='width=device-width,initial-scale=1')
-        link(href='/css/style.css', rel='stylesheet')
-        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
-
+        title 관리자 로그인
+        include cmmn.pug
+        style.
+            #box {display: flex; flex-flow: column; justify-content: center; align-items: center; height: 100vh;}
+            .rows {padding: 20px; border: 1px solid #e2e2e2; border-radius: 5px;}
+            .row {display: flex; justify-content: center; align-items: center; margin-top:10px; gap:10px;}
+            .row label {width: 40px;}
     body
         form(action='/sys/sys_login_process', method='post', enctype='application/x-www-form-urlencoded')
-            .rows
-                .row
-                    label ID:
-                    input(type='text', name='id', value= id)
-                .row
-                    label PW:
-                    input(type='password' name='pw', value= pw)
-                .row
-                    if code !== '0000'
-                        p.warn= msg 
-                .row
-                    input(type='submit', value='확인')
+            #box
+                h2(style='margin-bottom: 20px;') 관리자 로그인
+                .rows
+                    .row
+                        label ID:
+                        input(type='text', name='id', value= id)
+                    .row
+                        label PW:
+                        input(type='password' name='pw', value= pw)
+                    .row
+                        if code !== '0000'
+                            p.warn= msg 
+                    .row
+                        input(type='submit', value='확인')
         

@@ -51,11 +51,25 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 5px 0;
+  padding: 5px;
+}
+
+.tool-bar-group {
+  position: relative;
+  border: 2px solid #e2e2e2;
+  border-radius: 5px;
+}
+
+.tool-bar-row-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
 }
 
 .tool-bar button:last-child {
   margin-left: 10px;
+  padding-right: 0;
 }
 
 .tool-bar-btn {
@@ -63,6 +77,18 @@
   border: none;
   cursor: pointer;
   display: flex;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.tool-bar-check-label {
+  font-size: 1.2rem;
 }
 
 .flex-flex-center {

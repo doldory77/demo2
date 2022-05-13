@@ -1,0 +1,23 @@
+doctype html 
+html(lang='ko')
+    head
+        title 회원상세
+        include ../cmmn.pug
+
+    body
+        .main
+            h2(class='m-title center-text') 회원상세
+            hr
+            form
+                #mode.input-box
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 일련번호:
+                        input(type='text', id='seq_no', name='seq_no', readonly, value=mem.seq_no)
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 아이디:
+                        input(type='text', id='id', name='id', readonly, value=mem.id)
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 이름:
+                        input(type='text', id='name', name='name', readonly, value=mem.name)
+                    
+

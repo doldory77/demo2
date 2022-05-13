@@ -1,5 +1,25 @@
 meta(name='viewport', content='width=device-width,initial-scale=1')
 link(rel='stylesheet', href='https://fonts.sandbox.google.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200')
-link(href='/css/style.css', rel='stylesheet')
-link(href='/css/mng.css', rel='stylesheet')
+link(rel='stylesheet', href='https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css')
+link(rel='stylesheet', href='/css/style.css')
+link(rel='stylesheet', href='/css/mng.css')
 script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+script(src='https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js')
+script.
+    gj.core.messages['kr-ko'] = {
+        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        monthShortNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        weekDaysMin: ['일', '월', '화', '수', '목', '금', '토'],
+        weekDaysShort:  ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+        weekDays: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+        am: '오전',
+        pm: '오후',
+        ok: '확인',
+        cancel: '취소',
+        titleFormat: 'yyyy년 mmmm'
+    };
+    $(document).ready(() => {
+        $('.datepicker').each(function(){
+            $(this).datepicker({locale:'kr-ko', format:'yyyy-mm-dd'})
+        })
+    })

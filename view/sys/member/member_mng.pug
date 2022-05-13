@@ -25,13 +25,55 @@ html(lang='ko')
             #body {min-height:100px; max-height:300px; overflow-y:scroll; -ms-overflow-style: none}
             #body::-webkit-scrollbar {display: none;}
 
+        script.
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '회원상세':
+                        window.open('/sys/member_dtl?seq_no='+'1', '_blank')
+                        break;
+                    default:
+                        break;
+                }
+            }
+                
     body
         include ../cmmn_menu.pug
         .main
             h2(class='m-title center-text') 회원관리
             hr
             #box
-                div(class='tool-bar flex-side')
+                form(action='/sys/member_mng', method='post', enctype='application/x-www-form-urlencoded')
+                    div.tool-bar-group.mt20
+                        button(style='position:absolute; top:8px; right:5px;') 조회
+                        div(class='tool-bar flex-left' style='width:90%; flex-wrap: wrap; gap:20px;')
+                            div.tool-bar-row-group
+                                input(name='chk_id_or_name', type='checkbox', value='1', checked)
+                                select(name='slt_id_or_name')
+                                    option(value='1') 이름
+                                    option(value='2') 아이디
+                                input(name='id_or_name', type='text', style='width:120px;')
+                            div.tool-bar-row-group
+                                label.tool-bar-check-label(for='chk_jikbun') 직분
+                                input(id='chk_jikbun', name='chk_jikbun', type='checkbox', checked= params.chk_jikbun != undefined)
+                                select(name='slt_jikbun')
+                                    - for (let i=0; i<jikbun.length; i++)
+                                        option(value=jikbun[i].cd, selected= jikbun[i].cd == params.slt_jikbun)= jikbun[i].cd_nm
+                            div.tool-bar-row-group
+                                label.tool-bar-check-label(for='chk_mw') 성별
+                                input(id='chk_mw', name='chk_mw', type='checkbox', checked= params.chk_mw != undefined)
+                                select(name='slt_mw')
+                                    - for (let i=0; i<mwgubun.length; i++)
+                                        option(value=mwgubun[i].cd, selected= mwgubun[i].cd == params.slt_mw)= mwgubun[i].cd_nm
+                            div.tool-bar-row-group
+                                label.tool-bar-check-label(for='chk_reg_dt') 등록기간
+                                input(id='chk_reg_dt', name='chk_reg_dt', type='checkbox', checked= params.chk_reg_dt != undefined)
+                                input.datepicker(id='start_reg_dt', name='start_reg_dt', type='text', style='width:120px;', value= params.start_reg_dt || '')
+                                span ~
+                                input.datepicker(id='end_reg_dt', name='end_reg_dt', type='text', style='width:120px;', value= params.end_reg_dt || '')
+                                
+                div(class='tool-bar flex-side mt10')
                     span.s-title 회원정보
                     button#add.tool-bar-btn(data-text='회원추가', onclick='buttonClick(this)')
                         span(class="material-symbols-rounded") add_box
