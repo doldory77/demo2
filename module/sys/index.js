@@ -271,10 +271,29 @@ async function viewMember(params, res) {
 }
 
 router.get('/member_dtl', (req, res) => {
-    (async function(){
-        let mem = await query('sys', 'selectMember', {seq_no:req.query.seq_no})
-        res.render('sys/member/member_dtl', {mem:mem[0]||{}})
-    })()
+    // (async function(){
+    //     let mem = await query('sys', 'selectMember', {seq_no:req.query.seq_no})
+    //     let jikbun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0300'})
+    //     let mwgubun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0900'})
+    //     let contact_kind = await query('sys', 'selectCodeByParentCd', {parent_cd:'0400'})
+    //     let contact = await query('sys', 'selectContactByMbSeqNo', {mb_seq_no:req.query.seq_no})
+    //     res.render('sys/member/member_dtl', {mem:mem[0]||{}, jikbun, mwgubun, contact_kind, contact})
+    // })()
+    viewMemberDetail(Object.assign({}, req.query), res)
+})
+
+async function viewMemberDetail(params, res) {
+    let mem = await query('sys', 'selectMember', {seq_no:params.seq_no})
+    let jikbun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0300'})
+    let mwgubun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0900'})
+    let contact_kind = await query('sys', 'selectCodeByParentCd', {parent_cd:'0400'})
+    let contact = await query('sys', 'selectContactByMbSeqNo', {mb_seq_no:params.seq_no})
+    res.render('sys/member/member_dtl', {mem:mem[0]||{}, jikbun, mwgubun, contact_kind, contact})
+}
+
+router.post('/member_contact_add', (req, res) => {
+    console.log(req.body)
+    viewMemberDetail(Object.assign({}, req.body), res)
 })
 
 module.exports = router;

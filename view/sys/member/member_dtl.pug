@@ -4,10 +4,57 @@ html(lang='ko')
         title 회원상세
         include ../cmmn.pug
 
+        template#contact_no
+            div(class='tool-bar flex-left', style='gap:5px;')
+                label(class='flex-label100') 연락처
+                select(name='slt_contact_kind')
+                    - for (let i=0; i<contact_kind.length; i++)
+                        option(value=contact_kind[i].cd)= contact_kind[i].cd_nm
+                input(type='text', name='contack_no')
+
+        script.
+            var contact_num = 0
+            var contact_cnt = 0
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '연락처추가':
+                        contact_num = contact_num === 0 ? ($('form[name="mod_contact"] div.tool-bar').length || 0) : contact_num
+                        contact_num = contact_num + 1
+                        let template = $.trim($('#contact_no').html())
+                        
+                        let container = $($('form[name="new_contact"] > div#new')[0])
+                        container.append(
+                            template
+                                .replace('연락처', '연락처(' + contact_num + ')') 
+                                .replace('slt_contact_kind', 'slt_contact_kind'+contact_num)
+                                .replace('contack_no', 'contack_no'+contact_num)
+                        )
+                        if (container.css('display') === 'none') {
+                            $($('form[name="new_contact"] input[name="start_no"]')[0]).val(contact_num)
+                            container.css('display', 'block')
+                        }
+                        $($('form[name="new_contact"] input[name="count"]')[0]).val(++contact_cnt)
+                        break;
+                    case '주소추가':
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+
     body
         .main
             h2(class='m-title center-text') 회원상세
             hr
+            div(class='tool-bar flex-side mt10')
+                span.s-title 회원정보
+                span(style='display:flex;')
+                    button(data-text='연락처추가', onclick='buttonClick(this)') 연락처 추가
+                    button(data-text='주소추가', onclick='buttonClick(this)') 주소 추가
+                    
             form
                 #mode.input-box
                     div(class='tool-bar flex-left')
@@ -18,6 +65,49 @@ html(lang='ko')
                         input(type='text', id='id', name='id', readonly, value=mem.id)
                     div(class='tool-bar flex-left')
                         label.flex-label100 이름:
-                        input(type='text', id='name', name='name', readonly, value=mem.name)
-                    
+                        input(type='text', id='name', name='name', value=mem.name)
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 직분:
+                        select(name='slt_jikbun')
+                            - for (let i=0; i<jikbun.length; i++)
+                                option(value=jikbun[i].cd, selected= jikbun[i].cd == mem.jikbun_cd)= jikbun[i].cd_nm
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 이메일:
+                        input(type='text', id='email', name='email', value=mem.email)
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 등록일:
+                        input.datepicker(id='reg_dt', name='reg_dt', type='text', style='width:120px;', value= mem.reg_dt || '')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 성별:
+                        select(name='slt_mw')
+                            - for (let i=0; i<mwgubun.length; i++)
+                                option(value=mwgubun[i].cd, selected= mwgubun[i].cd == mem.mw_cd)= mwgubun[i].cd_nm
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 재적구분:
+                        select(name='slt_del_yn')
+                            option(value='Y', selected= 'Y' == mem.del_yn) Y
+                            option(value='N', selected= 'N' == mem.del_yn) N
+                
+            form(name='mod_contact')
+                #mode.input-box(data-tag= mem)
+                    - for (let i=0; i<contact.length; i++)
+                        div(class='tool-bar flex-left', style='gap:5px;')
+                            label.flex-label100= '연락처(' + (i+1) + ') :'
+                            select(name='slt_contact_kind_'+i)
+                                - for (let j=0; j<contact_kind.length; j++)
+                                    option(value=contact_kind[j].cd, selected= contact_kind[j].cd == contact[i].kind_cd)= contact_kind[j].cd_nm
+                            input(type='text', id='contack_no'+i, name='contack_no'+i, value=contact[i].contact_no)
+                            label(for='contact_del_yn'+i) 삭제
+                            input(type='checkbox', id='contact_del_yn'+i, name='contact_del_yn'+i)
+                            input(type='hidden' name='seq_no'+i, value=contact[i].seq_no)
+
+            form(name='new_contact', action='/sys/member_contact_add', method='post', enctype='application/x-www-form-urlencoded')
+                input(type='hidden', name='seq_no', value=mem.seq_no)
+                input(type='hidden', name='count')
+                input(type='hidden', name='start_no')
+                #new.input-box(data-tag= mem, style='display:none; position:relative')
+                    div.abs-top-right
+                        button(data-text='신규연락처저장', onclick='buttonClick(this)') 저장
+                
+
 

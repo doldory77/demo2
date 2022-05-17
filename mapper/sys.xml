@@ -48,6 +48,7 @@
       a.email,
       fun_fmt_date(a.reg_dt) as reg_dt,
       a.del_yn,
+      a.mw_cd,
       fun_cd_nm(a.mw_cd) as mw_cd_nm
     from member a
     where 1=1
@@ -114,5 +115,17 @@
       #{contact_no}
     )
   </insert>
+
+  <select id="selectContactByMbSeqNo">
+    select
+      seq_no,
+      mb_seq_no,
+      kind_cd,
+      fun_cd_nm(kind_cd) as kind_cd_nm,
+      contact_no
+    from contact
+    where 1=1
+	    and mb_seq_no = #{mb_seq_no}
+  </select>
   
 </mapper>

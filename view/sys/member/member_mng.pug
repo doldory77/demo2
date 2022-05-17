@@ -31,7 +31,8 @@ html(lang='ko')
                 console.log(text);
                 switch (text) {
                     case '회원상세':
-                        window.open('/sys/member_dtl?seq_no='+'1', '_blank')
+                        let seq_no = $(e).closest('.row').data('tag').seq_no
+                        window.open('/sys/member_dtl?seq_no='+seq_no, '_blank')
                         break;
                     default:
                         break;
