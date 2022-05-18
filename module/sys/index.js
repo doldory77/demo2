@@ -271,14 +271,6 @@ async function viewMember(params, res) {
 }
 
 router.get('/member_dtl', (req, res) => {
-    // (async function(){
-    //     let mem = await query('sys', 'selectMember', {seq_no:req.query.seq_no})
-    //     let jikbun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0300'})
-    //     let mwgubun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0900'})
-    //     let contact_kind = await query('sys', 'selectCodeByParentCd', {parent_cd:'0400'})
-    //     let contact = await query('sys', 'selectContactByMbSeqNo', {mb_seq_no:req.query.seq_no})
-    //     res.render('sys/member/member_dtl', {mem:mem[0]||{}, jikbun, mwgubun, contact_kind, contact})
-    // })()
     viewMemberDetail(Object.assign({}, req.query), res)
 })
 
@@ -288,12 +280,75 @@ async function viewMemberDetail(params, res) {
     let mwgubun = await query('sys', 'selectCodeByParentCd', {parent_cd:'0900'})
     let contact_kind = await query('sys', 'selectCodeByParentCd', {parent_cd:'0400'})
     let contact = await query('sys', 'selectContactByMbSeqNo', {mb_seq_no:params.seq_no})
-    res.render('sys/member/member_dtl', {mem:mem[0]||{}, jikbun, mwgubun, contact_kind, contact})
+    let addr = await query('sys', 'selectAddrByMbSeqNo', {mb_seq_no:params.seq_no})
+    res.render('sys/member/member_dtl', {mem:mem[0]||{}, jikbun, mwgubun, contact_kind, contact, addr})
 }
 
 router.post('/member_contact_add', (req, res) => {
-    console.log(req.body)
-    viewMemberDetail(Object.assign({}, req.body), res)
+    (async function(params){
+        // console.log(params)
+        let i = 0;
+        while (true) {
+            if (params['contack_no'+i] == undefined) {
+                break;
+            }
+            await query('sys', 'insertContact', {
+                mb_seq_no: params.seq_no,
+                kind_cd: params['slt_contact_kind'+i],
+                contact_no: params['contack_no'+i]
+            })
+            i++
+            if (i > 100) break
+        }
+        viewMemberDetail(params, res)
+    })(req.body)
+})
+
+router.post('/member_addr_add', (req, res) => {
+    (async function(params){
+        // console.log(params)
+        let i = 0;
+        while (true) {
+            if (params['addr'+i] == undefined) {
+                break;
+            }
+            await query('sys', 'insertAddr', {
+                mb_seq_no: params.seq_no,
+                postal_cd: params['postal_cd'+i],
+                addr: params['addr'+i],
+                addr_detail: params['detail'+i]
+            })
+            i++
+            if (i > 100) break
+        }
+        viewMemberDetail(params, res)
+    })(req.body)
+})
+
+router.post('/member_contact_mod', (req, res) => {
+    (async function(params){
+        // console.log(params)
+        let i = 0;
+        while (true) {
+            if (params['contact_seq_no'+i] == undefined) {
+                break;
+            }
+            if (params['contact_del_yn'+i] !== undefined) {
+                await query('sys', 'deleteContactBySeqNo', {seq_no:params['contact_seq_no'+i]})
+                i++
+                continue
+            }
+            await query('sys', 'updateContact', {
+                kind_cd: params['slt_contact_kind'+i],
+                contact_no: params['contack_no'+i],
+                seq_no: params['contact_seq_no'+i]
+            })
+            // console.log(params['contact_seq_no'+i])
+            i++
+            if (i > 100) break
+        }
+        viewMemberDetail(params, res)
+    })(req.body)
 })
 
 module.exports = router;

@@ -364,3 +364,65 @@ begin
 	return return_value;
 end $$
 delimiter ;
+
+delimiter $$
+drop function if exists fun_mask_phn_no; 
+create function fun_mask_phn_no(
+	p_no varchar(50),
+	p_mask char(1)
+) returns varchar(50)
+begin
+	declare return_value varchar(50);
+	case length(p_no)
+	when 9 then
+		if p_mask = 'Y' then
+			set return_value = concat(left(p_no, 2), '-', '***', '-', right(p_no, 4));
+		else
+			set return_value = concat(left(p_no, 2), '-', mid(p_no, 3, 3), '-', right(p_no, 4));
+		end if;
+	when 10 then
+		case left(p_no, 2)
+		when '02' then
+			if p_mask = 'Y' then
+				set return_value = concat(left(p_no, 2), '-', '****', '-', right(p_no, 4));
+			else
+				set return_value = concat(left(p_no, 2), '-', mid(p_no, 3, 4), '-', right(p_no, 4));
+			end if;
+		else
+			if p_mask = 'Y' then
+				set return_value = concat(left(p_no, 3), '-', '***', '-', right(p_no, 4));
+			else
+				set return_value = concat(left(p_no, 3), '-', mid(p_no, 4, 3), '-', right(p_no, 4));
+			end if;
+		end case;
+	when 11 then
+		if p_mask = 'Y' then
+			set return_value = concat(left(p_no, 3), '-', '****', '-', right(p_no, 4));
+		else
+			set return_value = concat(left(p_no, 3), '-', mid(p_no, 4, 4), '-', right(p_no, 4));
+		end if;
+	when 12 then
+		if p_mask = 'Y' then
+			set return_value = concat(left(p_no, 4), '-', '****', '-', right(p_no, 4));
+		else
+			set return_value = concat(left(p_no, 4), '-', mid(p_no, 4, 4), '-', right(p_no, 4));
+		end if;
+	else
+		set return_value = p_no;
+	end case;
+	return return_value;
+end $$
+delimiter ;
+
+
+delimiter $$
+drop function if exists fun_split_phn_no; 
+create function fun_split_phn_no(
+	p_no varchar(50)
+) returns varchar(50)
+begin
+	declare return_value varchar(50);
+	set return_value = replace(replace(replace(p_no, '-', ''), ' ', ''), ')', '');
+	return return_value;
+end $$
+delimiter ;
