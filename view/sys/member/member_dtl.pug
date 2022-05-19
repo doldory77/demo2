@@ -4,6 +4,11 @@ html(lang='ko')
         title 회원상세
         include ../cmmn.pug
         
+        template#portrait
+            div(class='tool-bar flex-left', style='gap:5px;')
+                label(for='fileX') 사진:
+                input(type='file', id='fileX', name='fileX')
+
         template#contact_no
             div(class='tool-bar flex-left', style='gap:5px;')
                 label(class='flex-label100') 연락처
@@ -12,7 +17,7 @@ html(lang='ko')
                         option(value=contact_kind[i].cd)= contact_kind[i].cd_nm
                 input(type='text', name='contack_no')
 
-        template#addr_no
+        template#addrX
             div(class='tool-bar flex-left', style='gap:5px;')
                 label(class='flex-label100') 주소
                 span
@@ -39,6 +44,7 @@ html(lang='ko')
             }
             var contact_num = 0
             var addr_num = 0
+            var portrait_num = 0
             let template = undefined
             let container = undefined
             let buttonClick = (e) => {
@@ -59,7 +65,7 @@ html(lang='ko')
                         contact_num++
                         break;
                     case '주소추가':
-                        template = $.trim($('#addr_no').html())
+                        template = $.trim($('#addrX').html())
                         container = $($('form[name="new_addr"] > div#new')[0])
                         container.append(
                             template
@@ -71,6 +77,17 @@ html(lang='ko')
                         )
                         container.css('display', 'block')
                         addr_num++
+                        break;
+                    case '사진추가':
+                        template = $.trim($('#portrait').html())
+                        container = $($('form[name="new_portrait"] > div#new')[0])
+                        container.append(
+                            template
+                                .replace('사진', '사진(' + (portrait_num + 1) + ')') 
+                                .replace(/fileX/gi, 'fileX'+portrait_num)
+                        )
+                        container.css('display', 'block')
+                        portrait_num++
                         break;
                     default:
                         break;
@@ -84,7 +101,8 @@ html(lang='ko')
             div(class='tool-bar flex-side mt10')
                 span.s-title 회원정보
                 span(style='display:flex;')
-                    button(data-text='연락처추가', onclick='buttonClick(this)') 연락처 추가
+                    button(data-text='사진추가', onclick='buttonClick(this)') 사진 추가
+                    button(data-text='연락처추가', onclick='buttonClick(this)', style='margin-left:10px;') 연락처 추가
                     button(data-text='주소추가', onclick='buttonClick(this)') 주소 추가
                     
             form
@@ -119,6 +137,14 @@ html(lang='ko')
                         select(name='slt_del_yn')
                             option(value='Y', selected= 'Y' == mem.del_yn) Y
                             option(value='N', selected= 'N' == mem.del_yn) N
+
+            form(name='new_portrait', action='/sys/member_portrait_add', method='post', enctype='multipart/form-data')
+                input(type='hidden', name='src_tbl_nm', value='member')
+                input(type='hidden', name='rf_key', value=mem.seq_no)
+                input(type='hidden', name='file_path', value='portrait')
+                #new.input-box(data-tag= mem, style='display:none; position:relative')
+                    div.abs-top-right
+                        button(data-text='사진저장', onclick='buttonClick(this)') 저장
 
             if (contact && contact.length > 0)    
                 form(name='mod_contact', action='/sys/member_contact_mod', method='post', enctype='application/x-www-form-urlencoded')
@@ -159,6 +185,9 @@ html(lang='ko')
                                 span
                                     label(for='detail'+i) 상세주소:
                                     input(type='text', id='detail'+i, name='detail'+i, style='width:300px;', value= addr[i].addr_detail)
+                                span
+                                    label(for='addr_del_yn'+i) 삭제
+                                    input(type='checkbox', id='addr_del_yn'+i, name='addr_del_yn'+i)
                                 input(type='hidden' name='addr_seq_no'+i, value=addr[i].seq_no)
                         div.abs-top-right
                             button(data-text='주소수정', onclick='buttonClick(this)') 수정

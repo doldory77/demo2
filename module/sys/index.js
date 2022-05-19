@@ -5,7 +5,7 @@ const formidable = require('formidable')
 const fs = require('fs')
 const path = require('path');
 const { resolve } = require('path');
-const { query } = require('../cmmn/cmmn')
+const { query, fileTypeCode, filePath, fileExt } = require('../cmmn/cmmn')
 
 /** 세션체크 */
 router.use((req, res, next) => {
@@ -118,19 +118,7 @@ async function processCodeMng(params, res) {
 //     })
 // })
 
-// router.post('/code_process', (req, res) => {
-//     var form = new formidable.IncomingForm();
-//     form.multiples = true
-//     form.keepExtensions = true
-//     form.parse(req, (err, fields, files) => {
-//         fs.rename(files.file1.filepath, 'C:/Users/doldo/dev-workspace/node/xxx.png', err => {
-//             if (err) throw err;
-//         })
-//         console.log('fields: ', fields)
-//         console.log('files: ', files)
-//     })
-//     res.render('sys/code/code_mng')
-// })
+
 
 router.get('/menu_mng', (req, res) => {
     processMenuMng({}, res)
@@ -349,6 +337,83 @@ router.post('/member_contact_mod', (req, res) => {
         }
         viewMemberDetail(params, res)
     })(req.body)
+})
+
+router.post('/member_addr_mod', (req, res) => {
+    (async function(params){
+        // console.log(params)
+        let i = 0;
+        while (true) {
+            if (params['addr_seq_no'+i] == undefined) {
+                break;
+            }
+            if (params['addr_del_yn'+i] !== undefined) {
+                await query('sys', 'deleteAddrBySeqNo', {seq_no:params['addr_seq_no'+i]})
+                i++
+                continue
+            }
+            await query('sys', 'updateAddr', {
+                postal_cd: params['postal_cd'+i],
+                addr: params['addr'+i],
+                addr_detail: params['detail'+i],
+                seq_no: params['addr_seq_no'+i]
+            })
+            // console.log(params['contact_seq_no'+i])
+            i++
+            if (i > 100) break
+        }
+        viewMemberDetail(params, res)
+    })(req.body)
+})
+
+router.post('/member_portrait_add', (req, res) => {
+    var form = new formidable.IncomingForm();
+    form.multiples = true
+    form.keepExtensions = true
+    form.parse(req, async (err, fields, files) => {
+        let rtn = await (function(){
+            return new Promise((resolve, reject) => {
+                let i = 0;
+                let f = undefined;
+                while (true) {
+                    if (files['fileX'+i] == undefined) {
+                        break
+                    }
+                    f = files['fileX'+i]
+                    // try {
+                    //     console.log(filePath(global.appRoot, fields.file_path))
+                    //     console.log(f.newFilename + fileExt(f.originalFilename))
+                    //     console.log(fileTypeCode(f.mimetype))
+                    // } catch (exception) {
+                    //     reject(exception)
+                    // }
+                    fs.rename(f.filepath, path.join(filePath(global.appRoot, fields.file_path), f.newFilename + fileExt(f.originalFilename)), err => {
+                        reject(err)
+                    })
+                    query('sys', 'insertFile', {
+                        src_tbl_nm: fields.src_tbl_nm,
+                        rf_key: fields.rf_key,
+                        file_org_nm: f.originalFilename,
+                        file_path: filePath(global.appRoot, fields.file_path),
+                        file_nm: f.newFilename + fileExt(f.originalFilename),
+                        file_kind_cd: fileTypeCode(f.mimetype)
+                    })
+                    i++
+                    if (i > 100) break
+                }       
+                resolve((i+1) + "")                          
+            }).then(result => {
+                return result
+            }).catch(error => {
+                return error
+            })
+        })()
+        console.log('########## rtn : ', rtn)
+        console.log('global.appRoot: ', global.appRoot)
+        console.log('fields: ', fields)
+        console.log('files: ', files)
+        viewMemberDetail({seq_no:fields.rf_key}, res)
+    })
 })
 
 module.exports = router;

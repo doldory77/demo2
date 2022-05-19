@@ -162,5 +162,35 @@
     from address
     where mb_seq_no = #{mb_seq_no}
   </select>
+
+  <delete id="deleteAddrBySeqNo">
+    delete from address where seq_no = #{seq_no}
+  </delete>
+
+  <update id="updateAddr">
+    update address set
+      postal_cd = #{postal_cd},
+      addr = #{addr},
+      addr_detail = #{addr_detail}
+    where seq_no = #{seq_no}
+  </update>
+
+  <insert id="insertFile">
+    insert file (
+      src_tbl_nm,
+      rf_key,
+      file_kind_cd,
+      file_path,
+      file_nm,
+      file_org_nm
+    ) values (
+      #{src_tbl_nm},
+      #{rf_key},
+      #{file_kind_cd},
+      #{file_path},
+      #{file_nm},
+      #{file_org_nm}
+    )
+  </insert>
   
 </mapper>

@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
     query : async function (nameSpace, id, params, emptyObject = []) {
         return new Promise((resolve, reject) => {
@@ -22,5 +24,28 @@ module.exports = {
             return emptyObject
         })
     },
+    fileTypeCode(mimetype) {
+        if (/image/.test(mimetype)) {
+            return '0201'
+        } else {
+            return '0205'
+        }
+    },
+    filePath(rootPath, type) {
+        switch (type) {
+            case 'portrait':
+                return path.join(rootPath, 'public','img','portrait')
+            default:
+                return path.join(rootPath, 'public','etc')
+        }
+        
+    },
+    fileExt(orgFileNm) {
+        if (/[.]/.test(orgFileNm)) {
+            return '.' + orgFileNm.split('.')[1]
+        } else {
+            return orgFileNm
+        }
+    }
     
 }
