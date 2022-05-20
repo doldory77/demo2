@@ -180,6 +180,7 @@
       src_tbl_nm,
       rf_key,
       file_kind_cd,
+      file_real_path,
       file_path,
       file_nm,
       file_org_nm
@@ -187,10 +188,38 @@
       #{src_tbl_nm},
       #{rf_key},
       #{file_kind_cd},
+      #{file_real_path},
       #{file_path},
       #{file_nm},
       #{file_org_nm}
     )
   </insert>
+
+  <select id="selectFile">
+    select
+      seq_no,
+      src_tbl_nm,
+      rf_key,
+      file_kind_cd,
+      file_real_path,
+      file_path,
+      file_nm,
+      file_org_nm
+    from file
+    where 1=1
+    <if test="seq_no != null and seq_no != ''">
+      and seq_no = #{seq_no}
+    </if>
+    <if test="src_tbl_nm != null and src_tbl_nm != ''">
+      and src_tbl_nm = #{src_tbl_nm}
+    </if>
+    <if test="rf_key != null and rf_key != ''">
+      and rf_key = #{rf_key}
+    </if>
+  </select>
+
+  <delete id="deleteFileBySeqNo">
+    delete from file where seq_no = #{seq_no}
+  </delete>
   
 </mapper>

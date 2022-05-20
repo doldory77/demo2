@@ -65,3 +65,22 @@ body { font-size: 1.6rem; font-family: 'Nanum Gothic'; }
         cursor: pointer;
     }
 }
+
+.img-wrap {
+    border: 1px solid rgb(121, 107, 107);
+    margin: 1px;
+    position: relative;
+    border-radius: 3px;
+    .img-thumb {
+        width: 180px;
+    }
+    .img-thumb-toolbar {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        padding: 2px 0;
+        width: 100%;
+        background-color: white;
+    }
+}
+.text-right {text-align: right;}

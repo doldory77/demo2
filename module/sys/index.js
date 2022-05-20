@@ -5,7 +5,7 @@ const formidable = require('formidable')
 const fs = require('fs')
 const path = require('path');
 const { resolve } = require('path');
-const { query, fileTypeCode, filePath, fileExt } = require('../cmmn/cmmn')
+const { query, fileTypeCode, fileRealPath, fileUrlPath, fileExt, setRouterForDeleteFileBySeqNo } = require('../cmmn/cmmn')
 
 /** 세션체크 */
 router.use((req, res, next) => {
@@ -269,7 +269,8 @@ async function viewMemberDetail(params, res) {
     let contact_kind = await query('sys', 'selectCodeByParentCd', {parent_cd:'0400'})
     let contact = await query('sys', 'selectContactByMbSeqNo', {mb_seq_no:params.seq_no})
     let addr = await query('sys', 'selectAddrByMbSeqNo', {mb_seq_no:params.seq_no})
-    res.render('sys/member/member_dtl', {mem:mem[0]||{}, jikbun, mwgubun, contact_kind, contact, addr})
+    let picture = await query('sys', 'selectFile', {src_tbl_nm:'member', rf_key:params.seq_no})
+    res.render('sys/member/member_dtl', {mem:mem[0]||{}, jikbun, mwgubun, contact_kind, contact, addr, picture})
 }
 
 router.post('/member_contact_add', (req, res) => {
@@ -380,21 +381,16 @@ router.post('/member_portrait_add', (req, res) => {
                         break
                     }
                     f = files['fileX'+i]
-                    // try {
-                    //     console.log(filePath(global.appRoot, fields.file_path))
-                    //     console.log(f.newFilename + fileExt(f.originalFilename))
-                    //     console.log(fileTypeCode(f.mimetype))
-                    // } catch (exception) {
-                    //     reject(exception)
-                    // }
-                    fs.rename(f.filepath, path.join(filePath(global.appRoot, fields.file_path), f.newFilename + fileExt(f.originalFilename)), err => {
-                        reject(err)
+                    
+                    fs.rename(f.filepath, path.join(fileRealPath(global.appRoot, fields.file_path), f.newFilename + fileExt(f.originalFilename)), (err) => {
+                        if (err) reject(err)
                     })
                     query('sys', 'insertFile', {
                         src_tbl_nm: fields.src_tbl_nm,
                         rf_key: fields.rf_key,
                         file_org_nm: f.originalFilename,
-                        file_path: filePath(global.appRoot, fields.file_path),
+                        file_real_path: fileRealPath(global.appRoot, fields.file_path).replace(/\\/gi, '\/'),
+                        file_path: fileUrlPath(fields.file_path),
                         file_nm: f.newFilename + fileExt(f.originalFilename),
                         file_kind_cd: fileTypeCode(f.mimetype)
                     })
@@ -408,12 +404,17 @@ router.post('/member_portrait_add', (req, res) => {
                 return error
             })
         })()
-        console.log('########## rtn : ', rtn)
-        console.log('global.appRoot: ', global.appRoot)
-        console.log('fields: ', fields)
-        console.log('files: ', files)
-        viewMemberDetail({seq_no:fields.rf_key}, res)
+        // console.log('fields: ', fields)
+        // console.log('files: ', files)
+        res.redirect('/sys/member_dtl?seq_no=' + fields.rf_key)
+        // viewMemberDetail({seq_no:fields.rf_key}, res)
     })
 })
+
+/** 파일삭제 공통화 */
+setRouterForDeleteFileBySeqNo(router, query, '/file_del/byseqno', (params, res) => {
+    res.redirect('/sys/member_dtl?seq_no=' + params.seq_no)
+})
+
 
 module.exports = router;

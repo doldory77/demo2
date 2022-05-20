@@ -138,6 +138,19 @@ html(lang='ko')
                             option(value='Y', selected= 'Y' == mem.del_yn) Y
                             option(value='N', selected= 'N' == mem.del_yn) N
 
+            if (picture && picture.length > 0)
+                form(name='del_file', action='/sys/file_del/byseqno', method='post', enctype='application/x-www-form-urlencoded')
+                    input(type='hidden', name='seq_no', value=mem.seq_no)
+                    #new.input-box(data-tag= mem, style='position:relative; display:flex;')
+                        - for (let i=0; i<picture.length; i++)
+                            div.img-wrap
+                                img.img-thumb(src= picture[i].file_path + picture[i].file_nm)
+                                div(class='img-thumb-toolbar text-right')
+                                    label(for='file_del_yn'+i) 삭제
+                                    input(type='checkbox', id='file_del_yn'+i, name='file_del_yn'+i, value= picture[i].seq_no)
+                        div.abs-top-right
+                            button(data-text='사진삭제', onclick='buttonClick(this)') 삭제
+
             form(name='new_portrait', action='/sys/member_portrait_add', method='post', enctype='multipart/form-data')
                 input(type='hidden', name='src_tbl_nm', value='member')
                 input(type='hidden', name='rf_key', value=mem.seq_no)

@@ -98,9 +98,10 @@ CREATE TABLE file(
 		rf_key                        		INT(4)		 NOT NULL  COMMENT '키',
 		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
 		file_kind_cd                  		CHAR(4)		 NULL  COMMENT '파일유형코드',
-		file_path							varchar(50)	 NOT NULL COMMENT '파일경로',
-		file_nm								varchar(50)	 NOT NULL COMMENT '신규파일명',
-		file_org_nm							varchar(50)	 NULL COMMENT '오리지널파일명'
+		file_real_path						varchar(100)  NOT NULL COMMENT '파일물리경로',
+		file_path							varchar(100)  NOT NULL COMMENT '파일URL경로',
+		file_nm								varchar(100)  NOT NULL COMMENT '신규파일명',
+		file_org_nm							varchar(100)  NULL COMMENT '오리지널파일명'
 ) COMMENT='파일(이미지,문서 등)';
 
 /**********************************/
