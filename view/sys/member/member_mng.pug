@@ -26,6 +26,9 @@ html(lang='ko')
             #body::-webkit-scrollbar {display: none;}
 
         script.
+            function openResult() {
+                $('form[name="member_search"]').submit()
+            }
             let buttonClick = (e) => {
                 let text = $(e).data('text');
                 console.log(text);
@@ -34,6 +37,8 @@ html(lang='ko')
                         let seq_no = $(e).closest('.row').data('tag').seq_no
                         window.open('/sys/member_dtl?seq_no='+seq_no, '_blank')
                         break;
+                    case '회원추가':
+                        window.open('/sys/member_new', '_blank')
                     default:
                         break;
                 }
@@ -45,7 +50,7 @@ html(lang='ko')
             h2(class='m-title center-text') 회원관리
             hr
             #box
-                form(action='/sys/member_mng', method='post', enctype='application/x-www-form-urlencoded')
+                form(name='member_search', action='/sys_member/member_mng', method='post', enctype='application/x-www-form-urlencoded')
                     div.tool-bar-group.mt20
                         button(style='position:absolute; top:8px; right:5px;') 조회
                         div(class='tool-bar flex-left' style='width:90%; flex-wrap: wrap; gap:20px;')

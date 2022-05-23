@@ -1,7 +1,9 @@
 const path = require('path')
 const fs = require('fs')
+const formidable = require('formidable')
 
-module.exports = {
+const cmmnUtil = {
+    /** 쿼리 공통 함수 */
     query : async function (nameSpace, id, params, emptyObject = []) {
         return new Promise((resolve, reject) => {
             let sql = global.sqlMap.getStatement(nameSpace, id, params, global.format)
@@ -25,6 +27,7 @@ module.exports = {
             return emptyObject
         })
     },
+    /** mimetype으로 파일유형 공통코드 제공 */
     fileTypeCode(mimetype) {
         if (/image/.test(mimetype)) {
             return '0201'
@@ -32,6 +35,7 @@ module.exports = {
             return '0205'
         }
     },
+    /** type으로 물리경로 제공  */
     fileRealPath(rootPath, type) {
         switch (type) {
             case 'portrait':
@@ -41,6 +45,7 @@ module.exports = {
         }
         
     },
+    /** type으로 공객영역 경로 제공 */
     fileUrlPath(type) {
         switch (type) {
             case 'portrait':
@@ -49,6 +54,7 @@ module.exports = {
                 return '/etc/'
         }        
     },
+    /** 파일의 확장자만 추출 */
     fileExt(orgFileNm) {
         if (/[.]/.test(orgFileNm)) {
             return '.' + orgFileNm.split('.')[1]
@@ -56,14 +62,67 @@ module.exports = {
             return orgFileNm
         }
     },
-    setRouterForDeleteFileBySeqNo(router, query, url, callbackFun) {
+    /** 파일저장 공통함수 */
+    setRouterForSaveFile(router, url, callbackFun) {
+        let ctx = this
+        if (router) {
+            router.post(url, (req, res) => {
+                var form = new formidable.IncomingForm();
+                form.multiples = true
+                form.keepExtensions = true
+                form.parse(req, async (err, fields, files) => {
+                    let rtn = await (function(){
+                        return new Promise((resolve, reject) => {
+                            if (err) reject(err)
+                            let i = 0;
+                            let f = undefined;
+                            while (true) {
+                                if (files['fileX'+i] == undefined) {
+                                    break
+                                }
+                                f = files['fileX'+i]
+                                
+                                fs.rename(f.filepath, path.join(ctx.fileRealPath(global.appRoot, fields.file_path), f.newFilename + ctx.fileExt(f.originalFilename)), (err) => {
+                                    if (err) reject(err)
+                                })
+                                ctx.query('sys', 'insertFile', {
+                                    src_tbl_nm: fields.src_tbl_nm,
+                                    rf_key: fields.rf_key,
+                                    file_org_nm: f.originalFilename,
+                                    file_real_path: ctx.fileRealPath(global.appRoot, fields.file_path).replace(/\\/gi, '\/'),
+                                    file_path: ctx.fileUrlPath(fields.file_path),
+                                    file_nm: f.newFilename + ctx.fileExt(f.originalFilename),
+                                    file_kind_cd: ctx.fileTypeCode(f.mimetype)
+                                })
+                                i++
+                                if (i > 100) break
+                            }       
+                            resolve((i+1) + "")                          
+                        }).then(result => {
+                            return result
+                        }).catch(error => {
+                            return error
+                        })
+                    })()
+                    console.log('fields: ', fields)
+                    console.log('files: ', files)
+                    if (callbackFun) callbackFun(fields, res, [rtn, fields.src_tbl_nm, fields.rf_key])
+                })
+            })
+        }
+    },
+    /** 파일삭제 공통함수
+     * 제약: 10개까지 삭제 가능
+     */
+    setRouterForDeleteFileBySeqNo(router, url, callbackFun) {
+        let ctx = this
         if (router) {
             router.post(url, (req, res) => {
                 (async function(params){
                     // console.log(params)
                     for (let i=0; i<10; i++) {
                         if (params['file_del_yn'+i] !== undefined) {
-                            let f = await query('sys', 'selectFile', {seq_no:params['file_del_yn'+i]})
+                            let f = await ctx.query('sys', 'selectFile', {seq_no:params['file_del_yn'+i]})
                             fs.access(path.join(f[0].file_real_path, f[0].file_nm)
                                 , fs.constants.F_OK
                                 , err => {
@@ -76,7 +135,7 @@ module.exports = {
                                     })
                                 }
                             )
-                            await query('sys', 'deleteFileBySeqNo', {
+                            await ctx.query('sys', 'deleteFileBySeqNo', {
                                 seq_no: params['file_del_yn'+i]
                             })
                         }
@@ -88,3 +147,5 @@ module.exports = {
     }
     
 }
+
+module.exports = {query: cmmnUtil.query, cmmnUtil}

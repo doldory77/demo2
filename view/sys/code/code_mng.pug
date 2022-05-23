@@ -130,27 +130,6 @@ html(lang='ko')
                     default:
                 }
             }
-            //- let getChildCode = (parent_cd) => {
-            //-     $.ajax({
-            //-         url: '/sys/child_code',
-            //-         async: true,
-            //-         type: 'POST',
-            //-         data: {parent_cd},
-            //-         dataType: 'json',
-            //-         success:(data, statusText, jqXHR) => {
-            //-             console.log(data)
-            //-             console.log(statusText)
-            //-             console.log(jqXHR)
-
-            //-         },
-            //-         error:(jqXHR, textStatus, errorThrown) => {
-            //-             console.log(jqXHR)
-            //-             console.log(textStatus)
-            //-             console.log(errorThrown)
-            //-         }
-            //-     })
-            //- }
-            
             
     body
         include ../cmmn_menu.pug
@@ -261,7 +240,7 @@ html(lang='ko')
                         button(data-text='하위코드수정취소', onclick='button2Click(this)') 취소
                         button(data-text='하위코드수정저장', onclick='button2Click(this)') 수정
 
-                form#hiddenForm(action='/sys/code_mng', enctype='application/x-www-form-urlencoded', method='post')
+                form#hiddenForm(action='/sys_code/code_mng', enctype='application/x-www-form-urlencoded', method='post')
                     input(type='hidden', name='submit_mode', value='')
                     input(type='hidden', name='selected_parent_cd', value=selectedParentCd[0].cd)
                     input(type='hidden', name='mod_p_cd', value='')
@@ -280,17 +259,4 @@ html(lang='ko')
                     input(type='hidden', name='new_c_parent_cd', value='')
                     input(type='hidden', name='new_c_ord_no', value='')
                     
-                    
-                    
-            //- form(action='/sys/code_process', enctype='multipart/form-data', method='post')
-            //-     .rows    
-            //-         .row
-            //-             label 이름
-            //-             input(type='text', value='전용재', name='name')
-            //-         .row
-            //-             input(type='file', name='file1')
-            //-         .row
-            //-             input(type='file', name='file2')
-            //-         .row
-            //-             input(type='submit', value='저장')
                     

@@ -26,9 +26,19 @@ if (app.get('env') === 'development') {
 }
 
 const user_router = require('./module/user/index')
-const sys_router = require('./module/sys/index')
 app.use('/user', user_router);
+
+const sys_router = require('./module/sys/index')
 app.use('/sys', sys_router);
+
+const sys_code_router = require('./module/sys/code')
+app.use('/sys_code', sys_code_router);
+
+const sys_menu_router = require('./module/sys/menu')
+app.use('/sys_menu', sys_menu_router);
+
+const sys_member_router = require('./module/sys/member')
+app.use('/sys_member', sys_member_router);
 
 
 app.use(express.static('public'));
@@ -38,29 +48,8 @@ global.dbPool = pool;
 global.format = { language: 'sql', indent: '  ' }
 
 app.get('/', (req, res) => {
-    // res.sendFile(__dirname + "/public/main.html")
     res.render('index');
 });
-
-app.get('/main', (req, res) => {
-    // res.sendFile(__dirname + "/public/main.html")
-    let param = { cd:'0001' }
-    let query = global.sqlMap.getStatement('test', 'test', param, global.format)
-    console.log(query)
-
-    global.dbPool.getConnection((err, conn) => {
-        if (!err) {
-            conn.query(query, (error, rows, fields) => {
-                if (error) throw error;
-                console.log('code info is: ', rows)
-            })
-        }
-        conn.release()
-    })
-    res.render('index');
-});
-
-
 
 app.listen(8080, () => {
     console.log("start! express server no port 8080")

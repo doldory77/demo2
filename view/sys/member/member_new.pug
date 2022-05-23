@@ -1,0 +1,89 @@
+doctype html 
+html(lang='ko')
+    head
+        title 회원등록
+        include ../cmmn.pug
+        
+        script.
+            function chkId() {
+                let id = $('#id').val()
+                if (!id) {
+                    alert('아이디를 확인하세요')
+                    return;
+                }
+                $.ajax({
+                    url: '/sys/member_id_chk',
+                    async: true,
+                    type: 'POST',
+                    data: {id},
+                    dataType: 'json',
+                    success:(data, statusText, jqXHR) => {
+                        if (data && data.code === '0000') {
+                            $('input[name="id_chk_yn"]').val('Y')
+                        }
+                        if (data && data.msg) {
+                            $('#id-chk-rtn').text(data.msg)
+                        }
+                        //- console.log(data)
+                        //- console.log(statusText)
+                        //- console.log(jqXHR)
+
+                    },
+                    error:(jqXHR, textStatus, errorThrown) => {
+                        console.log(jqXHR)
+                        console.log(textStatus)
+                        console.log(errorThrown)
+                    }
+                })
+            }
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '회원등록':
+                        break;
+                    case '닫기':
+                        window.opener.openResult()
+                        window.close()
+                    default:
+                        break;
+                }
+            }
+
+    body
+        .main
+            h2(class='m-title center-text') 회원등록
+            hr
+            div(class='tool-bar flex-side mt10')
+                span.s-title 회원정보
+            form(name='member_add', action='/sys_member/member_add', method='post', enctype='application/x-www-form-urlencoded')
+                #new.input-box
+                    input(type='hidden', name='id_chk_yn', value='N')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 아이디:
+                        input(type='text', id='id', name='id')
+                        a.ajax-chk-btn(href='javascript:chkId();') 확인
+                        span#id-chk-rtn.ajax-chk-disp
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 이름:
+                        input(type='text', id='name', name='name')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 직분:
+                        select(name='slt_jikbun')
+                            - for (let i=0; i<jikbun.length; i++)
+                                option(value=jikbun[i].cd)= jikbun[i].cd_nm
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 이메일:
+                        input(type='text', id='email', name='email')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 등록일:
+                        input.datepicker(id='reg_dt', name='reg_dt', type='text', style='width:120px;')
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 성별:
+                        select(name='slt_mw')
+                            - for (let i=0; i<mwgubun.length; i++)
+                                option(value=mwgubun[i].cd)= mwgubun[i].cd_nm
+                    div.abs-top-right
+                        button(data-text='회원등록', onclick='buttonClick(this)') 저장
+            div.tool-bar.flex-right
+                button(data-text='닫기', onclick='buttonClick(this)') 닫기

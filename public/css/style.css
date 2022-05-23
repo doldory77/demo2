@@ -137,4 +137,22 @@ body {
   text-align: right;
 }
 
+.ajax-chk-btn {
+  text-decoration: none;
+  margin-left: 10px;
+  font-size: 1.2rem;
+  border: 1px solid #eee;
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+}
+
+.ajax-chk-disp {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
 /*# sourceMappingURL=style.css.map */

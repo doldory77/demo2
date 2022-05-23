@@ -240,7 +240,7 @@ html(lang='ko')
                         button(data-text='하위메뉴수정취소', onclick='button2Click(this)') 취소
                         button(data-text='하위메뉴수정저장', onclick='button2Click(this)') 수정
 
-                form#hiddenForm(action='/sys/menu_mng', enctype='application/x-www-form-urlencoded', method='post')
+                form#hiddenForm(action='/sys_menu/menu_mng', enctype='application/x-www-form-urlencoded', method='post')
                     input(type='hidden', name='submit_mode', value='')
                     input(type='hidden', name='selected_parent_menu_cd', value=selectedParentMenu[0].menu_cd)
                     input(type='hidden', name='mod_p_menu_cd', value='')

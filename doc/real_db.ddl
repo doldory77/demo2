@@ -36,7 +36,8 @@ CREATE TABLE member(
 		email                         		VARCHAR(30)		 NULL  COMMENT '이메일',
 		reg_dt                        		VARCHAR(8)		 NULL  COMMENT '등록일자',
 		del_yn                        		CHAR(1)		 DEFAULT 'N'		 NULL  COMMENT '삭제여부',
-		mw_cd                         		CHAR(4)		 NULL  COMMENT '남여구분코드'
+		mw_cd                         		CHAR(4)		 NULL  COMMENT '남여구분코드',
+		pwd_chng_dt							varchar(8)	NULL COMMENT '패스워드변경일자'
 ) COMMENT='회원(성도)';
 
 /**********************************/
@@ -65,7 +66,8 @@ CREATE TABLE media(
 /**********************************/
 CREATE TABLE church_department(
 		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
-		church_dept_cd                		CHAR(4)		 NULL  COMMENT '교회부서코드',
+		dept_ctg_cd							CHAR(4)		 NOT NULL COMMENT '부서카테고리코드',
+		church_dept_cd                		CHAR(4)		 NOT NULL  COMMENT '교회부서코드',
 		subject                       		VARCHAR(80)		 NULL  COMMENT '표어',
 		bible_verse                   		VARCHAR(200)		 NULL  COMMENT '주제성구',
 		worship_time                  		VARCHAR(100)		 NULL  COMMENT '예배시간',
@@ -253,10 +255,19 @@ insert into code (cd, parent_cd, cd_nm) value ('0803', '0800', '주보');
 insert into code (cd, parent_cd, cd_nm) value ('0804', '0800', '새가족 소개');
 insert into code (cd, parent_cd, cd_nm) value ('0805', '0800', '칼럼');
 insert into code (cd, parent_cd, cd_nm) value ('0806', '0800', '부서용');
+insert into code (cd, parent_cd, cd_nm) value ('0807', '0800', '교회역사');
 
 insert into code (cd, parent_cd, cd_nm) value ('0900', '0000', '남여구분코드');
 insert into code (cd, parent_cd, cd_nm) value ('0901', '0900', '남');
 insert into code (cd, parent_cd, cd_nm) value ('0902', '0900', '여');
+
+insert into code (cd, parent_cd, cd_nm) value ('1000', '0000', '부서카테고리코드');
+insert into code (cd, parent_cd, cd_nm) value ('1001', '1000', '예배');
+insert into code (cd, parent_cd, cd_nm) value ('1002', '1000', '교육훈련');
+insert into code (cd, parent_cd, cd_nm) value ('1003', '1000', '전도선교');
+insert into code (cd, parent_cd, cd_nm) value ('1004', '1000', '교제');
+insert into code (cd, parent_cd, cd_nm) value ('1005', '1000', '봉사');
+insert into code (cd, parent_cd, cd_nm) value ('1006', '1000', '특수조직');
 
 /* 메뉴 */
 insert into menu (menu_cd, parent_menu_cd, menu_nm) values ('0100', '0000', '교회소개');

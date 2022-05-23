@@ -28,13 +28,15 @@
       name,
       passwd,
       jikbun_cd,
-      mw_cd
+      mw_cd,
+      reg_dt
     ) values (
       #{id},
       #{name},
       password(#{passwd}),
       #{jikbun_cd},
-      #{mw_cd}
+      #{mw_cd},
+      replace(#{reg_dt}, '-', '')
     )  
   </insert>
 
