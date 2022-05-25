@@ -35,10 +35,10 @@ html(lang='ko')
                 switch (text) {
                     case '회원상세':
                         let seq_no = $(e).closest('.row').data('tag').seq_no
-                        window.open('/sys/member_dtl?seq_no='+seq_no, '_blank')
+                        window.open('/sys_member/member_dtl?seq_no='+seq_no, '_blank')
                         break;
                     case '회원추가':
-                        window.open('/sys/member_new', '_blank')
+                        window.open('/sys_member/member_new', '_blank')
                     default:
                         break;
                 }

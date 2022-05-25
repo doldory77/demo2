@@ -86,8 +86,32 @@
   margin-top: 20px;
 }
 
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.wp70 {
+  width: 70%;
+}
+
 .tool-bar-check-label {
   font-size: 1.2rem;
+}
+
+.flex-flex {
+  display: flex !important;
+}
+
+.align-center {
+  align-items: center;
 }
 
 .flex-flex-center {

@@ -1,0 +1,53 @@
+doctype html 
+html(lang='ko')
+    head
+        title 게시판 글쓰기
+        include ../cmmn.pug
+        include ../cmmn_board.pug
+
+        script.
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '게시판글등록':
+                        if (!$('input[name="subject"]').val()) {
+                            alert('제목이 없습니다.')
+                            return
+                        }
+                        let markupStr = $('#summernote').summernote('code').trim()
+                        if (!markupStr) {
+                            alert('내용이 없습니다.')
+                            return
+                        }
+                        $('input[name="content"]').val(markupStr)
+
+                        $('form[name="board_write"]').submit()
+
+                        break;
+                    case '닫기':
+                        window.opener.openResult()
+                        window.close()
+                    default:
+                        break;
+                }
+            }
+
+    body
+        .main
+            h2(class='m-title center-text')= board_kind.kind_cd_nm
+            hr
+            div(class='tool-bar flex-side mt10')
+                span.s-title 글쓰기
+            form(name='board_write', action='/sys_board/board_write_process', method='post', enctype='application/x-www-form-urlencoded')
+                #new.input-box
+                    input(type='hidden', name='kind_cd', value= board_kind.kind_cd)
+                    input(type='hidden', name='content')
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 제목:
+                        input.wp70(type='text', id='subject', name='subject')
+                    div#summernote    
+                    div.abs-top-right
+                        button(data-text='게시판글등록', type='button', onclick='buttonClick(this)') 저장
+            div.tool-bar.flex-right
+                button(data-text='닫기', onclick='buttonClick(this)') 닫기

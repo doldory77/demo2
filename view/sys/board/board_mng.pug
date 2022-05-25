@@ -1,0 +1,94 @@
+doctype html 
+html(lang='ko')
+    head
+        title 게시판 관리
+        include ../cmmn.pug
+        style.
+            #box {min-width:420px;}
+            #head, .row {display: flex;}
+            #head {background-color: #eee; font-weight: 700;}
+            #head div, .row div {
+                border: 1px solid darkgray; 
+                display:flex; 
+                justify-content:center; 
+                align-item:center; 
+                padding: 3px;
+            }
+            .row div:nth-child(2) {justify-content:start;}
+            #head div:nth-child(1), .row div:nth-child(1) {flex-grow:0; flex-basis:15%;}
+            #head div:nth-child(2), .row div:nth-child(2) {flex-grow:0; flex-basis:15%;}
+            #head div:nth-child(3), .row div:nth-child(3) {flex-grow:0; flex-basis:40%;}
+            #head div:nth-child(4), .row div:nth-child(4) {flex-grow:0; flex-basis:15%;}
+            #head div:nth-child(5), .row div:nth-child(5) {flex-grow:0; flex-basis:15%;}
+            
+            #body {min-height:100px; max-height:300px; overflow-y:scroll; -ms-overflow-style: none}
+            #body::-webkit-scrollbar {display: none;}
+
+        script.
+            function openResult() {
+                $('form[name="member_search"]').submit()
+            }
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '게시판상세보기':
+                        let board_no = $(e).closest('.row').data('tag')
+                        window.open('/sys_board/board_dtl?board_no='+board_no, '_blank')
+                        break;
+                    case '게시판작성':
+                        let kind_cd = $('select[name="slt_kind"] option:selected').val()
+                        window.open('/sys_board/board_write?kind_cd='+kind_cd, '_blank')
+                    default:
+                        break;
+                }
+            }
+                
+    body
+        include ../cmmn_menu.pug
+        .main
+            h2(class='m-title center-text') 게시판 관리
+            hr
+            #box
+                form(name='board_search', action='/sys_board/board_mng', method='post', enctype='application/x-www-form-urlencoded')
+                    div.tool-bar-group.mt20
+                        button(style='position:absolute; top:8px; right:5px;') 조회
+                        div(class='tool-bar flex-left' style='width:90%; flex-wrap: wrap; gap:20px;')
+                            div.tool-bar-row-group
+                                label.tool-bar-check-label(for='chk_kind') 구분
+                                input(id='chk_kind', name='chk_kind', type='checkbox', checked)
+                                select(name='slt_kind')
+                                    - for (let i=0; i<kind.length; i++)
+                                        option(value=kind[i].cd, selected= kind[i].cd == params.slt_kind)= kind[i].cd_nm
+                            div.tool-bar-row-group
+                                input(name='chk_titl_or_ctnt', type='checkbox')
+                                select(name='slt_titl_or_ctnt')
+                                    option(value='1') 제목
+                                    option(value='2') 내용
+                                input(name='titl_or_ctnt', type='text', style='width:120px;')
+                            div.tool-bar-row-group
+                                label.tool-bar-check-label(for='chk_write_dt') 작성일
+                                input(id='chk_write_dt', name='chk_write_dt', type='checkbox', checked= params.chk_write_dt != undefined)
+                                input.datepicker(id='start_write_dt', name='start_write_dt', type='text', style='width:120px;', value= params.start_write_dt || '')
+                                span ~
+                                input.datepicker(id='end_write_dt', name='end_write_dt', type='text', style='width:120px;', value= params.end_write_dt || '')
+                                
+                div(class='tool-bar flex-side mt10')
+                    span.s-title 게시판정보
+                    button#add.tool-bar-btn(data-text='게시판작성', onclick='buttonClick(this)')
+                        span(class="material-symbols-rounded") add_box
+                #head
+                    div 구분
+                    div 작성일자
+                    div 제목
+                    div 작성자
+                    div 조회수
+                #body
+                    - for (let i=0; i<board.length; i++)
+                        .row(data-tag= board[i].board_no)
+                            div= board[i].kind_cd_nm
+                            div= board[i].write_dt
+                            div
+                                a(data-text='게시판상세보기', onclick='buttonClick(this)')= board[i].subject
+                            div= board[i].writer
+                            div= board[i].view_cnt

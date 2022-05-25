@@ -40,16 +40,44 @@ const cmmnUtil = {
         switch (type) {
             case 'portrait':
                 return path.join(rootPath, 'public','img','portrait')
+            case '0801':
+                return path.join(rootPath, 'public','img','0801')
+            case '0802':
+                return path.join(rootPath, 'public','img','0802')
+            case '0803':
+                return path.join(rootPath, 'public','img','0803')
+            case '0804':
+                return path.join(rootPath, 'public','img','0804')
+            case '0805':
+                return path.join(rootPath, 'public','img','0805')
+            case '0806':
+                return path.join(rootPath, 'public','img','0806')
+            case '0807':
+                return path.join(rootPath, 'public','img','0807')
             default:
                 return path.join(rootPath, 'public','etc')
         }
         
     },
-    /** type으로 공객영역 경로 제공 */
+    /** type으로 공개영역 경로 제공 */
     fileUrlPath(type) {
         switch (type) {
             case 'portrait':
                 return '/img/portrait/'
+            case '0801':
+                return '/img/0801/'
+            case '0802':
+                return '/img/0802/'
+            case '0803':
+                return '/img/0803/'
+            case '0804':
+                return '/img/0804/'
+            case '0805':
+                return '/img/0805/'
+            case '0806':
+                return '/img/0806/'
+            case '0807':
+                return '/img/0807/'
             default:
                 return '/etc/'
         }        
