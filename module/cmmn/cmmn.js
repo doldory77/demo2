@@ -90,6 +90,20 @@ const cmmnUtil = {
             return orgFileNm
         }
     },
+    /** 파일확장자로 파일유형 코드 제공 */
+    fileTypeCodeByExt(fileName) {
+        if (/[.](jpg|png|gif|jpeg|psd|pic|raw|tiff|bmp)$/i.test(fileName)) {
+            return '0201'
+        } else if (/[.](avi|flv|mkv|mov|mp3|mp4|wav|wma)$/i.test(fileName)) {
+            return '0206'
+        } else if (/[.](doc|docx|html|hwp|pdf|txt|xlx|xlsx|ppt|pptx)$/i.test(fileName)) {
+            return '0203'
+        } else if (/[.](zip|7z|rar|tar|alz|egg)$/i.test(fileName)) {
+            return '0204'
+        } else {
+            return '0205'   // 기타
+        }
+    },
     /** 파일저장 공통함수 */
     setRouterForSaveFile(router, url, callbackFun) {
         let ctx = this
@@ -120,7 +134,7 @@ const cmmnUtil = {
                                     file_real_path: ctx.fileRealPath(global.appRoot, fields.file_path).replace(/\\/gi, '\/'),
                                     file_path: ctx.fileUrlPath(fields.file_path),
                                     file_nm: f.newFilename + ctx.fileExt(f.originalFilename),
-                                    file_kind_cd: ctx.fileTypeCode(f.mimetype)
+                                    file_kind_cd: ctx.fileTypeCodeByExt(f.originalFilename)
                                 })
                                 i++
                                 if (i > 100) break
@@ -140,7 +154,7 @@ const cmmnUtil = {
         }
     },
     /** 파일삭제 공통함수
-     * 제약: 10개까지 삭제 가능
+     * 제약: 20개까지 삭제 가능
      */
     setRouterForDeleteFileBySeqNo(router, url, callbackFun) {
         let ctx = this
@@ -148,7 +162,7 @@ const cmmnUtil = {
             router.post(url, (req, res) => {
                 (async function(params){
                     // console.log(params)
-                    for (let i=0; i<10; i++) {
+                    for (let i=0; i<20; i++) {
                         if (params['file_del_yn'+i] !== undefined) {
                             let f = await ctx.query('sys', 'selectFile', {seq_no:params['file_del_yn'+i]})
                             fs.access(path.join(f[0].file_real_path, f[0].file_nm)
@@ -171,6 +185,46 @@ const cmmnUtil = {
                     if (callbackFun) callbackFun(params, res)
                 })(req.body)
             })
+        }
+    },
+    boardInnerFileSave: async function(content, src_tbl_nm, callbackFun) {
+        let ctx = this
+        let orgFiles = []
+        let matches = content.match(/data-filename=\"(.*?)\"/g)
+        console.log('matches : ', matches)
+        if (matches) {
+            matches.forEach((elem, idx) => {
+                let rtn = elem.match(/data-filename=\"(.*)\"/)
+                if (rtn) {
+                    // console.log(rtn[1])
+                    content = content.replace(rtn[0], '')
+                    orgFiles.push(rtn[1])
+                }
+            })
+        }
+        if (orgFiles && orgFiles.length > 0) {
+            matches = content.match(/src=\"data:image\/.{3,4};base64,(.*?)\"/g)
+            if (matches) {
+                matches.forEach((elem, idx) => {
+                    let rtn = elem.match(/src=\"data:image\/.{3,4};base64,(.*)\"/)
+                    content = content.replace(rtn[0], 'src="' + ctx.fileUrlPath(src_tbl_nm) + orgFiles[idx] + '"')
+                    fs.writeFile(
+                            path.join(ctx.fileRealPath(global.appRoot, src_tbl_nm), orgFiles[idx])
+                            ,rtn[1]
+                            ,'base64'
+                            ,function(err) {
+                                if (err) {
+                                    console.log(err)
+                                }
+                            }
+                    )
+                })
+                // console.log(content)
+            }
+        }
+        // console.log('1. content ==========> ', content)
+        if (callbackFun) {
+            callbackFun(content, orgFiles)
         }
     }
     

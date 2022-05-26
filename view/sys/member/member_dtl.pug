@@ -34,6 +34,12 @@ html(lang='ko')
 
         script(src='//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js')
         script.
+            $(document).ready(function(){
+                window.addEventListener('unload', function(){
+                    window.opener.openResult()
+                });
+            })
+            
             let getPost = (num) => {
                 new daum.Postcode({
                     oncomplete: function(data){
@@ -89,10 +95,10 @@ html(lang='ko')
                         container.css('display', 'block')
                         portrait_num++
                         break;
-                    case '닫기':
-                        window.opener.openResult()
-                        window.close()
-                        break;
+                    //- case '닫기':
+                    //-     window.opener.openResult()
+                    //-     window.close()
+                    //-     break;
                     default:
                         break;
                 }
@@ -216,8 +222,8 @@ html(lang='ko')
                     div.abs-top-right
                         button(data-text='신규주소저장', onclick='buttonClick(this)') 저장
             
-            div.tool-bar.flex-right
-                button(data-text='닫기', onclick='buttonClick(this)') 닫기
+            //- div.tool-bar.flex-right
+            //-     button(data-text='닫기', onclick='buttonClick(this)') 닫기
                 
 
 

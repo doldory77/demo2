@@ -89,7 +89,8 @@ CREATE TABLE board(
 		writer                        		VARCHAR(30)		 NULL  COMMENT '작성자',
 		write_dt                      		CHAR(14)		 NULL  COMMENT '작성일',
 		view_cnt                      		INT(4)		 NULL  COMMENT '조회수',
-		ref_dept_seq_no               		INT(4)		 NULL  COMMENT '관련부서일련번호'
+		ref_dept_seq_no               		INT(4)		 NULL  COMMENT '관련부서일련번호',
+		enable_yn							CHAR(1)		DEFAULT 'Y' COMMENT '활성여부'
 ) COMMENT='게시판';
 
 /**********************************/
@@ -184,6 +185,12 @@ ALTER TABLE link ADD CONSTRAINT IDX_link_1 UNIQUE (src_tbl_nm, rf_key);
 
 ALTER TABLE sys_auth ADD CONSTRAINT IDX_sys_auth_PK PRIMARY KEY (mb_seq_no);
 
+/*
+ALTER TABLE member ADD COLUMN pwd_chng_dt varchar(8) NULL COMMENT '패스워드변경일자';
+
+ALTER TABLE board ADD COLUMN enable_yn CHAR(1) DEFAULT 'Y' COMMENT '활성여부';
+*/
+
 
 /* 코드 */
 insert into code (cd, parent_cd, cd_nm) value ('0100', '0000', '교역자유형코드');
@@ -201,6 +208,7 @@ insert into code (cd, parent_cd, cd_nm) value ('0202', '0200', '썸네일');
 insert into code (cd, parent_cd, cd_nm) value ('0203', '0200', '문서');
 insert into code (cd, parent_cd, cd_nm) value ('0204', '0200', '압축파일');
 insert into code (cd, parent_cd, cd_nm) value ('0205', '0200', '기타');
+insert into code (cd, parent_cd, cd_nm) value ('0206', '0200', '영상');
 
 insert into code (cd, parent_cd, cd_nm) value ('0300', '0000', '직분코드');
 insert into code (cd, parent_cd, cd_nm) value ('0301', '0300', '장로');

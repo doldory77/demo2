@@ -14,6 +14,11 @@ html(lang='ko')
             $(document).ready(function(){
                 let markupStr = $('input[name="content"]').val();
                 $('#summernote').summernote('code', markupStr);
+
+                window.addEventListener('unload', function(){
+                    window.opener.openResult()
+                });
+
             })
 
             var attFile_num = 0
@@ -34,10 +39,25 @@ html(lang='ko')
                         container.css('display', 'block')
                         attFile_num++
                         break;
-                    case '닫기':
-                        window.opener.openResult()
-                        window.close()
+                    case '게시판글수정':
+                        if (!$('input[name="subject"]').val()) {
+                            alert('제목이 없습니다.')
+                            return
+                        }
+                        let markupStr = $('#summernote').summernote('code').trim()
+                        if (!markupStr) {
+                            alert('내용이 없습니다.')
+                            return
+                        }
+                        $('input[name="content"]').val(markupStr)
+
+                        $('form[name="board_update"]').submit()
+
                         break;
+                    //- case '닫기':
+                    //-     window.opener.openResult()
+                    //-     window.close()
+                    //-     break;
                     default:
                         break;
                 }
@@ -52,26 +72,32 @@ html(lang='ko')
                 span(style='display:flex;')
                     button(data-text='첨부추가', onclick='buttonClick(this)') 첨부 추가
                     
-            form
+            form(name='board_update', action='/sys_board/board_update', method='post', enctype='application/x-www-form-urlencoded')
                 #mode.input-box
                     input(type='hidden', name='content', value= board.content)
-                    imput(type='hidden', name='board_no', value= board.board_no)
+                    input(type='hidden', name='board_no', value= board.board_no)
+                    input(type='hidden', name='kind_cd', value= board.kind_cd)
                     div(class='tool-bar flex-left mb10')
                         label.flex-label100 제목:
                         input.wp70(type='text', id='subject', name='subject', value=board.subject)
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 상태:
+                        select(name='slt_enable_yn')
+                            option(value='Y', selected= board.enable_yn === 'Y') 활성
+                            option(value='N', selected= board.enable_yn === 'N') 비활성
                     div#summernote
                     div.abs-top-right
-                        button(data-text='게시판글수정', onclick='buttonClick(this)') 수정                    
+                        button(data-text='게시판글수정', type='button', onclick='buttonClick(this)') 수정                    
 
             if (file && file.length > 0)
                 form(name='del_file', action='/sys_board/file_del/byboardno', method='post', enctype='application/x-www-form-urlencoded')
                     input(type='hidden', name='board_no', value=board.board_no)
                     #new.input-box(style='position:relative;')
                         - for (let i=0; i<file.length; i++)
-                            div.flex-flex.flex-left.mb5
+                            div.flex-flex-center.flex-left.mb5
                                 div(style='min-width:240px;')= file[i].file_org_nm
                                 label(for='file_del_yn'+i) 삭제
-                                input(type='checkbox', id='file_del_yn'+i, name='file_del_yn'+i, value= file[i].board_no)
+                                input(type='checkbox', id='file_del_yn'+i, name='file_del_yn'+i, value= file[i].seq_no)
                         div.abs-top-right
                             button(data-text='파일삭제', onclick='buttonClick(this)') 삭제
 
@@ -83,8 +109,8 @@ html(lang='ko')
                     div.abs-top-right
                         button(data-text='첨부파일저장', onclick='buttonClick(this)') 저장
             
-            div.tool-bar.flex-right
-                button(data-text='닫기', onclick='buttonClick(this)') 닫기
+            //- div.tool-bar.flex-right
+            //-     button(data-text='닫기', onclick='buttonClick(this)') 닫기
                 
 
 

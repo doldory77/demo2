@@ -24,29 +24,42 @@
     )  
   </insert>
 
+  <update id="updateBoard">
+    update board set
+      subject = #{subject},
+      content = #{content},
+      enable_yn = #{slt_enable_yn}
+    where board_no = #{board_no}
+  </update>
+
   <select id="selectBoardForList">
     select
       a.board_no,
       fun_cd_nm(a.kind_cd) as kind_cd_nm, 
       a.subject,
       fun_fmt_date(a.write_dt) as write_dt,
-      a.view_cnt
-    from board a
-    where 1=1
+      a.writer,
+      b.name,
+      ifnull(a.view_cnt, 0) as view_cnt,
+      a.enable_yn,
+      if(a.enable_yn = 'Y', '활성', '비활성') as enable_yn_nm
+    from board a,
+      member b
+    where a.writer = b.id
       <if test="kind_cd != null and kind_cd != ''"> 
       and a.kind_cd = #{kind_cd}
       </if>
       <if test="subject != null and subject != ''"> 
-      and a.subject like concat(#{subject}, '%')
+      and a.subject like concat('%', #{subject}, '%')
       </if>
       <if test="content != null and content != ''"> 
       and a.content like concat('%', #{content}, '%')
       </if>
       <if test="start_write_dt != null and start_write_dt != ''"> 
-      and a.write_dt <![CDATA[ >= ]]> #{start_write_dt}
+      and a.write_dt <![CDATA[ >= ]]> replace(#{start_write_dt}, '-', '')
       </if>
       <if test="end_write_dt != null and end_write_dt != ''"> 
-      and a.write_dt <![CDATA[ <= ]]> #{end_write_dt}
+      and a.write_dt <![CDATA[ <= ]]> replace(#{end_write_dt}, '-', '')
       </if>
   </select>
 
@@ -58,7 +71,8 @@
       a.subject,
       a.content,
       fun_fmt_date(a.write_dt) as write_dt,
-      a.view_cnt
+      a.view_cnt,
+      a.enable_yn
     from board a
     where board_no = #{board_no}
   </select>

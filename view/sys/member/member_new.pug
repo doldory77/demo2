@@ -5,6 +5,12 @@ html(lang='ko')
         include ../cmmn.pug
         
         script.
+            $(document).ready(function(){
+                window.addEventListener('unload', function(){
+                    window.opener.openResult()
+                });
+            })
+            
             function chkId() {
                 let id = $('#id').val()
                 if (!id) {
@@ -42,9 +48,10 @@ html(lang='ko')
                 switch (text) {
                     case '회원등록':
                         break;
-                    case '닫기':
-                        window.opener.openResult()
-                        window.close()
+                    //- case '닫기':
+                    //-     window.opener.openResult()
+                    //-     window.close()
+                    //-     break;
                     default:
                         break;
                 }
@@ -85,5 +92,5 @@ html(lang='ko')
                                 option(value=mwgubun[i].cd)= mwgubun[i].cd_nm
                     div.abs-top-right
                         button(data-text='회원등록', onclick='buttonClick(this)') 저장
-            div.tool-bar.flex-right
-                button(data-text='닫기', onclick='buttonClick(this)') 닫기
+            //- div.tool-bar.flex-right
+            //-     button(data-text='닫기', onclick='buttonClick(this)') 닫기

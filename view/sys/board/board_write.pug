@@ -6,6 +6,12 @@ html(lang='ko')
         include ../cmmn_board.pug
 
         script.
+            $(document).ready(function(){
+                window.addEventListener('unload', function(){
+                    window.opener.openResult()
+                });
+            })
+
             let buttonClick = (e) => {
                 let text = $(e).data('text');
                 console.log(text);
@@ -25,9 +31,10 @@ html(lang='ko')
                         $('form[name="board_write"]').submit()
 
                         break;
-                    case '닫기':
-                        window.opener.openResult()
-                        window.close()
+                    //- case '닫기':
+                    //-     window.opener.openResult()
+                    //-     window.close()
+                    //-     break;
                     default:
                         break;
                 }
@@ -49,5 +56,5 @@ html(lang='ko')
                     div#summernote    
                     div.abs-top-right
                         button(data-text='게시판글등록', type='button', onclick='buttonClick(this)') 저장
-            div.tool-bar.flex-right
-                button(data-text='닫기', onclick='buttonClick(this)') 닫기
+            //- div.tool-bar.flex-right
+            //-     button(data-text='닫기', onclick='buttonClick(this)') 닫기

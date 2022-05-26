@@ -36,18 +36,16 @@ if (app.get('env') === 'development') {
 /** 세션체크 */
 app.use((req, res, next) => {
     let reqUrl = url.parse(req.url).pathname
-    console.log('===> ', reqUrl)
     if (/\/sys_login/.test(reqUrl)) {
         next()
     } else if (/\/sys(_|\/){1}/.test(reqUrl)) {
-        // console.log('==========> session require')
+        console.log(':::::: [', reqUrl, '] ::::::')
         if (req.session && req.session.isLoggedIn === true) {
             next()
         } else {
             res.redirect('/sys/sys_login')
         }
     } else {
-        // console.log('==========> session not require')
         next()
     }
 })

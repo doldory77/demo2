@@ -50,10 +50,10 @@
       and a.mw_cd = #{mw_cd}
       </if>
       <if test="start_reg_dt != null and start_reg_dt != ''"> 
-      and a.reg_dt <![CDATA[ >= ]]> #{start_reg_dt}
+      and a.reg_dt <![CDATA[ >= ]]> replace(#{start_reg_dt}, '-', '')
       </if>
       <if test="end_reg_dt != null and end_reg_dt != ''"> 
-      and a.reg_dt <![CDATA[ <= ]]> #{end_reg_dt}
+      and a.reg_dt <![CDATA[ <= ]]> replace(#{end_reg_dt}, '-', '')
       </if>
   </select>
 
