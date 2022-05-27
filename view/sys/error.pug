@@ -1,0 +1,13 @@
+doctype html 
+html(lang='ko')
+    head
+        title 관리자 Home
+        include cmmn.pug
+
+    body
+        include cmmn_menu.pug
+        .main
+            h2(class='m-title center-text') [ERROR PAGE]
+            hr
+            - for (let i=0; i<errors.length; i++)
+                div= errors[i]

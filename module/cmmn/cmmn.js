@@ -27,6 +27,25 @@ const cmmnUtil = {
             return emptyObject
         })
     },
+    /** 쿼리 공통 함수(개선) */
+    query2 : function (nameSpace, id, params) {
+        return new Promise((resolve, reject) => {
+            let sql = global.sqlMap.getStatement(nameSpace, id, params, global.format)
+            if (global.isDebug) console.log(sql)
+            global.dbPool.getConnection((err, conn) => {
+                if (!err) {
+                    conn.query(sql, (error, result) => {
+                        if (global.isDebug) console.log(result)
+                        if (error) reject(error)
+                        resolve(result)
+                    })
+                } else {
+                    reject(err)
+                }
+                conn.release()
+            })
+        })
+    },
     /** mimetype으로 파일유형 공통코드 제공 */
     fileTypeCode(mimetype) {
         if (/image/.test(mimetype)) {
@@ -153,6 +172,70 @@ const cmmnUtil = {
             })
         }
     },
+    /** 파일저장 공통함수(개선) */
+    setRouterForSaveFile2: function(req, callbackFun) {
+        let ctx = this
+        let form = new formidable.IncomingForm();
+        form.multiples = true
+        form.keepExtensions = true
+
+        form.parse(req, async (err, fields, files) => {
+            if (err) {
+                console.log(':::[ERROR]::::', err)
+                throw new Error('form parse error')
+            }
+
+            let i = 0;
+            let f = undefined;
+            while (true) {
+                if (files['fileX'+i] == undefined) {
+                    break
+                }
+                f = files['fileX'+i]
+                let rtn = 'fail'
+                try { 
+                    rtn = await (function(){
+                        return new Promise((rsl, rjt) => {
+                            fs.rename(
+                                f.filepath
+                                , path.join(ctx.fileRealPath(global.appRoot, fields.file_path), f.newFilename + ctx.fileExt(f.originalFilename))
+                                , (err) => {
+                                    if (err) rjt(err)
+                                    rsl('success')
+                                }
+                            )
+                        })
+                    })() 
+                } catch (err) {
+                    console.log(':::[ERROR]::::', err)
+                    throw new Error('fs rename error')
+                }
+                try {
+                    if (rtn === 'success') {
+                        await ctx.query2('sys', 'insertFile', {
+                            src_tbl_nm: fields.src_tbl_nm,
+                            rf_key: fields.rf_key,
+                            file_org_nm: f.originalFilename,
+                            file_real_path: ctx.fileRealPath(global.appRoot, fields.file_path).replace(/\\/gi, '\/'),
+                            file_path: ctx.fileUrlPath(fields.file_path),
+                            file_nm: f.newFilename + ctx.fileExt(f.originalFilename),
+                            file_kind_cd: ctx.fileTypeCodeByExt(f.originalFilename)
+                        })
+                        rtn = 'fail'
+                    } 
+                } catch (error) {
+                    throw new Error('fs rename error')
+                }
+                i++
+                if (i > 100) break
+            }
+            
+            // console.log('fields: ', fields)
+            // console.log('files: ', files)
+            if (callbackFun) callbackFun((i+1) + "", fields)
+        })
+        
+    },
     /** 파일삭제 공통함수
      * 제약: 20개까지 삭제 가능
      */
@@ -187,11 +270,60 @@ const cmmnUtil = {
             })
         }
     },
+    /** 파일삭제 공통함수(개선)
+     * 제약: 20개까지 삭제 가능
+     */
+    setRouterForDeleteFileBySeqNo2: async function (req, callbackFun) {
+        let ctx = this
+        let j = 0
+        let params = req.body
+        // console.log(params)
+        for (let i=0; i<20; i++) {
+            if (params['file_del_yn'+i] !== undefined) {
+                let f = []
+                try { f = await ctx.query2('sys', 'selectFile', {seq_no:params['file_del_yn'+i]}) }
+                catch (err) {
+                    console.log(':::[ERROR]::::', err)
+                    throw new Error('sql error')
+                }
+                let rtn = 'fail'
+                try { 
+                    rtn = await (function(){
+                        return new Promise((rsl, rjt) => {
+                            fs.unlink(
+                                path.join(f[0].file_real_path, f[0].file_nm)
+                                , err => {
+                                    if (err) rjt(err)
+                                    j++
+                                    rsl('success')
+                                }
+                            )
+                        })
+                    })()
+                } catch (err) {
+                    console.log(':::[ERROR]::::', err)
+                    throw new Error('file delete error')
+                }
+                if (rtn === 'success') {
+                    try {
+                        await ctx.query2('sys', 'deleteFileBySeqNo', {
+                            seq_no: params['file_del_yn'+i]
+                        })
+                        rtn = 'fail'
+                    } catch (err) {
+                        console.log(':::[ERROR]::::', err)
+                        throw new Error('sql error')
+                    }
+                }
+            }
+        }
+        if (callbackFun) callbackFun((j+1) + "")
+    },
     boardInnerFileSave: async function(content, src_tbl_nm, callbackFun) {
         let ctx = this
         let orgFiles = []
         let matches = content.match(/data-filename=\"(.*?)\"/g)
-        console.log('matches : ', matches)
+        // console.log('matches : ', matches)
         if (matches) {
             matches.forEach((elem, idx) => {
                 let rtn = elem.match(/data-filename=\"(.*)\"/)
@@ -205,19 +337,29 @@ const cmmnUtil = {
         if (orgFiles && orgFiles.length > 0) {
             matches = content.match(/src=\"data:image\/.{3,4};base64,(.*?)\"/g)
             if (matches) {
-                matches.forEach((elem, idx) => {
+                matches.forEach(async (elem, idx) => {
                     let rtn = elem.match(/src=\"data:image\/.{3,4};base64,(.*)\"/)
                     content = content.replace(rtn[0], 'src="' + ctx.fileUrlPath(src_tbl_nm) + orgFiles[idx] + '"')
-                    fs.writeFile(
-                            path.join(ctx.fileRealPath(global.appRoot, src_tbl_nm), orgFiles[idx])
-                            ,rtn[1]
-                            ,'base64'
-                            ,function(err) {
-                                if (err) {
-                                    console.log(err)
-                                }
-                            }
-                    )
+                    let xx = 'fail'
+                    try {
+                        xx = await (function(){
+                            return new Promise((rsl, rjt) => {
+                                fs.writeFile(
+                                    path.join(ctx.fileRealPath(global.appRoot, src_tbl_nm), orgFiles[idx])
+                                    ,rtn[1]
+                                    ,'base64'
+                                    ,function(err) {
+                                        if (err) rjt(err)
+                                        rsl('success')
+                                    }
+                                )
+    
+                            })    
+                        })()
+                    } catch (err) {
+                        console.log(':::[ERROR]::::', err)
+                        throw new Error('file write error')
+                    }
                 })
                 // console.log(content)
             }
@@ -230,4 +372,4 @@ const cmmnUtil = {
     
 }
 
-module.exports = {query: cmmnUtil.query, cmmnUtil}
+module.exports = {query: cmmnUtil.query, query2: cmmnUtil.query2, cmmnUtil}

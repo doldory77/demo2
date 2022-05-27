@@ -60,9 +60,10 @@ app.use('/sys_board', require('./module/sys/board'));
 
 app.use(express.static('public'));
 
-global.appRoot = path.resolve(__dirname);
-global.sqlMap = mapper;
-global.dbPool = pool;
+global.appRoot = path.resolve(__dirname)
+global.sqlMap = mapper
+global.dbPool = pool
+global.isDebug = true
 global.format = { language: 'sql', indent: '  ' }
 
 app.get('/', (req, res) => {
