@@ -154,7 +154,7 @@ html(lang='ko')
                     #new.input-box(data-tag= mem, style='position:relative; display:flex;')
                         - for (let i=0; i<picture.length; i++)
                             div.img-wrap
-                                img.img-thumb(src= picture[i].file_path + picture[i].file_nm)
+                                img.img-thumb(src= picture[i].file_path + picture[i].file_nm, onerror="this.src='/img/noimg_h.png'")
                                 div(class='img-thumb-toolbar text-right')
                                     label(for='file_del_yn'+i) 삭제
                                     input(type='checkbox', id='file_del_yn'+i, name='file_del_yn'+i, value= picture[i].seq_no)

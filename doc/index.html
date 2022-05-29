@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        section {
+            width: 1000px;
+            height: 360px;
+            margin: 100px auto;
+            display: flex;
+            justify-content: space-around;
+        }
+        h1 {
+            text-align: center;
+        }
+        div {
+            width: 200px;
+            height: 90%;
+            padding: 20px;
+            margin: 10px;
+            background: #fafafa;
+            box-sizing: border-box;
+        }
+        p {
+            background: red;
+            padding: 5px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rank in order as your choice</h1>
+
+    <section>
+        <div class="choice">
+            <p draggable="true">Samsung</p>
+            <p draggable="true">HP</p>
+            <p draggable="true">Asus</p>
+            <p draggable="true">Apple</p>
+            <p draggable="true">Microsoft</p>
+            <p draggable="true">Dell</p>
+        </div>
+        <div class="choice"></div>
+        <div class="choice"></div>
+        <div class="choice"></div>
+        <div class="choice"></div>
+    </section>
+    <div>
+        <button id="btn">click</button>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var p = document.getElementsByTagName('p');
+    var choice = document.getElementsByClassName('choice');
+    var dragItem = null;
+
+    for (var i of p) {
+        i.addEventListener('dragstart', dragStart);
+        i.addEventListener('dragend', dragEnd);
+    }
+
+    function dragStart() {
+        dragItem = this;
+        setTimeout(() => this.style.display = "none", 0);
+    }
+
+    function dragEnd() {
+        setTimeout(() => this.style.display = "block", 0);
+        dragItem = null;
+    }
+
+    for (j of choice) {
+        j.addEventListener('dragover', dragOver);
+        j.addEventListener('dragenter', dragEnter);
+        j.addEventListener('dragleave', dragLeave);
+        j.addEventListener('drop', drop);
+    }
+
+    function drop() {
+        this.append(dragItem);
+    }
+    function dragOver(e) {
+        e.preventDefault();
+        this.style.border = "2px dotted cyan";
+    }
+    function dragEnter(e) {
+        e.preventDefault();
+    }
+    function dragLeave() {
+        this.style.border = "none";
+    }
+    function click() {
+        console.log(obj.showName.call(foo))
+    }
+    var obj = {
+        name: 'doldory',
+        showName: function() {
+            return this.name
+        }
+    }
+    var foo = {
+        name: 'xxxx'
+    }
+    document.getElementById('btn').addEventListener('click', click)
+
+</script>

@@ -34,7 +34,8 @@ CREATE TABLE member(
 		email                         		VARCHAR(30)		 NULL  COMMENT '이메일',
 		reg_dt                        		VARCHAR(8)		 NULL  COMMENT '등록일자',
 		del_yn                        		CHAR(1)		 DEFAULT 'N'		 NULL  COMMENT '삭제여부',
-		mw_cd                         		CHAR(4)		 NULL  COMMENT '남여구분코드'
+		mw_cd                         		CHAR(4)		 NULL  COMMENT '남여구분코드',
+		pwd_chng_dt                   		VARCHAR(8)		 NULL  COMMENT '패스워드변경일자'
 ) COMMENT='회원(성도)';
 
 /**********************************/
@@ -63,6 +64,7 @@ CREATE TABLE media(
 /**********************************/
 CREATE TABLE church_department(
 		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT COMMENT '일련번호',
+		church_ctg_cd                 		CHAR(4)		 NULL  COMMENT '부서카테고리코드',
 		church_dept_cd                		CHAR(4)		 NULL  COMMENT '교회부서코드',
 		subject                       		VARCHAR(80)		 NULL  COMMENT '표어',
 		bible_verse                   		VARCHAR(200)		 NULL  COMMENT '주제성구',
@@ -85,7 +87,8 @@ CREATE TABLE board(
 		writer                        		VARCHAR(30)		 NULL  COMMENT '작성자',
 		write_dt                      		CHAR(14)		 NULL  COMMENT '작성일',
 		view_cnt                      		INT(4)		 NULL  COMMENT '조회수',
-		ref_dept_seq_no               		INT(4)		 NULL  COMMENT '관련부서일련번호'
+		ref_dept_seq_no               		INT(4)		 NULL  COMMENT '관련부서일련번호',
+		enable_yn                     		CHAR(1)		 DEFAULT 'Y'		 NULL  COMMENT '활성여부'
 ) COMMENT='게시판';
 
 /**********************************/
@@ -95,7 +98,10 @@ CREATE TABLE file(
 		src_tbl_nm                    		VARCHAR(30)		 NULL  COMMENT '소스테이블명',
 		rf_key                        		INT(4)		 NULL  COMMENT '키',
 		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT COMMENT '일련번호',
-		file_kind_cd                  		CHAR(4)		 NULL  COMMENT '파일유형코드'
+		file_kind_cd                  		CHAR(4)		 NULL  COMMENT '파일유형코드',
+		file_path                     		VARCHAR(100)		 NULL  COMMENT '파일경로',
+		file_nm                       		VARCHAR(100)		 NULL  COMMENT '신규파일명',
+		file_org_nm                   		VARCHAR(100)		 NULL  COMMENT '오리니널파일명'
 ) COMMENT='파일(이미지,문서 등)';
 
 /**********************************/
