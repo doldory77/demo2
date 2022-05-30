@@ -308,7 +308,7 @@ router.post('/member_addr_mod', (req, res) => {
 router.post('/member_portrait_add', (req, res) => {
     let errors = []
     try {
-        cmmnUtil.setRouterForSaveFile2(req, (addCnt, fields) => {
+        cmmnUtil.saveFile(req, (addCnt, fields) => {
             res.redirect('/sys_member/member_dtl?seq_no=' + fields.rf_key)
         })
     } catch (error) {
@@ -320,7 +320,7 @@ router.post('/member_portrait_add', (req, res) => {
 
 router.post('/file_del/byseqno', (req, res) => {
     let errors = []
-    cmmnUtil.setRouterForDeleteFileBySeqNo2(req, dellCnt => {
+    cmmnUtil.deleteFile(req, dellCnt => {
         res.redirect('/sys_member/member_dtl?seq_no=' + req.body.seq_no)
     }).catch(error => {
         errors.push('sql error')

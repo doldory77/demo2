@@ -61,6 +61,34 @@
       <if test="end_write_dt != null and end_write_dt != ''"> 
       and a.write_dt <![CDATA[ <= ]]> replace(#{end_write_dt}, '-', '')
       </if>
+      <if test="row_cnt != null and row_cnt != ''">
+        <if test="start_row != null and start_row != ''">
+      limit ${row_cnt} offset ${start_row}
+        </if>
+      </if>
+  </select>
+
+    <select id="selectBoardForListTotalCnt">
+    select
+      count(*) as total_cnt
+    from board a,
+      member b
+    where a.writer = b.id
+      <if test="kind_cd != null and kind_cd != ''"> 
+      and a.kind_cd = #{kind_cd}
+      </if>
+      <if test="subject != null and subject != ''"> 
+      and a.subject like concat('%', #{subject}, '%')
+      </if>
+      <if test="content != null and content != ''"> 
+      and a.content like concat('%', #{content}, '%')
+      </if>
+      <if test="start_write_dt != null and start_write_dt != ''"> 
+      and a.write_dt <![CDATA[ >= ]]> replace(#{start_write_dt}, '-', '')
+      </if>
+      <if test="end_write_dt != null and end_write_dt != ''"> 
+      and a.write_dt <![CDATA[ <= ]]> replace(#{end_write_dt}, '-', '')
+      </if>
   </select>
 
   <select id="selectBoardByBoardNo">

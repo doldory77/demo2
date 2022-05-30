@@ -155,4 +155,26 @@ body {
   font-weight: 600;
 }
 
+.paging-box {
+  width: 50%;
+  margin: 5px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.paging-box .paging-item {
+  margin: 0 10px;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  background-color: #fafafa;
+  border-radius: 5px;
+}
+.paging-box .paging-item.selected {
+  border: 1px solid darkgray;
+}
+
 /*# sourceMappingURL=style.css.map */

@@ -173,7 +173,7 @@ const cmmnUtil = {
         }
     },
     /** 파일저장 공통함수(개선) */
-    setRouterForSaveFile2: function(req, callbackFun) {
+    saveFile: function(req, callbackFun) {
         let ctx = this
         let form = new formidable.IncomingForm();
         form.multiples = true
@@ -273,7 +273,7 @@ const cmmnUtil = {
     /** 파일삭제 공통함수(개선)
      * 제약: 20개까지 삭제 가능
      */
-    setRouterForDeleteFileBySeqNo2: async function (req, callbackFun) {
+    deleteFile: async function (req, callbackFun) {
         let ctx = this
         let j = 0
         let params = req.body
@@ -293,7 +293,7 @@ const cmmnUtil = {
                             fs.unlink(
                                 path.join(f[0].file_real_path, f[0].file_nm)
                                 , err => {
-                                    if (err) rjt(err)
+                                    if (err) { /*rjt(err)*/ }
                                     j++
                                     rsl('success')
                                 }

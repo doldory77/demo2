@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { query, query2, cmmnUtil } = require('../cmmn/cmmn')
+const { query2, cmmnUtil } = require('../cmmn/cmmn')
 const fs = require('fs')
-const path = require('path')
+const path = require('path');
+const { query } = require('express');
 
 router.get('/board_mng', (req, res) => {
-    viewBoard({}, res)
+    viewBoard(Object.assign({}, req.query), res)
 })
 
 router.post('/board_mng', (req, res) => {
@@ -14,6 +15,7 @@ router.post('/board_mng', (req, res) => {
 
 async function viewBoard(params, res) {
     console.log('params: ', params)
+    let errors = []
     newParams = {}
     if (params.chk_kind) {
         newParams.kind_cd = params.slt_kind
@@ -27,9 +29,36 @@ async function viewBoard(params, res) {
         newParams.start_write_dt = params.start_write_dt
         newParams.end_write_dt = params.end_write_dt
     }
-    let board = await query('sys_board', 'selectBoardForList', newParams)
-    let kind = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0800'})
-    res.render('sys/board/board_mng', {board, kind, params})
+    if (!params.page) {
+        params.page = 1
+    }
+    newParams.row_cnt = global.rowCnt
+    newParams.start_row = global.rowCnt * (Number(params.page) - 1)
+
+    let board = []
+    try { board = await query2('sys_board', 'selectBoardForList', newParams) }
+    catch (error) {
+        errors.push('sql error')
+        console.log(':::[ERROR]::::', error)
+    }
+    let totalCnt = []
+    totalCnt = await query2('sys_board', 'selectBoardForListTotalCnt', newParams)
+    let kind = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0800'})
+
+    paging = {rowCnt : global.rowCnt}
+    paging.totalCnt = totalCnt[0].total_cnt
+    paging.totalPage = Math.ceil(totalCnt[0].total_cnt / global.rowCnt)
+    paging.currPage = params.page
+    paging.totalBlock = Math.ceil(paging.totalPage / global.blockCnt)
+    paging.currBlock = Math.floor((paging.currPage-1)/global.blockCnt)+1
+    paging.startPage = (paging.currBlock - 1) * global.blockCnt + 1
+    paging.endPage = paging.startPage + global.blockCnt - 1
+    paging.endPage = paging.totalPage < paging.endPage ? paging.totalPage : paging.endPage
+    paging.prevPage = paging.startPage - 1 > 0 ? paging.startPage - 1 : -1
+    paging.nextPage = paging.endPage + 1 <= paging.totalPage ? paging.endPage + 1 : -1
+
+    console.log('## paging info ##', paging)
+    res.render('sys/board/board_mng', {board, kind, params, paging})
 }
 
 router.post('/board_update', (req, res) => {
@@ -96,7 +125,14 @@ router.post('/board_update', (req, res) => {
 
 router.get('/board_write', (req, res) => {
     (async function(){
-        let rtn = await query('sys_code', 'selectCdNm', {cd:req.query.kind_cd})
+        let errors = []
+        let rtn = []
+        try { rtn = await query2('sys_code', 'selectCdNm', {cd:req.query.kind_cd}) }
+        catch (error) {
+            errors.push('sql error')
+            console.log(':::[ERROR]::::', error)
+            res.render('sys/error', {errors})
+        }
         let board_kind = {
             kind_cd:req.query.kind_cd, 
             kind_cd_nm: rtn[0].cd_nm 
@@ -176,7 +212,7 @@ async function viewBoardDetail(params, res) {
 router.post('/board_file_add', (req, res) => {
     let errors = []
     try {
-        cmmnUtil.setRouterForSaveFile2(req, (addCnt, fields) => {
+        cmmnUtil.saveFile(req, (addCnt, fields) => {
             res.redirect('/sys_board/board_dtl?board_no=' + fields.rf_key)
         })
     } catch (error) {
@@ -188,7 +224,7 @@ router.post('/board_file_add', (req, res) => {
 
 router.post('/file_del/byboardno', (req, res) => {
     let errors = []
-    cmmnUtil.setRouterForDeleteFileBySeqNo2(req, dellCnt => {
+    cmmnUtil.deleteFile(req, dellCnt => {
         res.redirect('/sys_board/board_dtl?board_no=' + req.body.board_no)
     }).catch(error => {
         errors.push('sql error')

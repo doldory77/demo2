@@ -100,3 +100,24 @@ body { font-size: 1.6rem; font-family: 'Nanum Gothic'; }
     font-size: 1.3rem;
     font-weight: 600;
 }
+.paging-box {
+    width: 50%;
+    margin: 5px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .paging-item {
+        margin: 0 10px;
+        width: 46px;
+        height: 46px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        background-color: #fafafa;
+        border-radius: 5px;
+        &.selected {
+            border:  1px solid darkgray;
+        }
+    }
+}
