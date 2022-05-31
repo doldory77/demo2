@@ -51,6 +51,7 @@ html(lang='ko')
             hr
             #box
                 form(name='member_search', action='/sys_member/member_mng', method='post', enctype='application/x-www-form-urlencoded')
+                    input(type='hidden', name='page', value='1')
                     div.tool-bar-group.mt20
                         button(style='position:absolute; top:8px; right:5px;') 조회
                         div(class='tool-bar flex-left' style='width:90%; flex-wrap: wrap; gap:20px;')
@@ -100,3 +101,5 @@ html(lang='ko')
                             div= member[i].mw_cd_nm
                             div= member[i].reg_dt
                             div= member[i].del_yn
+                
+                +nv(paging)

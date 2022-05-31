@@ -45,20 +45,21 @@ async function viewBoard(params, res) {
     totalCnt = await query2('sys_board', 'selectBoardForListTotalCnt', newParams)
     let kind = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0800'})
 
-    paging = {rowCnt : global.rowCnt}
-    paging.totalCnt = totalCnt[0].total_cnt
-    paging.totalPage = Math.ceil(totalCnt[0].total_cnt / global.rowCnt)
-    paging.currPage = params.page
-    paging.totalBlock = Math.ceil(paging.totalPage / global.blockCnt)
-    paging.currBlock = Math.floor((paging.currPage-1)/global.blockCnt)+1
-    paging.startPage = (paging.currBlock - 1) * global.blockCnt + 1
-    paging.endPage = paging.startPage + global.blockCnt - 1
-    paging.endPage = paging.totalPage < paging.endPage ? paging.totalPage : paging.endPage
-    paging.prevPage = paging.startPage - 1 > 0 ? paging.startPage - 1 : -1
-    paging.nextPage = paging.endPage + 1 <= paging.totalPage ? paging.endPage + 1 : -1
+    // let paging = {rowCnt : global.rowCnt}
+    // paging.totalCnt = totalCnt[0].total_cnt
+    // paging.totalPage = Math.ceil(totalCnt[0].total_cnt / global.rowCnt)
+    // paging.currPage = params.page
+    // paging.totalBlock = Math.ceil(paging.totalPage / global.blockCnt)
+    // paging.currBlock = Math.floor((paging.currPage-1)/global.blockCnt)+1
+    // paging.startPage = (paging.currBlock - 1) * global.blockCnt + 1
+    // paging.endPage = paging.startPage + global.blockCnt - 1
+    // paging.endPage = paging.totalPage < paging.endPage ? paging.totalPage : paging.endPage
+    // paging.prevPage = paging.startPage - 1 > 0 ? paging.startPage - 1 : -1
+    // paging.nextPage = paging.endPage + 1 <= paging.totalPage ? paging.endPage + 1 : -1
+    let paging = cmmnUtil.pagingObj(params.page, totalCnt)
 
     console.log('## paging info ##', paging)
-    res.render('sys/board/board_mng', {board, kind, params, paging})
+    res.render('sys/board/board_mng', {board, kind, params, errors, paging})
 }
 
 router.post('/board_update', (req, res) => {

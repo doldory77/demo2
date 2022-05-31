@@ -368,6 +368,20 @@ const cmmnUtil = {
         if (callbackFun) {
             callbackFun(content, orgFiles)
         }
+    },
+    pagingObj(pageNo = 1, totalCnt = [{total_cnt:0}]) {
+        let paging = {rowCnt : global.rowCnt}
+        paging.totalCnt = totalCnt[0].total_cnt
+        paging.totalPage = Math.ceil(totalCnt[0].total_cnt / global.rowCnt)
+        paging.currPage = pageNo
+        paging.totalBlock = Math.ceil(paging.totalPage / global.blockCnt)
+        paging.currBlock = Math.floor((paging.currPage-1)/global.blockCnt)+1
+        paging.startPage = (paging.currBlock - 1) * global.blockCnt + 1
+        paging.endPage = paging.startPage + global.blockCnt - 1
+        paging.endPage = paging.totalPage < paging.endPage ? paging.totalPage : paging.endPage
+        paging.prevPage = paging.startPage - 1 > 0 ? paging.startPage - 1 : -1
+        paging.nextPage = paging.endPage + 1 <= paging.totalPage ? paging.endPage + 1 : -1
+        return paging
     }
     
 }

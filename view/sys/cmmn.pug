@@ -1,3 +1,16 @@
+mixin nv(paging = {totalPage:0})
+    if (paging && paging.totalPage > 0)
+        div.paging-box
+            if (paging.prevPage > -1)
+                a(href='javascript:goPage('+paging.prevPage+')').paging-item 이전
+            - for (let i=paging.startPage; i<=paging.endPage; i++)
+                if (i == paging.currPage)
+                    a(href='javascript:goPage('+i+')').paging-item.selected= i
+                else
+                    a(href='javascript:goPage('+i+')').paging-item= i
+            if (paging.nextPage > -1)
+                a(href='javascript:goPage('+paging.nextPage+')').paging-item 다음
+
 meta(name='viewport', content='width=device-width,initial-scale=1')
 link(rel='stylesheet', href='https://fonts.sandbox.google.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200')
 link(rel='stylesheet', href='https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css')

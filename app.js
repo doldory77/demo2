@@ -65,8 +65,8 @@ global.sqlMap = mapper
 global.dbPool = pool
 global.isDebug = true
 global.format = { language: 'sql', indent: '  ' }
-global.rowCnt = 3
-global.blockCnt = 3
+global.rowCnt = 10
+global.blockCnt = 5
 
 app.get('/', (req, res) => {
     res.render('index');

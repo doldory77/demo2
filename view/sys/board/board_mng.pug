@@ -56,7 +56,7 @@ html(lang='ko')
             hr
             #box
                 form(name='board_search', action='/sys_board/board_mng', method='post', enctype='application/x-www-form-urlencoded')
-                    input(type='hidden', name='page', value= params.page || '1')
+                    input(type='hidden', name='page', value='1')
                     div.tool-bar-group.mt20
                         button(style='position:absolute; top:8px; right:5px;') 조회
                         div(class='tool-bar flex-left' style='width:90%; flex-wrap: wrap; gap:20px;')
@@ -101,15 +101,5 @@ html(lang='ko')
                             div= board[i].view_cnt
                             div= board[i].enable_yn_nm
 
-                if (paging && paging.totalPage > 0)
-                    div.paging-box
-                        if (paging.prevPage > -1)
-                            a(href='javascript:goPage('+paging.prevPage+')').paging-item 이전
-                        - for (let i=paging.startPage; i<=paging.endPage; i++)
-                            if (i == paging.currPage)
-                                a(href='javascript:goPage('+i+')').paging-item.selected= i
-                            else
-                                a(href='javascript:goPage('+i+')').paging-item= i
-                        if (paging.nextPage > -1)
-                            a(href='javascript:goPage('+paging.nextPage+')').paging-item 다음
+                +nv(paging)
                             

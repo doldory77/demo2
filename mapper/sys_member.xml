@@ -55,6 +55,39 @@
       <if test="end_reg_dt != null and end_reg_dt != ''"> 
       and a.reg_dt <![CDATA[ <= ]]> replace(#{end_reg_dt}, '-', '')
       </if>
+      <if test="row_cnt != null and row_cnt != ''">
+        <if test="start_row != null and start_row != ''">
+      limit ${row_cnt} offset ${start_row}
+        </if>
+      </if>
+  </select>
+
+  <select id="selectMemberTotalCnt">
+    select
+      count(*) as total_cnt
+    from member a
+    where 1=1
+      <if test="seq_no != null and seq_no != ''"> 
+      and a.seq_no = #{seq_no}
+      </if>
+      <if test="id != null and id != ''"> 
+      and a.id = #{id}
+      </if>
+      <if test="name != null and name != ''"> 
+      and a.name = #{name}
+      </if>
+      <if test="jikbun_cd != null and jikbun_cd != ''"> 
+      and a.jikbun_cd = #{jikbun_cd}
+      </if>
+      <if test="mw_cd != null and mw_cd != ''"> 
+      and a.mw_cd = #{mw_cd}
+      </if>
+      <if test="start_reg_dt != null and start_reg_dt != ''"> 
+      and a.reg_dt <![CDATA[ >= ]]> replace(#{start_reg_dt}, '-', '')
+      </if>
+      <if test="end_reg_dt != null and end_reg_dt != ''"> 
+      and a.reg_dt <![CDATA[ <= ]]> replace(#{end_reg_dt}, '-', '')
+      </if>  
   </select>
 
   <select id="selectMemberNoById">

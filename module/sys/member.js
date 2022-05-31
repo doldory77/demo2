@@ -3,7 +3,7 @@ const router = express.Router();
 const { query, query2, cmmnUtil } = require('../cmmn/cmmn')
 
 router.get('/member_mng', (req, res) => {
-    viewMember({}, res)
+    viewMember(Object.assign({}, req.query), res)
 })
 
 router.post('/member_mng', (req, res) => {
@@ -11,7 +11,7 @@ router.post('/member_mng', (req, res) => {
 })
 
 async function viewMember(params, res) {
-    // console.log('params: ', params)
+    console.log('params: ', params)
     let errors = []
     newParams = {seq_no:''}
     if (params.chk_id_or_name && params.slt_id_or_name == '1') {
@@ -29,12 +29,17 @@ async function viewMember(params, res) {
         newParams.start_reg_dt = params.start_reg_dt
         newParams.end_reg_dt = params.end_reg_dt
     }
+    if (!params.page) {
+        params.page = 1
+    }
     let member = []
     try { member = await query2('sys_member', 'selectMember', newParams) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
+    let totalCnt = []
+    totalCnt = await query2('sys_member', 'selectMemberTotalCnt', newParams)
     let jikbun = []
     try { jikbun = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0300'}) }
     catch (error) {
@@ -47,7 +52,10 @@ async function viewMember(params, res) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
-    res.render('sys/member/member_mng', {member, jikbun, mwgubun, params, errors})
+
+    let paging = cmmnUtil.pagingObj(params.page, totalCnt)
+    console.log('## paging info ##', paging)
+    res.render('sys/member/member_mng', {member, jikbun, mwgubun, params, errors, paging})
 }
 
 router.get('/member_new', (req, res) => {
