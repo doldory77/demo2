@@ -25,6 +25,7 @@ mapper.createMapper([
     './mapper/sys_code.xml',
     './mapper/sys_member.xml',
     './mapper/sys_board.xml',
+    './mapper/sys_media.xml',
 ])
 
 app.set('view engine', 'pug')
