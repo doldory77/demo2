@@ -59,6 +59,22 @@ const cmmnUtil = {
         switch (type) {
             case 'portrait':
                 return path.join(rootPath, 'public','img','portrait')
+            case '0501':
+                return path.join(rootPath, 'public','img','0501')
+            case '0502':
+                return path.join(rootPath, 'public','img','0502')
+            case '0503':
+                return path.join(rootPath, 'public','img','0503')
+            case '0504':
+                return path.join(rootPath, 'public','img','0504')
+            case '0505':
+                return path.join(rootPath, 'public','img','0505')
+            case '0506':
+                return path.join(rootPath, 'public','img','0506')
+            case '0507':
+                return path.join(rootPath, 'public','img','0507')
+            case '0508':
+                return path.join(rootPath, 'public','img','0508')
             case '0801':
                 return path.join(rootPath, 'public','img','0801')
             case '0802':
@@ -83,6 +99,22 @@ const cmmnUtil = {
         switch (type) {
             case 'portrait':
                 return '/img/portrait/'
+            case '0501':
+                return '/img/0501/'
+            case '0502':
+                return '/img/0502/'
+            case '0503':
+                return '/img/0503/'
+            case '0504':
+                return '/img/0504/'
+            case '0505':
+                return '/img/0505/'
+            case '0506':
+                return '/img/0506/'
+            case '0507':
+                return '/img/0507/'
+            case '0508':
+                return '/img/0508/'
             case '0801':
                 return '/img/0801/'
             case '0802':

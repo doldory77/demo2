@@ -53,12 +53,13 @@ CREATE TABLE pastor(
 /**********************************/
 CREATE TABLE media(
 		seq_no                        		INT(4)		 NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '일련번호',
+		media_kind_cd                 		CHAR(4)		 NULL  COMMENT '미디어종류코드',
 		subject                       		VARCHAR(80)		 NULL  COMMENT '제목',
 		content                       		TEXT		 NULL  COMMENT '본문',
 		event_nm                      		VARCHAR(100)		 NULL  COMMENT '행사이름',
-		preacher                      		VARCHAR(20)		 NULL  COMMENT '설교자',
-		dt                            		CHAR(14)		 NULL  COMMENT '날짜',
-		media_kind_cd                 		CHAR(4)		 NULL  COMMENT '미디어종류코드'
+		event_dt                       		CHAR(14)		 NULL  COMMENT '행사날짜',
+		preacher                      		VARCHAR(50)		 NULL  COMMENT '설교자',
+		view_cnt                      		INT(4)		 NULL  COMMENT '조회수'
 ) COMMENT='미디어(영상)';
 
 /**********************************/

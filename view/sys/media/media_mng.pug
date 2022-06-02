@@ -1,0 +1,107 @@
+doctype html 
+html(lang='ko')
+    head
+        title 미디어관리
+        include ../cmmn.pug
+        style.
+            #box {min-width:420px;}
+            #head, .row {display: flex;}
+            #head {background-color: #eee; font-weight: 700;}
+            #head div, .row div {
+                border: 1px solid darkgray; 
+                display:flex; 
+                justify-content:center; 
+                align-item:center; 
+                padding: 3px;
+            }
+            .row div:nth-child(5) {justify-content:start;}
+            #head div:nth-child(1), .row div:nth-child(1) {flex-grow:0; flex-basis:15%;}
+            #head div:nth-child(2), .row div:nth-child(2) {flex-grow:0; flex-basis:10%;}
+            #head div:nth-child(3), .row div:nth-child(3) {flex-grow:0; flex-basis:15%;}
+            #head div:nth-child(4), .row div:nth-child(4) {flex-grow:0; flex-basis:10%;}
+            #head div:nth-child(5), .row div:nth-child(5) {flex-grow:0; flex-basis:40%;}
+            #head div:nth-child(6), .row div:nth-child(6) {flex-grow:0; flex-basis:10%;}
+            
+            #body {min-height:100px; max-height:300px; overflow-y:scroll; -ms-overflow-style: none}
+            #body::-webkit-scrollbar {display: none;}
+
+        script.
+            function openResult() {
+                $('form[name="board_search"]').submit()
+            }
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '미디어상세보기':
+                        let seq_no = $(e).closest('.row').data('tag')
+                        window.open('/sys_media/media_dtl?seq_no='+seq_no, '_blank')
+                        break;
+                    case '미디어작성':
+                        let kind_cd = $('select[name="slt_kind"] option:selected').val()
+                        window.open('/sys_media/media_write?kind_cd='+kind_cd, '_blank')
+                    default:
+                        break;
+                }
+            }
+            let goPage = (page) => {
+                $('input[name="page"]').val(page)
+                $('form[name="media_search"]').submit()
+            }
+                
+    body
+        include ../cmmn_menu.pug
+        .main
+            h2(class='m-title center-text') 미디어 관리
+            hr
+            #box
+                form(name='media_search', action='/sys_media/media_mng', method='post', enctype='application/x-www-form-urlencoded')
+                    input(type='hidden', name='page', value='1')
+                    div.tool-bar-group.mt20
+                        button(style='position:absolute; top:8px; right:5px;') 조회
+                        div(class='tool-bar flex-left' style='width:90%; flex-wrap: wrap; gap:20px;')
+                            div.tool-bar-row-group
+                                label.tool-bar-check-label(for='chk_kind') 구분
+                                input(id='chk_kind', name='chk_kind', type='checkbox', checked= params.chk_kind ? true : false)
+                                select(name='slt_kind')
+                                    - for (let i=0; i<kind.length; i++)
+                                        option(value=kind[i].cd, selected= kind[i].cd == params.slt_kind)= kind[i].cd_nm
+                            div.tool-bar-row-group
+                                input(name='chk_ctnt', type='checkbox', checked= params.chk_ctnt ? true : false)
+                                select(name='slt_ctnt')
+                                    option(value='1', selected= params.slt_ctnt == '1' ? true : false) 행사명
+                                    option(value='2', selected= params.slt_ctnt == '2' ? true : false) 설교자
+                                    option(value='3', selected= params.slt_ctnt == '3' ? true : false) 제목
+                                    option(value='4', selected= params.slt_ctnt == '4' ? true : false) 내용
+                                input(name='srch_ctnt', type='text', style='min-width:240px;', value=  params.srch_ctnt || '')
+                            div.tool-bar-row-group
+                                label.tool-bar-check-label(for='chk_event_dt') 행사일자
+                                input(id='chk_event_dt', name='chk_event_dt', type='checkbox', checked= params.chk_event_dt ? true : false)
+                                input.datepicker(id='start_event_dt', name='start_event_dt', type='text', style='width:120px;', value= params.start_event_dt || '')
+                                span ~
+                                input.datepicker(id='end_event_dt', name='end_event_dt', type='text', style='width:120px;', value= params.end_event_dt || '')
+                                
+                div(class='tool-bar flex-side mt10')
+                    span.s-title 미디어 정보
+                    button#add.tool-bar-btn(data-text='미디어작성', onclick='buttonClick(this)')
+                        span(class="material-symbols-rounded") add_box
+                #head
+                    div 구분
+                    div 행사일자
+                    div 행사명
+                    div 설교자
+                    div 주제
+                    div 조회수
+                #body
+                    - for (let i=0; i<media.length; i++)
+                        .row(data-tag= media[i].seq_no)
+                            div= media[i].kind_cd_nm
+                            div= media[i].event_dt
+                            div= media[i].event_nm
+                            div= media[i].preacher
+                            div
+                                a(data-text='미디어상세보기', onclick='buttonClick(this)')= media[i].subject
+                            div= media[i].view_cnt
+
+                +nv(paging)
+                            

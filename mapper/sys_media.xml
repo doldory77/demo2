@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sys_media">
+
+  <insert id="insertMedia">
+    insert into board (
+      media_kind_cd,
+      event_nm,
+      event_dt,
+      preacher,
+      subject,
+      content
+    ) values (
+      #{kind_cd},
+      #{event_nm},
+      replace(#{event_dt}, '-', ''),
+      #{preacher},
+      #{subject},
+      #{content}
+    )  
+  </insert>
+
+  <update id="updateMedia">
+    update board set
+      subject = #{subject},
+      content = #{content},
+      enable_yn = #{slt_enable_yn}
+    where board_no = #{board_no}
+  </update>
+
+  <select id="selectMediaForList">
+    select
+      seq_no,
+      fun_cd_nm(media_kind_cd) as kind_cd_nm,
+      event_nm,
+      fun_fmt_date(event_dt) as event_dt,
+      preacher,
+      subject
+    from media
+    where 1=1
+      <if test="kind_cd != null and kind_cd != ''"> 
+      and media_kind_cd = #{kind_cd}
+      </if>
+      <if test="event_nm != null and event_nm != ''"> 
+      and event_nm like concat('%', #{event_nm}, '%')
+      </if>
+      <if test="preacher != null and preacher != ''"> 
+      and preacher like concat('%', #{preacher}, '%')
+      </if>
+      <if test="subject != null and subject != ''"> 
+      and subject like concat('%', #{subject}, '%')
+      </if>
+      <if test="content != null and content != ''"> 
+      and content like concat('%', #{content}, '%')
+      </if>
+      <if test="start_write_dt != null and start_write_dt != ''"> 
+      and event_dt <![CDATA[ >= ]]> replace(#{start_event_dt}, '-', '')
+      </if>
+      <if test="end_write_dt != null and end_write_dt != ''"> 
+      and event_dt <![CDATA[ <= ]]> replace(#{end_event_dt}, '-', '')
+      </if>
+      <if test="row_cnt != null and row_cnt != ''">
+        <if test="start_row != null and start_row != ''">
+      limit ${row_cnt} offset ${start_row}
+        </if>
+      </if>
+  </select>
+
+    <select id="selectMediaForListTotalCnt">
+    select
+      count(*) as total_cnt
+    from media
+    where 1=1
+      <if test="kind_cd != null and kind_cd != ''"> 
+      and media_kind_cd = #{kind_cd}
+      </if>
+      <if test="event_nm != null and event_nm != ''"> 
+      and event_nm like concat('%', #{event_nm}, '%')
+      </if>
+      <if test="preacher != null and preacher != ''"> 
+      and preacher like concat('%', #{preacher}, '%')
+      </if>
+      <if test="subject != null and subject != ''"> 
+      and subject like concat('%', #{subject}, '%')
+      </if>
+      <if test="content != null and content != ''"> 
+      and content like concat('%', #{content}, '%')
+      </if>
+      <if test="start_write_dt != null and start_write_dt != ''"> 
+      and event_dt <![CDATA[ >= ]]> replace(#{start_event_dt}, '-', '')
+      </if>
+      <if test="end_write_dt != null and end_write_dt != ''"> 
+      and event_dt <![CDATA[ <= ]]> replace(#{end_event_dt}, '-', '')
+      </if>
+  </select>
+
+  <select id="selectMeidaBySeqNo">
+    select
+      media_kind_cd as kind_cd,
+      event_nm,
+      fun_fmt_date(event_dt) as event_dt,
+      preacher,
+      subject,
+      content,
+      view_cnt
+    from media
+    where seq_no = #{seq_no}
+  </select>
+  
+</mapper>

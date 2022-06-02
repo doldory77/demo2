@@ -1,0 +1,79 @@
+doctype html 
+html(lang='ko')
+    head
+        title 미디어 작성
+        include ../cmmn.pug
+        include ../cmmn_board.pug
+
+        script.
+            $(document).ready(function(){
+                window.addEventListener('unload', function(){
+                    window.opener.openResult()
+                });
+            })
+
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '미디어등록':
+                        if (!$('input[name="event_nm"]').val()) {
+                            alert('행사명이 없습니다.')
+                            return
+                        }
+                        if (!$('input[name="event_dt"]').val()) {
+                            alert('행사일자가 없습니다.')
+                            return
+                        }
+                        if (!$('input[name="preacher"]').val()) {
+                            alert('설교자가 없습니다.')
+                            return
+                        }
+                        if (!$('input[name="subject"]').val()) {
+                            alert('제목이 없습니다.')
+                            return
+                        }
+                        let markupStr = $('#summernote').summernote('code').trim()
+                        if (!markupStr) {
+                            alert('내용이 없습니다.')
+                            return
+                        }
+                        $('input[name="content"]').val(markupStr)
+
+                        $('form[name="media_write"]').submit()
+
+                        break;
+                    //- case '닫기':
+                    //-     window.opener.openResult()
+                    //-     window.close()
+                    //-     break;
+                    default:
+                        break;
+                }
+            }
+
+    body
+        .main
+            h2(class='m-title center-text')= media_kind.kind_cd_nm
+            hr
+            div(class='tool-bar flex-side mt10')
+                span.s-title 미디어 작성
+            form(name='media_write', action='/sys_media/meida_write_process', method='post', enctype='application/x-www-form-urlencoded')
+                #new.input-box
+                    input(type='hidden', name='kind_cd', value= media_kind.kind_cd)
+                    input(type='hidden', name='content')
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 행사명:
+                        input.wp70(type='text', id='event_nm', name='event_nm')
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 행사일자:
+                        input.datepicker(id='event_dt', name='event_dt', type='text', style='width:120px;')
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 설교자:
+                        input.wp70(type='text', id='preacher', name='preacher')
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 제목:
+                        input.wp70(type='text', id='subject', name='subject')
+                    div#summernote    
+                    div.abs-top-right
+                        button(data-text='미디어등록', type='button', onclick='buttonClick(this)') 저장

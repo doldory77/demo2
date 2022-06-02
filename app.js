@@ -57,13 +57,13 @@ app.use('/sys_code', require('./module/sys/code'));
 app.use('/sys_menu', require('./module/sys/menu'));
 app.use('/sys_member', require('./module/sys/member'));
 app.use('/sys_board', require('./module/sys/board'));
+app.use('/sys_media', require('./module/sys/media'));
 
 app.use(express.static('public'));
-
 global.appRoot = path.resolve(__dirname)
 global.sqlMap = mapper
 global.dbPool = pool
-global.isDebug = true
+// global.isDebug = true
 global.format = { language: 'sql', indent: '  ' }
 global.rowCnt = 10
 global.blockCnt = 5

@@ -1,0 +1,129 @@
+doctype html 
+html(lang='ko')
+    head
+        title 미디어 상세
+        include ../cmmn.pug
+        include ../cmmn_board.pug
+        
+        template#attFile
+            div(class='tool-bar flex-left', style='gap:5px;')
+                label(for='fileX') 파일:
+                input(type='file', id='fileX', name='fileX')
+
+        script.
+            $(document).ready(function(){
+                let markupStr = $('input[name="content"]').val();
+                $('#summernote').summernote('code', markupStr);
+
+                window.addEventListener('unload', function(){
+                    window.opener.openResult()
+                });
+
+            })
+
+            var attFile_num = 0
+            let template = undefined
+            let container = undefined
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '첨부추가':
+                        template = $.trim($('#attFile').html())
+                        container = $($('form[name="new_attFile"] > div#new')[0])
+                        container.append(
+                            template
+                                .replace('사진', '사진(' + (attFile_num + 1) + ')') 
+                                .replace(/fileX/gi, 'fileX'+attFile_num)
+                        )
+                        container.css('display', 'block')
+                        attFile_num++
+                        break;
+                    case '미디어수정':
+                        if (!$('input[name="event_nm"]').val()) {
+                            alert('행사명이 없습니다.')
+                            return
+                        }
+                        if (!$('input[name="event_dt"]').val()) {
+                            alert('행사일자가 없습니다.')
+                            return
+                        }
+                        if (!$('input[name="preacher"]').val()) {
+                            alert('설교자가 없습니다.')
+                            return
+                        }
+                        if (!$('input[name="subject"]').val()) {
+                            alert('제목이 없습니다.')
+                            return
+                        }
+                        let markupStr = $('#summernote').summernote('code').trim()
+                        if (!markupStr) {
+                            alert('내용이 없습니다.')
+                            return
+                        }
+                        $('input[name="content"]').val(markupStr)
+
+                        $('form[name="media_update"]').submit()
+
+                        break;
+                    
+                    default:
+                        break;
+                }
+            }
+
+    body
+        .main
+            h2(class='m-title center-text')= board.subject
+            hr
+            div(class='tool-bar flex-side mt10')
+                span.s-title 상세내용
+                span(style='display:flex;')
+                    button(data-text='첨부추가', onclick='buttonClick(this)') 첨부 추가
+                    
+            form(name='media_update', action='/sys_media/media_update', method='post', enctype='application/x-www-form-urlencoded')
+                #mode.input-box
+                    input(type='hidden', name='content', value= media.content)
+                    input(type='hidden', name='seq_no', value= media.seq_no)
+                    input(type='hidden', name='kind_cd', value= media.kind_cd)
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 행사명:
+                        input.wp70(type='text', id='event_nm', name='event_nm', value=media.event_nm)
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 행사일자:
+                        input.datepicker(id='event_dt', name='event_dt', type='text', style='width:120px;', value=media.event_dt)
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 설교자:
+                        input.wp70(type='text', id='preacher', name='preacher', value=media.preacher)
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 제목:
+                        input.wp70(type='text', id='subject', name='subject', value=media.subject)
+                    div#summernote
+                    div.abs-top-right
+                        button(data-text='미디어수정', type='button', onclick='buttonClick(this)') 수정                    
+
+            if (file && file.length > 0)
+                form(name='del_file', action='/sys_media/file_del/byseqno', method='post', enctype='application/x-www-form-urlencoded')
+                    input(type='hidden', name='seq_no', value=media.seq_no)
+                    #new.input-box(style='position:relative;')
+                        - for (let i=0; i<file.length; i++)
+                            div.flex-flex-center.flex-left.mb5
+                                div(style='min-width:240px;')= file[i].file_org_nm
+                                label(for='file_del_yn'+i) 삭제
+                                input(type='checkbox', id='file_del_yn'+i, name='file_del_yn'+i, value= file[i].seq_no)
+                        div.abs-top-right
+                            button(data-text='파일삭제', onclick='buttonClick(this)') 삭제
+
+            form(name='new_attFile', action='/sys_media/media_file_add', method='post', enctype='multipart/form-data')
+                input(type='hidden', name='src_tbl_nm', value=media.kind_cd)
+                input(type='hidden', name='rf_key', value=media.seq_no)
+                input(type='hidden', name='file_path', value=media.kind_cd)
+                #new.input-box(style='display:none; position:relative')
+                    div.abs-top-right
+                        button(data-text='첨부파일저장', onclick='buttonClick(this)') 저장
+            
+            //- div.tool-bar.flex-right
+            //-     button(data-text='닫기', onclick='buttonClick(this)') 닫기
+                
+
+
