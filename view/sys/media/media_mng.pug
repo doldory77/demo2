@@ -75,7 +75,7 @@ html(lang='ko')
                                     option(value='4', selected= params.slt_ctnt == '4' ? true : false) 내용
                                 input(name='srch_ctnt', type='text', style='min-width:240px;', value=  params.srch_ctnt || '')
                             div.tool-bar-row-group
-                                label.tool-bar-check-label(for='chk_event_dt') 행사일자
+                                label.tool-bar-check-label(for='chk_event_dt') 행사 시작일자
                                 input(id='chk_event_dt', name='chk_event_dt', type='checkbox', checked= params.chk_event_dt ? true : false)
                                 input.datepicker(id='start_event_dt', name='start_event_dt', type='text', style='width:120px;', value= params.start_event_dt || '')
                                 span ~
@@ -87,7 +87,7 @@ html(lang='ko')
                         span(class="material-symbols-rounded") add_box
                 #head
                     div 구분
-                    div 행사일자
+                    div 일자
                     div 행사명
                     div 설교자
                     div 주제

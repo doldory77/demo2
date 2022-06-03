@@ -143,6 +143,9 @@ html(lang='ko')
                             - for (let i=0; i<mwgubun.length; i++)
                                 option(value=mwgubun[i].cd, selected= mwgubun[i].cd == mem.mw_cd)= mwgubun[i].cd_nm
                     div(class='tool-bar flex-left')
+                        label.flex-label100 생일:
+                        input.datepicker(id='birthday', name='birthday', type='text', style='width:120px;', value= mem.birthday || '')
+                    div(class='tool-bar flex-left')
                         label.flex-label100 재적구분:
                         select(name='slt_del_yn')
                             option(value='Y', selected= 'Y' == mem.del_yn) Y

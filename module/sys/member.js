@@ -98,6 +98,7 @@ router.post('/member_add', (req, res) => {
         newParams.jikbun_cd = req.body.slt_jikbun
         newParams.mw_cd = req.body.slt_mw
         newParams.reg_dt = req.body.reg_dt
+        newParams.birthday = req.body.birthday
         let result = {}
         try { result = await query2('sys_member', 'insertMembe', newParams) }
         catch (error) {

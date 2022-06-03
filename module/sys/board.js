@@ -97,24 +97,23 @@ router.post('/board_update', (req, res) => {
                 console.log(':::[ERROR]::::', error)
                 res.render('sys/error', {errors})
             }
-            orgFiles.forEach(async (elem, idx) => {
-                // console.log(elem)
-                try {
+            try {
+                for (let i=0; i<orgFiles.length; i++) {
                     await query2('sys', 'insertFile', {
                         src_tbl_nm: newParams.kind_cd,
                         rf_key: newParams.board_no,
-                        file_org_nm: elem,
+                        file_org_nm: orgFiles[i],
                         file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.kind_cd).replace(/\\/gi, '\/'),
                         file_path: cmmnUtil.fileUrlPath(newParams.kind_cd),
-                        file_nm: elem,
-                        file_kind_cd: cmmnUtil.fileTypeCodeByExt(elem)
+                        file_nm: orgFiles[i],
+                        file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
                     })
-                } catch (error) {
-                    errors.push('sql error')
-                    console.log(':::[ERROR]::::', error)
-                    res.render('sys/error', {errors})
                 }
-            })
+            } catch (error) {
+                errors.push('sql error')
+                console.log(':::[ERROR]::::', error)
+                res.render('sys/error', {errors})
+            }
             res.redirect('/sys_board/board_dtl?board_no='+newParams.board_no)
         }).catch(error => {
             errors.push('sql error')
@@ -160,24 +159,23 @@ router.post('/board_write_process', (req, res) => {
                 console.log(':::[ERROR]::::', error)
                 res.render('sys/error', {errors})
             }
-            orgFiles.forEach(async (elem, idx) => {
-                // console.log(elem)
-                try {
+            try {
+                for (let i=0; i<orgFiles.length; i++) {
                     await query2('sys', 'insertFile', {
                         src_tbl_nm: newParams.kind_cd,
                         rf_key: result.insertId,
-                        file_org_nm: elem,
+                        file_org_nm: orgFiles[i],
                         file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.kind_cd).replace(/\\/gi, '\/'),
                         file_path: cmmnUtil.fileUrlPath(newParams.kind_cd),
-                        file_nm: elem,
-                        file_kind_cd: cmmnUtil.fileTypeCodeByExt(elem)
+                        file_nm: orgFiles[i],
+                        file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
                     })
-                } catch (error) {
-                    errors.push('sql error')
-                    console.log(':::[ERROR]::::', error)
-                    res.render('sys/error', {errors})
                 }
-            })
+            } catch (error) {
+                errors.push('sql error')
+                console.log(':::[ERROR]::::', error)
+                res.render('sys/error', {errors})
+            }
             res.redirect('/sys_board/board_dtl?board_no='+result.insertId)
         }).catch(error => {
             errors.push('sql error')
@@ -193,11 +191,20 @@ router.get('/board_dtl', (req, res) => {
 })
 
 async function viewBoardDetail(params, res) {
-    let board = await query2('sys_board', 'selectBoardByBoardNo', {board_no:params.board_no})
-    let file = await query2('sys', 'selectFile', {
-        src_tbl_nm: board[0].kind_cd,
-        rf_key: board[0].board_no
-    })
+    let errors = []
+    let board = undefined
+    let file = undefined
+    try {
+        board = await query2('sys_board', 'selectBoardByBoardNo', {board_no:params.board_no})
+        file = await query2('sys', 'selectFile', {
+            src_tbl_nm: board[0].kind_cd,
+            rf_key: board[0].board_no
+        })
+    } catch (error) {
+        errors.push('sql error')
+        console.log(':::[ERROR]::::', error)
+        res.render('sys/error', {errors})
+    }
     res.render('sys/board/board_dtl', {board:board[0], file})
 }
 

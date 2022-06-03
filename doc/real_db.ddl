@@ -37,7 +37,8 @@ CREATE TABLE member(
 		reg_dt                        		VARCHAR(8)		 NULL  COMMENT '등록일자',
 		del_yn                        		CHAR(1)		 DEFAULT 'N'		 NULL  COMMENT '삭제여부',
 		mw_cd                         		CHAR(4)		 NULL  COMMENT '남여구분코드',
-		pwd_chng_dt							varchar(8)	NULL COMMENT '패스워드변경일자'
+		pwd_chng_dt							varchar(8)	NULL COMMENT '패스워드변경일자',
+		birthday                       		VARCHAR(8)	NULL  COMMENT '생일',
 ) COMMENT='회원(성도)';
 
 /**********************************/
@@ -188,6 +189,7 @@ ALTER TABLE sys_auth ADD CONSTRAINT IDX_sys_auth_PK PRIMARY KEY (mb_seq_no);
 
 /*
 ALTER TABLE member ADD COLUMN pwd_chng_dt varchar(8) NULL COMMENT '패스워드변경일자';
+ALTER TABLE member ADD COLUMN birthday varchar(8) NULL COMMENT '생일';
 
 ALTER TABLE board ADD COLUMN enable_yn CHAR(1) DEFAULT 'Y' COMMENT '활성여부';
 */

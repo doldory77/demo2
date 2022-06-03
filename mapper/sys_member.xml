@@ -9,14 +9,16 @@
       passwd,
       jikbun_cd,
       mw_cd,
-      reg_dt
+      reg_dt,
+      birthday
     ) values (
       #{id},
       #{name},
       password(#{passwd}),
       #{jikbun_cd},
       #{mw_cd},
-      replace(#{reg_dt}, '-', '')
+      replace(#{reg_dt}, '-', ''),
+      replace(#{birthday}, '-', '')
     )  
   </insert>
 
@@ -29,6 +31,7 @@
       fun_cd_nm(a.jikbun_cd) as jikbun_cd_nm, 
       a.email,
       fun_fmt_date(a.reg_dt) as reg_dt,
+      fun_fmt_date(a.birthday) as birthday,
       a.del_yn,
       a.mw_cd,
       fun_cd_nm(a.mw_cd) as mw_cd_nm

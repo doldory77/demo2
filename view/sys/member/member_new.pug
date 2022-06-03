@@ -90,6 +90,9 @@ html(lang='ko')
                         select(name='slt_mw')
                             - for (let i=0; i<mwgubun.length; i++)
                                 option(value=mwgubun[i].cd)= mwgubun[i].cd_nm
+                    div(class='tool-bar flex-left')
+                        label.flex-label100 생일
+                        input.datepicker(id='birthday', name='birthday', type='text', style='width:120px;')
                     div.abs-top-right
                         button(data-text='회원등록', onclick='buttonClick(this)') 저장
             //- div.tool-bar.flex-right

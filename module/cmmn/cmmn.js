@@ -75,6 +75,28 @@ const cmmnUtil = {
                 return path.join(rootPath, 'public','img','0507')
             case '0508':
                 return path.join(rootPath, 'public','img','0508')
+
+            case '0601':
+                return path.join(rootPath, 'public','img','0601')
+            case '0602':
+                return path.join(rootPath, 'public','img','0602')
+            case '0603':
+                return path.join(rootPath, 'public','img','0603')
+            case '0604':
+                return path.join(rootPath, 'public','img','0604')
+            case '0605':
+                return path.join(rootPath, 'public','img','0605')
+            case '0606':
+                return path.join(rootPath, 'public','img','0606')
+            case '0607':
+                return path.join(rootPath, 'public','img','0607')
+            case '0608':
+                return path.join(rootPath, 'public','img','0608')
+            case '0609':
+                return path.join(rootPath, 'public','img','0609')
+            case '0610':
+                return path.join(rootPath, 'public','img','0610')
+
             case '0801':
                 return path.join(rootPath, 'public','img','0801')
             case '0802':
@@ -115,6 +137,28 @@ const cmmnUtil = {
                 return '/img/0507/'
             case '0508':
                 return '/img/0508/'
+
+            case '0601':
+                return '/img/0601/'
+            case '0602':
+                return '/img/0602/'
+            case '0603':
+                return '/img/0603/'
+            case '0604':
+                return '/img/0604/'
+            case '0605':
+                return '/img/0605/'
+            case '0606':
+                return '/img/0606/'
+            case '0607':
+                return '/img/0607/'
+            case '0608':
+                return '/img/0608/'
+            case '0609':
+                return '/img/0609/'
+            case '0610':
+                return '/img/0610/'
+
             case '0801':
                 return '/img/0801/'
             case '0802':
@@ -371,7 +415,7 @@ const cmmnUtil = {
             if (matches) {
                 matches.forEach(async (elem, idx) => {
                     let rtn = elem.match(/src=\"data:image\/.{3,4};base64,(.*)\"/)
-                    content = content.replace(rtn[0], 'src="' + ctx.fileUrlPath(src_tbl_nm) + orgFiles[idx] + '"')
+                    content = content.replace(rtn[0], 'src="' + ctx.fileUrlPath(src_tbl_nm) + orgFiles[idx] + '"' + ` onerror="this.src='/img/noimg.png'"`)
                     let xx = 'fail'
                     try {
                         xx = await (function(){

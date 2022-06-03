@@ -3,7 +3,7 @@
 <mapper namespace="sys_media">
 
   <insert id="insertMedia">
-    insert into board (
+    insert into media (
       media_kind_cd,
       event_nm,
       event_dt,
@@ -21,11 +21,13 @@
   </insert>
 
   <update id="updateMedia">
-    update board set
+    update media set
+      event_nm = #{event_nm},
+      event_dt = replace(#{event_dt}, '-', ''),
+      preacher = #{preacher},
       subject = #{subject},
-      content = #{content},
-      enable_yn = #{slt_enable_yn}
-    where board_no = #{board_no}
+      content = #{content}
+    where seq_no = #{seq_no}
   </update>
 
   <select id="selectMediaForList">
@@ -96,6 +98,7 @@
 
   <select id="selectMeidaBySeqNo">
     select
+      seq_no,
       media_kind_cd as kind_cd,
       event_nm,
       fun_fmt_date(event_dt) as event_dt,

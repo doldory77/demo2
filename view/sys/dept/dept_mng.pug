@@ -1,0 +1,96 @@
+doctype html 
+html(lang='ko')
+    head
+        title 부서관리
+        include ../cmmn.pug
+        style.
+            #box {min-width:420px;}
+            #head, .row {display: flex;}
+            #head {background-color: #eee; font-weight: 700;}
+            #head div, .row div {
+                border: 1px solid darkgray; 
+                display:flex; 
+                justify-content:center; 
+                align-item:center; 
+                padding: 3px;
+            }
+            #head div:nth-child(1), .row div:nth-child(1) {flex-grow:0; flex-basis:20%;}
+            #head div:nth-child(2), .row div:nth-child(2) {flex-grow:0; flex-basis:20%;}
+            #head div:nth-child(3), .row div:nth-child(3) {flex-grow:0; flex-basis:20%;}
+            #head div:nth-child(4), .row div:nth-child(4) {flex-grow:0; flex-basis:20%;}
+            #head div:nth-child(5), .row div:nth-child(5) {flex-grow:0; flex-basis:10%;}
+            #head div:nth-child(6), .row div:nth-child(6) {flex-grow:0; flex-basis:10%;}
+            
+            #body {min-height:100px; max-height:300px; overflow-y:scroll; -ms-overflow-style: none}
+            #body::-webkit-scrollbar {display: none;}
+
+        script.
+            function openResult() {
+                $('form[name="board_search"]').submit()
+            }
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    case '미디어상세보기':
+                        let seq_no = $(e).closest('.row').data('tag')
+                        window.open('/sys_media/media_dtl?seq_no='+seq_no, '_blank')
+                        break;
+                    case '부서생성':
+                        window.open('/sys_dept/dept_write', '_blank')
+                    default:
+                        break;
+                }
+            }
+            let goPage = (page) => {
+                $('input[name="page"]').val(page)
+                $('form[name="media_search"]').submit()
+            }
+                
+    body
+        include ../cmmn_menu.pug
+        .main
+            h2(class='m-title center-text') 부서 관리
+            hr
+            #box
+                form(name='dept_search', action='/sys_dept/dept_mng', method='post', enctype='application/x-www-form-urlencoded')
+                    input(type='hidden', name='page', value='1')
+                    div.tool-bar-group.mt20
+                        button(style='position:absolute; top:8px; right:5px;') 조회
+                        div(class='tool-bar flex-left' style='width:90%; flex-wrap: wrap; gap:20px; padding:10px;')
+                            div.tool-bar-row-group
+                                label.tool-bar-check-label(for='chk_ctg') 조직
+                                input(id='chk_ctg', name='chk_ctg', type='checkbox', checked= params.chk_ctg ? true : false)
+                                select(name='slt_ctg', style='min-width:120px; margin-right: 20px;')
+                                    - for (let i=0; i<ctg_cd.length; i++)
+                                        option(value=ctg_cd[i].cd, selected= ctg_cd[i].cd == params.slt_ctg)= ctg_cd[i].cd_nm
+                                label.tool-bar-check-label(for='chk_dept') 부서
+                                input(id='chk_dept', name='chk_dept', type='checkbox', checked= params.chk_dept ? true : false)
+                                select(name='slt_dept', style='min-width:120px;')
+                                    - for (let i=0; i<dept_cd.length; i++)
+                                        option(value=dept_cd[i].cd, selected= dept_cd[i].cd == params.slt_dept)= dept_cd[i].cd_nm
+                                
+                div(class='tool-bar flex-side mt10')
+                    span.s-title 부서 정보
+                    button#add.tool-bar-btn(data-text='부서생성', onclick='buttonClick(this)')
+                        span(class="material-symbols-rounded") add_box
+                #head
+                    div 조직구분
+                    div 부서
+                    div 예배시간
+                    div 예배장소
+                    div 부서장
+                    div 교역자
+                #body
+                    - for (let i=0; i<dept.length; i++)
+                        .row(data-tag= dept[i].seq_no)
+                            div= dept[i].church_ctg_cd_nm
+                            div
+                                a(data-text='부서상세보기', onclick='buttonClick(this)')= dept[i].church_dept_cd_nm
+                            div= dept[i].worship_time
+                            div= dept[i].place
+                            div
+                            div
+
+                +nv(paging)
+                            

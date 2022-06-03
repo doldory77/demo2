@@ -32,8 +32,7 @@ const logger = createLogger({
         new transports.Console({
             level: 'debug',
             format: format.combine(
-                format.colorize(),
-                format.printf(messageFmt)
+                format.colorize()
             )
         }),
         dailyRotateFileTransport

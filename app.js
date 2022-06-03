@@ -3,8 +3,11 @@ const express = require('express')
 const session = require('express-session')
 const path = require('path')
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+const { logger } = require('./config/logger')
+const morgan = require('morgan')
+
+app.use(express.json({limit: "30mb"}));
+app.use(express.urlencoded({limit: "30mb", extended: true}));
 app.use(session({
     HttpOnly: true,
     secure: false,
@@ -26,6 +29,7 @@ mapper.createMapper([
     './mapper/sys_member.xml',
     './mapper/sys_board.xml',
     './mapper/sys_media.xml',
+    './mapper/sys_dept.xml',
 ])
 
 app.set('view engine', 'pug')
@@ -33,6 +37,12 @@ app.set('views', path.join(__dirname, 'view'))
 if (app.get('env') === 'development') {
     app.locals.pretty = true;
 }
+
+/** 웹 요청 로그 
+if (global.isDebug) {
+    app.use(morgan('dev', { stream: { write: msg => logger.http(msg) } }))
+}
+*/
 
 /** 세션체크 */
 app.use((req, res, next) => {
@@ -51,14 +61,15 @@ app.use((req, res, next) => {
     }
 })
 
-const user_router = require('./module/user/index')
-app.use('/user', user_router);
+// const user_router = require('./module/user/index')
+// app.use('/user', user_router);
 app.use('/sys', require('./module/sys/index'));
 app.use('/sys_code', require('./module/sys/code'));
 app.use('/sys_menu', require('./module/sys/menu'));
 app.use('/sys_member', require('./module/sys/member'));
 app.use('/sys_board', require('./module/sys/board'));
 app.use('/sys_media', require('./module/sys/media'));
+app.use('/sys_dept', require('./module/sys/dept'));
 
 app.use(express.static('public'));
 global.appRoot = path.resolve(__dirname)

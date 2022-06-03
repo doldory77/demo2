@@ -1,7 +1,7 @@
 doctype html 
 html(lang='ko')
     head
-        title 미디어 작성
+        title 부서 생성
         include ../cmmn.pug
         include ../cmmn_board.pug
 
@@ -16,21 +16,13 @@ html(lang='ko')
                 let text = $(e).data('text');
                 console.log(text);
                 switch (text) {
-                    case '미디어등록':
-                        if (!$('input[name="event_nm"]').val()) {
-                            alert('행사명이 없습니다.')
-                            return
-                        }
-                        if (!$('input[name="event_dt"]').val()) {
-                            alert('행사일자가 없습니다.')
-                            return
-                        }
-                        if (!$('input[name="preacher"]').val()) {
-                            alert('설교자가 없습니다.')
-                            return
-                        }
+                    case '부서등록':
                         if (!$('input[name="subject"]').val()) {
-                            alert('제목이 없습니다.')
+                            alert('표어가 없습니다.')
+                            return
+                        }
+                        if (!$('input[name="bible_verse"]').val()) {
+                            alert('주제성구가 없습니다.')
                             return
                         }
                         let markupStr = $('#summernote').summernote('code').trim()
@@ -40,7 +32,7 @@ html(lang='ko')
                         }
                         $('input[name="content"]').val(markupStr)
 
-                        $('form[name="media_write"]').submit()
+                        $('form[name="dept_write"]').submit()
 
                         break;
                     //- case '닫기':
@@ -57,23 +49,33 @@ html(lang='ko')
             h2(class='m-title center-text')= media_kind.kind_cd_nm
             hr
             div(class='tool-bar flex-side mt10')
-                span.s-title 미디어 작성
-            form(name='media_write', action='/sys_media/media_write_process', method='post', enctype='application/x-www-form-urlencoded')
+                span.s-title 부서 작성
+            form(name='dept_write', action='/sys_dept/dept_write_process', method='post', enctype='application/x-www-form-urlencoded')
                 #new.input-box
                     input(type='hidden', name='kind_cd', value= media_kind.kind_cd)
                     input(type='hidden', name='content')
                     div(class='tool-bar flex-left mb5')
-                        label.flex-label100 행사명:
-                        input.wp50(type='text', id='event_nm', name='event_nm')
+                        label.flex-label100 조직구분:
+                        select(name='slt_ctg')
+                            - for (let i=0; i<ctg_cd.length; i++)
+                                option(value=ctg_cd[i].cd)= ctg_cd[i].cd_nm
                     div(class='tool-bar flex-left mb5')
-                        label.flex-label100 행사일자:
-                        input.datepicker(id='event_dt', name='event_dt', type='text', style='width:120px;')
+                        label.flex-label100 부서:
+                        select(name='slt_dept')
+                            - for (let i=0; i<dept_cd.length; i++)
+                                option(value=dept_cd[i].cd)= dept_cd[i].cd_nm
                     div(class='tool-bar flex-left mb5')
-                        label.flex-label100 설교자:
-                        input.wp30(type='text', id='preacher', name='preacher')
-                    div(class='tool-bar flex-left mb10')
-                        label.flex-label100 제목:
+                        label.flex-label100 표어:
                         input.wp70(type='text', id='subject', name='subject')
+                    div(class='tool-bar flex-left mb5')
+                        label.flex-label100 주제성구:
+                        input.wp70(type='text', id='bible_verse', name='bible_verse')
+                    div(class='tool-bar flex-left mb5')
+                        label.flex-label100 예배시간:
+                        input.wp30(type='text', id='worship_time', name='worship_time')
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 장소:
+                        input.wp30(type='text', id='place', name='place')
                     div#summernote    
                     div.abs-top-right
-                        button(data-text='미디어등록', type='button', onclick='buttonClick(this)') 저장
+                        button(data-text='부서등록', type='button', onclick='buttonClick(this)') 저장

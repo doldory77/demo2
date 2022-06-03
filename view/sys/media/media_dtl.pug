@@ -74,7 +74,7 @@ html(lang='ko')
 
     body
         .main
-            h2(class='m-title center-text')= board.subject
+            h2(class='m-title center-text')= media.subject
             hr
             div(class='tool-bar flex-side mt10')
                 span.s-title 상세내용
@@ -86,15 +86,15 @@ html(lang='ko')
                     input(type='hidden', name='content', value= media.content)
                     input(type='hidden', name='seq_no', value= media.seq_no)
                     input(type='hidden', name='kind_cd', value= media.kind_cd)
-                    div(class='tool-bar flex-left mb10')
+                    div(class='tool-bar flex-left mb5')
                         label.flex-label100 행사명:
-                        input.wp70(type='text', id='event_nm', name='event_nm', value=media.event_nm)
-                    div(class='tool-bar flex-left mb10')
-                        label.flex-label100 행사일자:
+                        input.wp50(type='text', id='event_nm', name='event_nm', value=media.event_nm)
+                    div(class='tool-bar flex-left mb5')
+                        label.flex-label100 일자:
                         input.datepicker(id='event_dt', name='event_dt', type='text', style='width:120px;', value=media.event_dt)
-                    div(class='tool-bar flex-left mb10')
+                    div(class='tool-bar flex-left mb5')
                         label.flex-label100 설교자:
-                        input.wp70(type='text', id='preacher', name='preacher', value=media.preacher)
+                        input.wp30(type='text', id='preacher', name='preacher', value=media.preacher)
                     div(class='tool-bar flex-left mb10')
                         label.flex-label100 제목:
                         input.wp70(type='text', id='subject', name='subject', value=media.subject)

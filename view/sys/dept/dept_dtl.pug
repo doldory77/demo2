@@ -1,0 +1,102 @@
+doctype html 
+html(lang='ko')
+    head
+        title 미디어 상세
+        include ../cmmn.pug
+        include ../cmmn_board.pug
+        
+        script.
+            $(document).ready(function(){
+                let markupStr = $('input[name="content"]').val();
+                $('#summernote').summernote('code', markupStr);
+
+                window.addEventListener('unload', function(){
+                    window.opener.openResult()
+                });
+
+            })
+
+            let buttonClick = (e) => {
+                let text = $(e).data('text');
+                console.log(text);
+                switch (text) {
+                    
+                    case '부서수정':
+                        if (!$('input[name="subject"]').val()) {
+                            alert('표어가 없습니다.')
+                            return
+                        }
+                        if (!$('input[name="bible_verse"]').val()) {
+                            alert('주제성구가 없습니다.')
+                            return
+                        }
+                        let markupStr = $('#summernote').summernote('code').trim()
+                        if (!markupStr) {
+                            alert('내용이 없습니다.')
+                            return
+                        }
+                        $('input[name="content"]').val(markupStr)
+
+                        $('form[name="dept_update"]').submit()
+
+                        break;
+                    
+                    default:
+                        break;
+                }
+            }
+
+    body
+        .main
+            h2(class='m-title center-text')= dept.subject
+            hr
+            div(class='tool-bar flex-side mt10')
+                span.s-title 상세내용
+                    
+            form(name='dept_update', action='/sys_dept/dept_update', method='post', enctype='application/x-www-form-urlencoded')
+                #mode.input-box
+                    input(type='hidden', name='content', value= media.content)
+                    input(type='hidden', name='seq_no', value= media.seq_no)
+                    div(class='tool-bar flex-left mb5')
+                        label.flex-label100 조직구분:
+                        select(name='slt_ctg')
+                            - for (let i=0; i<ctg_cd.length; i++)
+                                option(value=ctg_cd[i].cd, selected= ctg_cd[i].cd == dept.dept_ctg_cd)= ctg_cd[i].cd_nm
+                    div(class='tool-bar flex-left mb5')
+                        label.flex-label100 부서:
+                        select(name='slt_dept')
+                            - for (let i=0; i<dept_cd.length; i++)
+                                option(value=dept_cd[i].cd, selected= dept_cd[i].cd == dept.church_dept_cd)= dept_cd[i].cd_nm
+                    div(class='tool-bar flex-left mb5')
+                        label.flex-label100 표어:
+                        input.wp70(type='text', id='subject', name='subject', value= dept.subject)
+                    div(class='tool-bar flex-left mb5')
+                        label.flex-label100 주제성구:
+                        input.wp70(type='text', id='bible_verse', name='bible_verse', value= dept.bible_verse)
+                    div(class='tool-bar flex-left mb5')
+                        label.flex-label100 예배시간:
+                        input.wp30(type='text', id='worship_time', name='worship_time', value= dept.worship_time)
+                    div(class='tool-bar flex-left mb10')
+                        label.flex-label100 장소:
+                        input.wp30(type='text', id='place', name='place', value= dept.place)
+                    div#summernote
+                    div.abs-top-right
+                        button(data-text='부서수정', type='button', onclick='buttonClick(this)') 수정                    
+
+            if (file && file.length > 0)
+                form(name='del_file', action='/sys_dept/file_del/byseqno', method='post', enctype='application/x-www-form-urlencoded')
+                    input(type='hidden', name='seq_no', value=dept.seq_no)
+                    #new.input-box(style='position:relative;')
+                        - for (let i=0; i<file.length; i++)
+                            div.flex-flex-center.flex-left.mb5
+                                div(style='min-width:240px;')= file[i].file_org_nm
+                                label(for='file_del_yn'+i) 삭제
+                                input(type='checkbox', id='file_del_yn'+i, name='file_del_yn'+i, value= file[i].seq_no)
+                        div.abs-top-right
+                            button(data-text='파일삭제', onclick='buttonClick(this)') 삭제
+            
+            //- div.tool-bar.flex-right
+            //-     button(data-text='닫기', onclick='buttonClick(this)') 닫기
+                
+
+

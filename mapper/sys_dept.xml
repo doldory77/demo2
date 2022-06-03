@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sys_dept">
+
+  <insert id="insertDept">
+    insert into dept (
+      dept_ctg_cd,
+      church_dept_cd,
+      subject,
+      bible_verse,
+      <if test="worship_time != null and worship_time != ''"> 
+      worship_time,
+      </if>
+      <if test="place != null and place != ''">
+      place,
+      </if>
+      content
+    ) values (
+      #{dept_ctg_cd},
+      #{church_dept_cd},
+      #{subject},
+      #{bible_verse},
+      <if test="worship_time != null and worship_time != ''"> 
+      #{worship_time},
+      </if>
+      <if test="place != null and place != ''">
+      #{place},
+      </if>
+      #{content}
+    )  
+  </insert>
+
+  <update id="updateMedia">
+    update media set
+      event_nm = #{event_nm},
+      event_dt = replace(#{event_dt}, '-', ''),
+      preacher = #{preacher},
+      subject = #{subject},
+      content = #{content}
+    where seq_no = #{seq_no}
+  </update>
+
+  <select id="selectDeptForList">
+    select
+      a.seq_no,
+      a.dept_ctg_cd,
+      fun_cd_nm(a.dept_ctg_cd) as dept_ctg_cd_nm,
+      a.church_dept_cd,
+      fun_cd_nm(a.church_dept_cd) as church_dept_cd_nm,
+      a.subject,
+      a.bible_verse,
+      a.worship_time,
+      a.place
+    from church_department a
+    where 1=1
+      <if test="dept_ctg_cd != null and dept_ctg_cd != ''"> 
+      and dept_ctg_cd = #{dept_ctg_cd}
+      </if>
+      <if test="church_dept_cd != null and church_dept_cd != ''"> 
+      and church_dept_cd = #{church_dept_cd}
+      </if>
+      <if test="row_cnt != null and row_cnt != ''">
+        <if test="start_row != null and start_row != ''">
+      limit ${row_cnt} offset ${start_row}
+        </if>
+      </if>
+  </select>
+
+  <select id="selectDeptForListTotalCnt">
+    select
+      count(*) as total_cnt
+    from church_department a
+    where 1=1
+      <if test="dept_ctg_cd != null and dept_ctg_cd != ''"> 
+      and dept_ctg_cd = #{dept_ctg_cd}
+      </if>
+      <if test="church_dept_cd != null and church_dept_cd != ''"> 
+      and church_dept_cd = #{church_dept_cd}
+      </if>
+  </select>
+
+  <select id="selectDeptBySeqNo">
+    select
+      seq_no,
+      dept_ctg_cd,
+      fun_cd_nm(dept_ctg_cd) as dept_ctg_cd_nm,
+      church_dept_cd,
+      fun_cd_nm(church_dept_cd) as church_dept_cd_nm,
+      subject,
+      bible_verse,
+      worship_time,
+      place,
+      content
+    from dept
+    where seq_no = #{seq_no}
+  </select>
+  
+</mapper>
