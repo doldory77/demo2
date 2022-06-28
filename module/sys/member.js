@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { query, query2, cmmnUtil } = require('../cmmn/cmmn')
+const { query, cmmnUtil } = require('../cmmn/cmmn')
 
 router.get('/member_mng', (req, res) => {
     viewMember(Object.assign({}, req.query), res)
@@ -33,21 +33,21 @@ async function viewMember(params, res) {
         params.page = 1
     }
     let member = []
-    try { member = await query2('sys_member', 'selectMember', newParams) }
+    try { member = await query('sys_member', 'selectMember', newParams) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let totalCnt = []
-    totalCnt = await query2('sys_member', 'selectMemberTotalCnt', newParams)
+    totalCnt = await query('sys_member', 'selectMemberTotalCnt', newParams)
     let jikbun = []
-    try { jikbun = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0300'}) }
+    try { jikbun = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0300'}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let mwgubun = []
-    try { mwgubun = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0900'}) }
+    try { mwgubun = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0900'}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
@@ -60,8 +60,8 @@ async function viewMember(params, res) {
 
 router.get('/member_new', (req, res) => {
     (async function(){
-        let jikbun = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0300'})
-        let mwgubun = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0900'})
+        let jikbun = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0300'})
+        let mwgubun = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0900'})
         res.render('sys/member/member_new', {jikbun, mwgubun})
     })()
 })
@@ -75,7 +75,7 @@ router.post('/member_id_chk', (req, res) => {
             return
         }
         let user = []
-        try { user = await query2('sys_member', 'selectMember', {id}) }
+        try { user = await query('sys_member', 'selectMember', {id}) }
         catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
@@ -100,7 +100,7 @@ router.post('/member_add', (req, res) => {
         newParams.reg_dt = req.body.reg_dt
         newParams.birthday = req.body.birthday
         let result = {}
-        try { result = await query2('sys_member', 'insertMembe', newParams) }
+        try { result = await query('sys_member', 'insertMembe', newParams) }
         catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
@@ -118,43 +118,43 @@ router.get('/member_dtl', (req, res) => {
 async function viewMemberDetail(params, res) {
     let errors = []
     let mem = []
-    try { mem = await query2('sys_member', 'selectMember', {seq_no:params.seq_no}) }
+    try { mem = await query('sys_member', 'selectMember', {seq_no:params.seq_no}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let jikbun = []
-    try { jikbun = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0300'}) }
+    try { jikbun = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0300'}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let mwgubun = []
-    try { mwgubun = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0900'}) }
+    try { mwgubun = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0900'}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let contact_kind = []
-    try { contact_kind = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0400'}) }
+    try { contact_kind = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0400'}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let contact = []
-    try { contact = await query2('sys_member', 'selectContactByMbSeqNo', {mb_seq_no:params.seq_no}) }
+    try { contact = await query('sys_member', 'selectContactByMbSeqNo', {mb_seq_no:params.seq_no}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let addr = []
-    try { addr = await query2('sys_member', 'selectAddrByMbSeqNo', {mb_seq_no:params.seq_no}) }
+    try { addr = await query('sys_member', 'selectAddrByMbSeqNo', {mb_seq_no:params.seq_no}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let picture = []
-    try { picture = await query2('sys', 'selectFile', {src_tbl_nm:'member', rf_key:params.seq_no}) }
+    try { picture = await query('sys', 'selectFile', {src_tbl_nm:'member', rf_key:params.seq_no}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
@@ -172,7 +172,7 @@ router.post('/member_contact_add', (req, res) => {
                 break;
             }
             try { 
-                await query2('sys_member', 'insertContact', {
+                await query('sys_member', 'insertContact', {
                     mb_seq_no: params.seq_no,
                     kind_cd: params['slt_contact_kind'+i],
                     contact_no: params['contack_no'+i]
@@ -200,7 +200,7 @@ router.post('/member_addr_add', (req, res) => {
                 break;
             }
             try {
-                await query2('sys_member', 'insertAddr', {
+                await query('sys_member', 'insertAddr', {
                     mb_seq_no: params.seq_no,
                     postal_cd: params['postal_cd'+i],
                     addr: params['addr'+i],
@@ -230,7 +230,7 @@ router.post('/member_contact_mod', (req, res) => {
                 break;
             }
             if (params['contact_del_yn'+i] !== undefined) {
-                try { await query2('sys_member', 'deleteContactBySeqNo', {seq_no:params['contact_seq_no'+i]}) }
+                try { await query('sys_member', 'deleteContactBySeqNo', {seq_no:params['contact_seq_no'+i]}) }
                 catch (error) {
                     errors.push('sql error')
                     console.log(':::[ERROR]::::', error)
@@ -241,7 +241,7 @@ router.post('/member_contact_mod', (req, res) => {
                 continue
             }
             try {
-                await query2('sys_member', 'updateContact', {
+                await query('sys_member', 'updateContact', {
                     kind_cd: params['slt_contact_kind'+i],
                     contact_no: params['contack_no'+i],
                     seq_no: params['contact_seq_no'+i]
@@ -271,7 +271,7 @@ router.post('/member_addr_mod', (req, res) => {
                 break;
             }
             if (params['addr_del_yn'+i] !== undefined) {
-                try { await query2('sys_member', 'deleteAddrBySeqNo', {seq_no:params['addr_seq_no'+i]}) }
+                try { await query('sys_member', 'deleteAddrBySeqNo', {seq_no:params['addr_seq_no'+i]}) }
                 catch (error) {
                     errors.push('sql error')
                     console.log(':::[ERROR]::::', error)
@@ -282,7 +282,7 @@ router.post('/member_addr_mod', (req, res) => {
                 continue
             }
             try {
-                await query2('sys_member', 'updateAddr', {
+                await query('sys_member', 'updateAddr', {
                     postal_cd: params['postal_cd'+i],
                     addr: params['addr'+i],
                     addr_detail: params['detail'+i],

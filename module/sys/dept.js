@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { query2, cmmnUtil } = require('../cmmn/cmmn')
+const { query, cmmnUtil } = require('../cmmn/cmmn')
 const { logger } = require('../../config/logger')
 
 router.get('/dept_mng', (req, res) => {
@@ -25,16 +25,16 @@ async function viewDept(params, res) {
     newParams.start_row = global.rowCnt * (Number(params.page) - 1)
 
     let dept = []
-    try { dept = await query2('sys_dept', 'selectDeptForList', newParams) }
+    try { dept = await query('sys_dept', 'selectDeptForList', newParams) }
     catch (error) {
         errors.push(error)
         logger.error(error)
         // console.log(':::[ERROR]::::', error)
     }
     let totalCnt = []
-    totalCnt = await query2('sys_dept', 'selectDeptForListTotalCnt', newParams)
-    let ctg_cd = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
-    let dept_cd = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})
+    totalCnt = await query('sys_dept', 'selectDeptForListTotalCnt', newParams)
+    let ctg_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
+    let dept_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})
   
     let paging = cmmnUtil.pagingObj(params.page, totalCnt)
 
@@ -52,7 +52,7 @@ router.post('/media_update', (req, res) => {
         await cmmnUtil.boardInnerFileSave(content, newParams.kind_cd, async (content, orgFiles) => {
             newParams.content = content
             // console.log('2. content ==========> ', newParams.content)
-            try { await query2('sys_media', 'updateMedia', newParams) }
+            try { await query('sys_media', 'updateMedia', newParams) }
             catch (error) {
                 errors.push('sql error')
                 // console.log(':::[ERROR]::::', error)
@@ -61,7 +61,7 @@ router.post('/media_update', (req, res) => {
             }
             try {
                 for (let i=0; i<orgFiles.length; i++) {
-                    await query2('sys', 'insertFile', {
+                    await query('sys', 'insertFile', {
                         src_tbl_nm: newParams.kind_cd,
                         rf_key: newParams.seq_no,
                         file_org_nm: orgFiles[i],
@@ -91,8 +91,8 @@ router.post('/media_update', (req, res) => {
 
 router.get('/dept_write', (req, res) => {
     (async function(){
-        let ctg_cd = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
-        let dept_cd = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})
+        let ctg_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
+        let dept_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})
         res.render('sys/dept/dept_write', {ctg_cd, dept_cd})
     })()
 })
@@ -107,7 +107,7 @@ router.post('/dept_write_process', (req, res) => {
             newParams.content = content
             // console.log('2. content ==========> ', newParams.content)
             let result = {}
-            try { result = await query2('sys_dept', 'insertDept', newParams) }
+            try { result = await query('sys_dept', 'insertDept', newParams) }
             catch (error) {
                 errors.push('sql error')
                 console.log(':::[ERROR]::::', error)
@@ -116,7 +116,7 @@ router.post('/dept_write_process', (req, res) => {
             }
             try {
                 for (let i=0; i<orgFiles.length; i++) {
-                    await query2('sys', 'insertFile', {
+                    await query('sys', 'insertFile', {
                         src_tbl_nm: newParams.church_dept_cd,
                         rf_key: result.insertId,
                         file_org_nm: orgFiles[i],
@@ -154,13 +154,13 @@ async function viewDeptDetail(params, res) {
     let ctg_cd = undefined
     let dept_cd = undefined
     try {
-        dept = await query2('sys_dept', 'selectDeptBySeqNo', {seq_no:params.seq_no})
-        file = await query2('sys', 'selectFile', {
+        dept = await query('sys_dept', 'selectDeptBySeqNo', {seq_no:params.seq_no})
+        file = await query('sys', 'selectFile', {
             src_tbl_nm: media[0].kind_cd,
             rf_key: media[0].seq_no
         })
-        ctg_cd = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
-        dept_cd = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})
+        ctg_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
+        dept_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})
     } catch (error) {
         errors.push('sql error')
         // console.log(':::[ERROR]::::', error)

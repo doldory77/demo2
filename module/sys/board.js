@@ -1,6 +1,6 @@
 // const express = require('express');
 const router = require('express').Router();
-const { query2, cmmnUtil } = require('../cmmn/cmmn')
+const { query, cmmnUtil } = require('../cmmn/cmmn')
 // const fs = require('fs')
 // const path = require('path');
 // const { query } = require('express');
@@ -38,14 +38,14 @@ async function viewBoard(params, res) {
     newParams.start_row = global.rowCnt * (Number(params.page) - 1)
 
     let board = []
-    try { board = await query2('sys_board', 'selectBoardForList', newParams) }
+    try { board = await query('sys_board', 'selectBoardForList', newParams) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     let totalCnt = []
-    totalCnt = await query2('sys_board', 'selectBoardForListTotalCnt', newParams)
-    let kind = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0800'})
+    totalCnt = await query('sys_board', 'selectBoardForListTotalCnt', newParams)
+    let kind = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0800'})
 
     // let paging = {rowCnt : global.rowCnt}
     // paging.totalCnt = totalCnt[0].total_cnt
@@ -91,7 +91,7 @@ router.post('/board_update', (req, res) => {
         await cmmnUtil.boardInnerFileSave(content, newParams.kind_cd, async (content, orgFiles) => {
             newParams.content = content
             // console.log('2. content ==========> ', newParams.content)
-            try { await query2('sys_board', 'updateBoard', newParams) }
+            try { await query('sys_board', 'updateBoard', newParams) }
             catch (error) {
                 errors.push('sql error')
                 console.log(':::[ERROR]::::', error)
@@ -99,7 +99,7 @@ router.post('/board_update', (req, res) => {
             }
             try {
                 for (let i=0; i<orgFiles.length; i++) {
-                    await query2('sys', 'insertFile', {
+                    await query('sys', 'insertFile', {
                         src_tbl_nm: newParams.kind_cd,
                         rf_key: newParams.board_no,
                         file_org_nm: orgFiles[i],
@@ -129,7 +129,7 @@ router.get('/board_write', (req, res) => {
     (async function(){
         let errors = []
         let rtn = []
-        try { rtn = await query2('sys_code', 'selectCdNm', {cd:req.query.kind_cd}) }
+        try { rtn = await query('sys_code', 'selectCdNm', {cd:req.query.kind_cd}) }
         catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
@@ -153,7 +153,7 @@ router.post('/board_write_process', (req, res) => {
             newParams.content = content
             // console.log('2. content ==========> ', newParams.content)
             let result = {}
-            try { result = await query2('sys_board', 'insertBoard', newParams) }
+            try { result = await query('sys_board', 'insertBoard', newParams) }
             catch (error) {
                 errors.push('sql error')
                 console.log(':::[ERROR]::::', error)
@@ -161,7 +161,7 @@ router.post('/board_write_process', (req, res) => {
             }
             try {
                 for (let i=0; i<orgFiles.length; i++) {
-                    await query2('sys', 'insertFile', {
+                    await query('sys', 'insertFile', {
                         src_tbl_nm: newParams.kind_cd,
                         rf_key: result.insertId,
                         file_org_nm: orgFiles[i],
@@ -195,8 +195,8 @@ async function viewBoardDetail(params, res) {
     let board = undefined
     let file = undefined
     try {
-        board = await query2('sys_board', 'selectBoardByBoardNo', {board_no:params.board_no})
-        file = await query2('sys', 'selectFile', {
+        board = await query('sys_board', 'selectBoardByBoardNo', {board_no:params.board_no})
+        file = await query('sys', 'selectFile', {
             src_tbl_nm: board[0].kind_cd,
             rf_key: board[0].board_no
         })

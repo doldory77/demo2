@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { query2, cmmnUtil } = require('../cmmn/cmmn')
+const { query, cmmnUtil } = require('../cmmn/cmmn')
 const { logger } = require('../../config/logger')
 
 router.get('/media_mng', (req, res) => {
@@ -38,15 +38,15 @@ async function viewMedia(params, res) {
     newParams.start_row = global.rowCnt * (Number(params.page) - 1)
 
     let media = []
-    try { media = await query2('sys_media', 'selectMediaForList', newParams) }
+    try { media = await query('sys_media', 'selectMediaForList', newParams) }
     catch (error) {
         errors.push('sql error')
         logger.error(error)
         // console.log(':::[ERROR]::::', error)
     }
     let totalCnt = []
-    totalCnt = await query2('sys_media', 'selectMediaForListTotalCnt', newParams)
-    let kind = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0500'})
+    totalCnt = await query('sys_media', 'selectMediaForListTotalCnt', newParams)
+    let kind = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0500'})
   
     let paging = cmmnUtil.pagingObj(params.page, totalCnt)
 
@@ -64,7 +64,7 @@ router.post('/media_update', (req, res) => {
         await cmmnUtil.boardInnerFileSave(content, newParams.kind_cd, async (content, orgFiles) => {
             newParams.content = content
             // console.log('2. content ==========> ', newParams.content)
-            try { await query2('sys_media', 'updateMedia', newParams) }
+            try { await query('sys_media', 'updateMedia', newParams) }
             catch (error) {
                 errors.push('sql error')
                 // console.log(':::[ERROR]::::', error)
@@ -73,7 +73,7 @@ router.post('/media_update', (req, res) => {
             }
             try {
                 for (let i=0; i<orgFiles.length; i++) {
-                    await query2('sys', 'insertFile', {
+                    await query('sys', 'insertFile', {
                         src_tbl_nm: newParams.kind_cd,
                         rf_key: newParams.seq_no,
                         file_org_nm: orgFiles[i],
@@ -105,7 +105,7 @@ router.get('/media_write', (req, res) => {
     (async function(){
         let errors = []
         let rtn = []
-        try { rtn = await query2('sys_code', 'selectCdNm', {cd:req.query.kind_cd}) }
+        try { rtn = await query('sys_code', 'selectCdNm', {cd:req.query.kind_cd}) }
         catch (error) {
             errors.push('sql error')
             // console.log(':::[ERROR]::::', error)
@@ -130,7 +130,7 @@ router.post('/media_write_process', (req, res) => {
             newParams.content = content
             // console.log('2. content ==========> ', newParams.content)
             let result = {}
-            try { result = await query2('sys_media', 'insertMedia', newParams) }
+            try { result = await query('sys_media', 'insertMedia', newParams) }
             catch (error) {
                 errors.push('sql error')
                 console.log(':::[ERROR]::::', error)
@@ -139,7 +139,7 @@ router.post('/media_write_process', (req, res) => {
             }
             try {
                 for (let i=0; i<orgFiles.length; i++) {
-                    await query2('sys', 'insertFile', {
+                    await query('sys', 'insertFile', {
                         src_tbl_nm: newParams.kind_cd,
                         rf_key: result.insertId,
                         file_org_nm: orgFiles[i],
@@ -175,8 +175,8 @@ async function viewMediaDetail(params, res) {
     let media = undefined
     let file = undefined
     try {
-        media = await query2('sys_media', 'selectMeidaBySeqNo', {seq_no:params.seq_no})
-        file = await query2('sys', 'selectFile', {
+        media = await query('sys_media', 'selectMeidaBySeqNo', {seq_no:params.seq_no})
+        file = await query('sys', 'selectFile', {
             src_tbl_nm: media[0].kind_cd,
             rf_key: media[0].seq_no
         })

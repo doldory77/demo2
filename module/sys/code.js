@@ -1,7 +1,7 @@
 const url = require('url');
 const express = require('express');
 const router = express.Router();
-const { query, query2, cmmnUtil } = require('../cmmn/cmmn')
+const { query, cmmnUtil } = require('../cmmn/cmmn')
 
 router.get('/code_mng', (req, res) => {
     processCodeMng({}, res)
@@ -22,7 +22,7 @@ async function processCodeMng(params, res) {
         newParams.parent_cd = '0000'
         newParams.cd_nm = params.new_p_cd_nm
         newParams.ord_no = params.new_p_ord_no
-        try { await query2('sys_code', 'insertCode', newParams) }
+        try { await query('sys_code', 'insertCode', newParams) }
         catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
@@ -32,7 +32,7 @@ async function processCodeMng(params, res) {
         newParams.cd = params.mod_p_cd
         newParams.cd_nm = params.mod_p_cd_nm
         newParams.ord_no = params.mod_p_ord_no
-        try { await query2('sys_code', 'updateCode', newParams) }
+        try { await query('sys_code', 'updateCode', newParams) }
         catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
@@ -43,7 +43,7 @@ async function processCodeMng(params, res) {
         newParams.parent_cd = params.new_c_parent_cd
         newParams.cd_nm = params.new_c_cd_nm
         newParams.ord_no = params.new_c_ord_no
-        try { await query2('sys_code', 'insertCode', newParams) }
+        try { await query('sys_code', 'insertCode', newParams) }
         catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
@@ -62,14 +62,14 @@ async function processCodeMng(params, res) {
     }
 
     let parentCode = []
-    try { parentCode = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:'0000'}) } 
+    try { parentCode = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0000'}) } 
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
     if (params && params.selected_parent_cd) {
         newParams.parent_cd = params.selected_parent_cd
-        try { selectedParentCd = await query2('sys_code', 'selectCodeByCd', {cd:params.selected_parent_cd}) }
+        try { selectedParentCd = await query('sys_code', 'selectCodeByCd', {cd:params.selected_parent_cd}) }
         catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
@@ -79,7 +79,7 @@ async function processCodeMng(params, res) {
         newParams.parent_cd = parentCode[0] ? parentCode[0].cd : ''
     }
     let childCode = []
-    try { childCode = await query2('sys_code', 'selectCodeByParentCd', {parent_cd:newParams.parent_cd}) }
+    try { childCode = await query('sys_code', 'selectCodeByParentCd', {parent_cd:newParams.parent_cd}) }
     catch (error) {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
