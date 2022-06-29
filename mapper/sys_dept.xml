@@ -3,7 +3,7 @@
 <mapper namespace="sys_dept">
 
   <insert id="insertDept">
-    insert into dept (
+    insert into church_department (
       dept_ctg_cd,
       church_dept_cd,
       subject,
@@ -16,8 +16,8 @@
       </if>
       content
     ) values (
-      #{dept_ctg_cd},
-      #{church_dept_cd},
+      #{slt_ctg},
+      #{slt_dept},
       #{subject},
       #{bible_verse},
       <if test="worship_time != null and worship_time != ''"> 
@@ -30,12 +30,13 @@
     )  
   </insert>
 
-  <update id="updateMedia">
-    update media set
-      event_nm = #{event_nm},
-      event_dt = replace(#{event_dt}, '-', ''),
-      preacher = #{preacher},
+  <update id="updateDept">
+    update church_department set
+      dept_ctg_cd = #{slt_ctg},
       subject = #{subject},
+      bible_verse = #{bible_verse},
+      worship_time = #{worship_time},
+      place = #{place},
       content = #{content}
     where seq_no = #{seq_no}
   </update>
@@ -91,7 +92,7 @@
       worship_time,
       place,
       content
-    from dept
+    from church_department
     where seq_no = #{seq_no}
   </select>
   

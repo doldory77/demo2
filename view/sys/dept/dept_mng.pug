@@ -32,9 +32,9 @@ html(lang='ko')
                 let text = $(e).data('text');
                 console.log(text);
                 switch (text) {
-                    case '미디어상세보기':
+                    case '부서상세보기':
                         let seq_no = $(e).closest('.row').data('tag')
-                        window.open('/sys_media/media_dtl?seq_no='+seq_no, '_blank')
+                        window.open('/sys_dept/dept_dtl?seq_no='+seq_no, '_blank')
                         break;
                     case '부서생성':
                         window.open('/sys_dept/dept_write', '_blank')
@@ -84,7 +84,7 @@ html(lang='ko')
                 #body
                     - for (let i=0; i<dept.length; i++)
                         .row(data-tag= dept[i].seq_no)
-                            div= dept[i].church_ctg_cd_nm
+                            div= dept[i].dept_ctg_cd_nm
                             div
                                 a(data-text='부서상세보기', onclick='buttonClick(this)')= dept[i].church_dept_cd_nm
                             div= dept[i].worship_time

@@ -55,115 +55,109 @@ async function viewMedia(params, res) {
     res.render('sys/media/media_mng', {media, kind, params, errors, paging})
 }
 
-router.post('/media_update', (req, res) => {
-    (async function(){
-        let errors = []
-        let newParams = Object.assign({writer:req.session.userId}, req.body)
-        let content = newParams.content
+router.post('/media_update', async (req, res) => {
+    let errors = []
+    let newParams = Object.assign({writer:req.session.userId}, req.body)
+    let content = newParams.content
 
-        await cmmnUtil.boardInnerFileSave(content, newParams.kind_cd, async (content, orgFiles) => {
-            newParams.content = content
-            // console.log('2. content ==========> ', newParams.content)
-            try { await query('sys_media', 'updateMedia', newParams) }
-            catch (error) {
-                errors.push('sql error')
-                // console.log(':::[ERROR]::::', error)
-                logger.error(error)
-                res.render('sys/error', {errors})
-            }
-            try {
-                for (let i=0; i<orgFiles.length; i++) {
-                    await query('sys', 'insertFile', {
-                        src_tbl_nm: newParams.kind_cd,
-                        rf_key: newParams.seq_no,
-                        file_org_nm: orgFiles[i],
-                        file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.kind_cd).replace(/\\/gi, '\/'),
-                        file_path: cmmnUtil.fileUrlPath(newParams.kind_cd),
-                        file_nm: orgFiles[i],
-                        file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
-                    })
-                }
-            } catch (error) {
-                errors.push('sql error')
-                // console.log(':::[ERROR]::::', error)
-                logger.error(error)
-                res.render('sys/error', {errors})
-            }
-            res.redirect('/sys_media/media_dtl?seq_no='+newParams.seq_no)
-        }).catch(error => {
-            errors.push('sql error')
-            // console.log(':::[ERROR]::::', error)
-            logger.error(error)
-            res.render('sys/error', {errors})
-        })
-
-    })()
-
-})
-
-router.get('/media_write', (req, res) => {
-    (async function(){
-        let errors = []
-        let rtn = []
-        try { rtn = await query('sys_code', 'selectCdNm', {cd:req.query.kind_cd}) }
+    await cmmnUtil.boardInnerFileSave(content, newParams.kind_cd, async (content, orgFiles) => {
+        newParams.content = content
+        // console.log('2. content ==========> ', newParams.content)
+        try { await query('sys_media', 'updateMedia', newParams) }
         catch (error) {
             errors.push('sql error')
             // console.log(':::[ERROR]::::', error)
             logger.error(error)
             res.render('sys/error', {errors})
         }
-        let media_kind = {
-            kind_cd:req.query.kind_cd, 
-            kind_cd_nm: rtn[0].cd_nm 
+        try {
+            for (let i=0; i<orgFiles.length; i++) {
+                await query('sys', 'insertFile', {
+                    src_tbl_nm: newParams.kind_cd,
+                    rf_key: newParams.seq_no,
+                    file_org_nm: orgFiles[i],
+                    file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.kind_cd).replace(/\\/gi, '\/'),
+                    file_path: cmmnUtil.fileUrlPath(newParams.kind_cd),
+                    file_nm: orgFiles[i],
+                    file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
+                })
+            }
+        } catch (error) {
+            errors.push('sql error')
+            // console.log(':::[ERROR]::::', error)
+            logger.error(error)
+            res.render('sys/error', {errors})
         }
-        res.render('sys/media/media_write', {media_kind})
-    })()
+        res.redirect('/sys_media/media_dtl?seq_no='+newParams.seq_no)
+    }).catch(error => {
+        errors.push('sql error')
+        // console.log(':::[ERROR]::::', error)
+        logger.error(error)
+        res.render('sys/error', {errors})
+    })
+
 })
 
-router.post('/media_write_process', (req, res) => {
-    (async function(){
-        let errors = []
-        let newParams = Object.assign({writer:req.session.userId}, req.body)
-        let content = newParams.content
-        
-        await cmmnUtil.boardInnerFileSave(content, newParams.kind_cd, async (content, orgFiles) => {
-            newParams.content = content
-            // console.log('2. content ==========> ', newParams.content)
-            let result = {}
-            try { result = await query('sys_media', 'insertMedia', newParams) }
-            catch (error) {
-                errors.push('sql error')
-                console.log(':::[ERROR]::::', error)
-                logger.error(error)
-                res.render('sys/error', {errors})
-            }
-            try {
-                for (let i=0; i<orgFiles.length; i++) {
-                    await query('sys', 'insertFile', {
-                        src_tbl_nm: newParams.kind_cd,
-                        rf_key: result.insertId,
-                        file_org_nm: orgFiles[i],
-                        file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.kind_cd).replace(/\\/gi, '\/'),
-                        file_path: cmmnUtil.fileUrlPath(newParams.kind_cd),
-                        file_nm: orgFiles[i],
-                        file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
-                    })
-                }
-            } catch (error) {
-                errors.push(error)
-                console.log(':::[ERROR]::::', error)
-                logger.error(error)
-                res.render('sys/error', {errors})
-            }
-            res.redirect('/sys_media/media_dtl?seq_no='+result.insertId)
-        }).catch(error => {
+router.get('/media_write', async (req, res) => {
+    let errors = []
+    let rtn = []
+    try { rtn = await query('sys_code', 'selectCdNm', {cd:req.query.kind_cd}) }
+    catch (error) {
+        errors.push('sql error')
+        // console.log(':::[ERROR]::::', error)
+        logger.error(error)
+        res.render('sys/error', {errors})
+    }
+    let media_kind = {
+        kind_cd:req.query.kind_cd, 
+        kind_cd_nm: rtn[0].cd_nm 
+    }
+    res.render('sys/media/media_write', {media_kind})
+    
+})
+
+router.post('/media_write_process', async (req, res) => {
+    let errors = []
+    let newParams = Object.assign({writer:req.session.userId}, req.body)
+    let content = newParams.content
+    
+    await cmmnUtil.boardInnerFileSave(content, newParams.kind_cd, async (content, orgFiles) => {
+        newParams.content = content
+        // console.log('2. content ==========> ', newParams.content)
+        let result = {}
+        try { result = await query('sys_media', 'insertMedia', newParams) }
+        catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
             logger.error(error)
             res.render('sys/error', {errors})
-        })
-        
-    })()
+        }
+        try {
+            for (let i=0; i<orgFiles.length; i++) {
+                await query('sys', 'insertFile', {
+                    src_tbl_nm: newParams.kind_cd,
+                    rf_key: result.insertId,
+                    file_org_nm: orgFiles[i],
+                    file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.kind_cd).replace(/\\/gi, '\/'),
+                    file_path: cmmnUtil.fileUrlPath(newParams.kind_cd),
+                    file_nm: orgFiles[i],
+                    file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
+                })
+            }
+        } catch (error) {
+            errors.push(error)
+            console.log(':::[ERROR]::::', error)
+            logger.error(error)
+            res.render('sys/error', {errors})
+        }
+        res.redirect('/sys_media/media_dtl?seq_no='+result.insertId)
+    }).catch(error => {
+        errors.push('sql error')
+        console.log(':::[ERROR]::::', error)
+        logger.error(error)
+        res.render('sys/error', {errors})
+    })
+    
 })
 
 router.get('/media_dtl', (req, res) => {

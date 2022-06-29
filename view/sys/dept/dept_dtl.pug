@@ -55,8 +55,8 @@ html(lang='ko')
                     
             form(name='dept_update', action='/sys_dept/dept_update', method='post', enctype='application/x-www-form-urlencoded')
                 #mode.input-box
-                    input(type='hidden', name='content', value= media.content)
-                    input(type='hidden', name='seq_no', value= media.seq_no)
+                    input(type='hidden', name='content', value= dept.content)
+                    input(type='hidden', name='seq_no', value= dept.seq_no)
                     div(class='tool-bar flex-left mb5')
                         label.flex-label100 조직구분:
                         select(name='slt_ctg')

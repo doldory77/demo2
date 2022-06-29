@@ -21,6 +21,9 @@ async function viewDept(params, res) {
     if (params.chk_dept) {
         newParams.church_dept_cd = params.slt_dept
     }
+    if (!params.page) {
+        params.page = 1
+    }
     newParams.row_cnt = global.rowCnt
     newParams.start_row = global.rowCnt * (Number(params.page) - 1)
 
@@ -43,104 +46,97 @@ async function viewDept(params, res) {
     res.render('sys/dept/dept_mng', {dept, ctg_cd, dept_cd, params, errors, paging})
 }
 
-router.post('/media_update', (req, res) => {
-    (async function(){
-        let errors = []
-        let newParams = Object.assign({writer:req.session.userId}, req.body)
-        let content = newParams.content
+router.post('/dept_update', async (req, res) => {
+    let errors = []
+    let newParams = Object.assign({writer:req.session.userId}, req.body)
+    let content = newParams.content
 
-        await cmmnUtil.boardInnerFileSave(content, newParams.kind_cd, async (content, orgFiles) => {
-            newParams.content = content
-            // console.log('2. content ==========> ', newParams.content)
-            try { await query('sys_media', 'updateMedia', newParams) }
-            catch (error) {
-                errors.push('sql error')
-                // console.log(':::[ERROR]::::', error)
-                logger.error(error)
-                res.render('sys/error', {errors})
-            }
-            try {
-                for (let i=0; i<orgFiles.length; i++) {
-                    await query('sys', 'insertFile', {
-                        src_tbl_nm: newParams.kind_cd,
-                        rf_key: newParams.seq_no,
-                        file_org_nm: orgFiles[i],
-                        file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.kind_cd).replace(/\\/gi, '\/'),
-                        file_path: cmmnUtil.fileUrlPath(newParams.kind_cd),
-                        file_nm: orgFiles[i],
-                        file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
-                    })
-                }
-            } catch (error) {
-                errors.push('sql error')
-                // console.log(':::[ERROR]::::', error)
-                logger.error(error)
-                res.render('sys/error', {errors})
-            }
-            res.redirect('/sys_media/media_dtl?seq_no='+newParams.seq_no)
-        }).catch(error => {
+    await cmmnUtil.boardInnerFileSave(content, newParams.slt_dept, async (content, orgFiles) => {
+        newParams.content = content
+        // console.log('2. content ==========> ', newParams.content)
+        try { await query('sys_dept', 'updateDept', newParams) }
+        catch (error) {
             errors.push('sql error')
             // console.log(':::[ERROR]::::', error)
             logger.error(error)
             res.render('sys/error', {errors})
-        })
-
-    })()
+        }
+        try {
+            for (let i=0; i<orgFiles.length; i++) {
+                await query('sys', 'insertFile', {
+                    src_tbl_nm: newParams.slt_dept,
+                    rf_key: newParams.seq_no,
+                    file_org_nm: orgFiles[i],
+                    file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.slt_dept).replace(/\\/gi, '\/'),
+                    file_path: cmmnUtil.fileUrlPath(newParams.slt_dept),
+                    file_nm: orgFiles[i],
+                    file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
+                })
+            }
+        } catch (error) {
+            errors.push('sql error')
+            // console.log(':::[ERROR]::::', error)
+            logger.error(error)
+            res.render('sys/error', {errors})
+        }
+        res.redirect('/sys_dept/dept_dtl?seq_no='+newParams.seq_no)
+    }).catch(error => {
+        errors.push('sql error')
+        // console.log(':::[ERROR]::::', error)
+        logger.error(error)
+        res.render('sys/error', {errors})
+    })
 
 })
 
-router.get('/dept_write', (req, res) => {
-    (async function(){
-        let ctg_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
-        let dept_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})
-        res.render('sys/dept/dept_write', {ctg_cd, dept_cd})
-    })()
+router.get('/dept_write', async (req, res) => {
+    let ctg_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
+    let dept_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})
+    res.render('sys/dept/dept_write', {ctg_cd, dept_cd})
 })
 
-router.post('/dept_write_process', (req, res) => {
-    (async function(){
-        let errors = []
-        let newParams = Object.assign({writer:req.session.userId}, req.body)
-        let content = newParams.content
-        
-        await cmmnUtil.boardInnerFileSave(content, newParams.church_dept_cd, async (content, orgFiles) => {
-            newParams.content = content
-            // console.log('2. content ==========> ', newParams.content)
-            let result = {}
-            try { result = await query('sys_dept', 'insertDept', newParams) }
-            catch (error) {
-                errors.push('sql error')
-                console.log(':::[ERROR]::::', error)
-                logger.error(error)
-                res.render('sys/error', {errors})
-            }
-            try {
-                for (let i=0; i<orgFiles.length; i++) {
-                    await query('sys', 'insertFile', {
-                        src_tbl_nm: newParams.church_dept_cd,
-                        rf_key: result.insertId,
-                        file_org_nm: orgFiles[i],
-                        file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.church_dept_cd).replace(/\\/gi, '\/'),
-                        file_path: cmmnUtil.fileUrlPath(newParams.church_dept_cd),
-                        file_nm: orgFiles[i],
-                        file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
-                    })
-                }
-            } catch (error) {
-                errors.push(error)
-                console.log(':::[ERROR]::::', error)
-                logger.error(error)
-                res.render('sys/error', {errors})
-            }
-            res.redirect('/sys_dept/dept_dtl?seq_no='+result.insertId)
-        }).catch(error => {
+router.post('/dept_write_process', async (req, res) => {
+    let errors = []
+    let newParams = Object.assign({writer:req.session.userId}, req.body)
+    let content = newParams.content
+    
+    await cmmnUtil.boardInnerFileSave(content, newParams.church_dept_cd, async (content, orgFiles) => {
+        newParams.content = content
+        // console.log('2. content ==========> ', newParams.content)
+        let result = {}
+        try { result = await query('sys_dept', 'insertDept', newParams) }
+        catch (error) {
             errors.push('sql error')
             console.log(':::[ERROR]::::', error)
             logger.error(error)
             res.render('sys/error', {errors})
-        })
-        
-    })()
+        }
+        try {
+            for (let i=0; i<orgFiles.length; i++) {
+                await query('sys', 'insertFile', {
+                    src_tbl_nm: newParams.church_dept_cd,
+                    rf_key: result.insertId,
+                    file_org_nm: orgFiles[i],
+                    file_real_path: cmmnUtil.fileRealPath(global.appRoot, newParams.church_dept_cd).replace(/\\/gi, '\/'),
+                    file_path: cmmnUtil.fileUrlPath(newParams.church_dept_cd),
+                    file_nm: orgFiles[i],
+                    file_kind_cd: cmmnUtil.fileTypeCodeByExt(orgFiles[i])
+                })
+            }
+        } catch (error) {
+            errors.push(error)
+            console.log(':::[ERROR]::::', error)
+            logger.error(error)
+            res.render('sys/error', {errors})
+        }
+        res.redirect('/sys_dept/dept_dtl?seq_no='+result.insertId)
+    }).catch(error => {
+        errors.push('sql error')
+        console.log(':::[ERROR]::::', error)
+        logger.error(error)
+        res.render('sys/error', {errors})
+    })
+    
 })
 
 router.get('/dept_dtl', (req, res) => {
@@ -156,8 +152,8 @@ async function viewDeptDetail(params, res) {
     try {
         dept = await query('sys_dept', 'selectDeptBySeqNo', {seq_no:params.seq_no})
         file = await query('sys', 'selectFile', {
-            src_tbl_nm: media[0].kind_cd,
-            rf_key: media[0].seq_no
+            src_tbl_nm: dept[0].church_dept_cd,
+            rf_key: dept[0].seq_no
         })
         ctg_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'1000'})
         dept_cd = await query('sys_code', 'selectCodeByParentCd', {parent_cd:'0600'})

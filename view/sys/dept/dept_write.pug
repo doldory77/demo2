@@ -46,13 +46,12 @@ html(lang='ko')
 
     body
         .main
-            h2(class='m-title center-text')= media_kind.kind_cd_nm
+            h2(class='m-title center-text') 부서등록
             hr
             div(class='tool-bar flex-side mt10')
                 span.s-title 부서 작성
             form(name='dept_write', action='/sys_dept/dept_write_process', method='post', enctype='application/x-www-form-urlencoded')
                 #new.input-box
-                    input(type='hidden', name='kind_cd', value= media_kind.kind_cd)
                     input(type='hidden', name='content')
                     div(class='tool-bar flex-left mb5')
                         label.flex-label100 조직구분:
