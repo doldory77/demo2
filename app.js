@@ -30,6 +30,8 @@ mapper.createMapper([
     './mapper/sys_board.xml',
     './mapper/sys_media.xml',
     './mapper/sys_dept.xml',
+    
+    './mapper/usr.xml'
 ])
 
 app.set('view engine', 'pug')
@@ -71,6 +73,8 @@ app.use('/sys_board', require('./module/sys/board'));
 app.use('/sys_media', require('./module/sys/media'));
 app.use('/sys_dept', require('./module/sys/dept'));
 
+app.use('/', require('./module/usr/index'));
+
 app.use(express.static('public'));
 global.appRoot = path.resolve(__dirname)
 global.sqlMap = mapper
@@ -80,9 +84,9 @@ global.format = { language: 'sql', indent: '  ' }
 global.rowCnt = 10
 global.blockCnt = 5
 
-app.get('/', (req, res) => {
-    res.render('index');
-});
+// app.get('/', (req, res) => {
+//     res.render('index');
+// });
 
 app.listen(8080, () => {
     console.log("start! express server no port 8080")

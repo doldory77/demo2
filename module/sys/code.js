@@ -1,7 +1,7 @@
 const url = require('url');
 const express = require('express');
 const router = express.Router();
-const { query, cmmnUtil } = require('../cmmn/cmmn')
+const { query } = require('../cmmn/cmmn')
 
 router.get('/code_mng', (req, res) => {
     processCodeMng({}, res)
