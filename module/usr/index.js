@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         errors.push('sql error')
         console.log(':::[ERROR]::::', error)
     }
-    res.render('index', { board });
+    res.render('usr/index', { board });
 });
 
 module.exports = router;
