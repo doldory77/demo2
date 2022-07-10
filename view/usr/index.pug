@@ -67,10 +67,10 @@ html(lang='ko')
                                 li
                                     a.subMenu(href='#') SUB-MENU 4
 
+                        //- #[h3 #{board[0].subject}]
                 main#main
-                    div
-                        h3=board[0].subject
-                        div=board[0].content
+                    div.
+                        !{board[0].content}
 
                 include ../footer.pug
 
