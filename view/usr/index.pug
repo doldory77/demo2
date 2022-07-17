@@ -4,95 +4,81 @@ html(lang='ko')
         title home
         meta(name='viewport', content='width=device-width,initial-scale=1')
         link(href='css/style.css', rel='stylesheet')
-        link(href='css/home.css', rel='stylesheet')
+        link(href='css/usr.css', rel='stylesheet')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
         script.
-            const htmlDecode = (input) => {
-                const doc = new DOMParser().parseFromString(input, "text/html");
-                return doc.documentElement.textContent;
-            }
-        
-        body
-            #container
-                #mMenu
-                    a.menu#mMenuBtn(href='javascript:void(0);') M-MENU
-                    #mMenuBody
-                        ul
-                            li
-                                a.subMenu m-menu1
-                                ul
-                                    li
-                                        a.subMenu1 m-menu1-1
-                                    li
-                                        a.subMenu1 m-menu1-2
-                                    li
-                                        a.subMenu1 m-menu1-3
-                            li
-                                a.subMenu m-menu2
-                                ul
-                                    li
-                                        a.subMenu1 m-menu2-1
-                                    li
-                                        a.subMenu1 m-menu2-2
-                                    li
-                                        a.subMenu1 m-menu2-3
-                header#header
-                nav#topMenu
-                    ul 
-                        li
-                            a.menu(href='#') MENU 1
-                            ul#subMenu1
-                                li
-                                    a.subMenu(href='#') SUB-MENU 1
-                                li
-                                    a.subMenu(href='#') SUB-MENU 2
-                                li
-                                    a.subMenu(href='#') SUB-MENU 3
-                                li
-                                    a.subMenu(href='#') SUB-MENU 4
-
-                        li
-                            a.menu(href='#') MENU 2
-                        li
-                            a.menu(href='#') MENU 3
-                        li
-                            a.menu(href='#') MENU 4
-                            ul#subMenu1
-                                li
-                                    a.subMenu(href='#') SUB-MENU 1
-                                li
-                                    a.subMenu(href='#') SUB-MENU 2
-                                li
-                                    a.subMenu(href='#') SUB-MENU 3
-                                li
-                                    a.subMenu(href='#') SUB-MENU 4
-
-                        //- #[h3 #{board[0].subject}]
-                main#main
-                    div.
-                        !{board[0].content}
-
-                include ../footer.pug
-
-            script(type='text/javascript').
-                const menuPosition = $('#topMenu').offset().top;
-                $(window).scroll(() => {
-                    const windowPosition = $(window).scrollTop();
-                    if (menuPosition <= windowPosition) {
-                        $('#topMenu').addClass('fixed');
-                        $('#topMenu > ul').addClass('fixed-1');
-                        //- $('#mMenu').addClass('fixed');
-                    } else {
-                        $('#topMenu').removeClass('fixed');
-                        $('#topMenu > ul').removeClass('fixed-1');
-                        //- $('#mMenu').removeClass('fixed');
-                    }
-                });
-
-                $('#mMenuBtn').click(() => {
-                    if ($('#mMenuBody').hasClass('mMenuOn')) {
-                        $('#mMenuBody').removeClass('mMenuOn');
-                    } else {
-                        $('#mMenuBody').addClass('mMenuOn');
-                    }
+            $(document).ready(function(){
+                $('#menu-site-map').click(function(){
+                    $('#m-menu').css('margin-left', '0')
                 })
+                $('#mbl-menu-close').click(function(){
+                    $('#m-menu').css('margin-left', '-60vw')
+                })
+            })
+        
+    body
+        #container
+            #header
+                #logo 산곡교회
+                #menu
+                    a(href="#") 교회소개
+                    span |
+                    a(href="#") 교회소식
+                    span |
+                    a(href="#") 교회방송
+                    span |
+                    a(href="#") 선교와 봉사
+                    span |
+                    a(href="#") 교회학교
+                #side-menu
+                    a#menu-login(href="#") 로그인
+                    a#menu-mbr-join(href="#") 회원가입
+                    a#menu-site-map(href="#") 사티트맵
+                #sub-menu
+                    .sub#sub-menu1
+                        a(href="#") 인사말
+                        a(href="#") 교회비전
+                        a(href="#") 교회연혁
+                        a(href="#") 섬기는 사람들
+                        a(href="#") 예배안내
+                        a(href="#") 오시는 길
+
+            #m-menu
+                #m-menu-head
+                    a 로그인
+                    a 회원가입
+                    a.material-symbols-rounded#mbl-menu-close(href="javascript:void(0)") close
+                .m-main-menu
+                    a 교회소개
+                    .m-sub-menu
+                        a 인사말
+                        a 교회비전
+                        a 교회연혁
+                        a 섬기는 사람들
+                        a 예배안내
+                        a 오시는 길
+                .m-main-menu
+                    a 교회소식
+                .m-main-menu
+                    a 교회방송
+                .m-main-menu
+                    a 선교와 봉사
+                .m-main-menu
+                    a 교회학교
+
+            #main-banner
+                img(src="img/sample/img01.jpg")
+            
+            #content
+                .content-item 우리교회는?
+                .content-item 사랑하고 축복합니다.
+                .content-item 이번주 주일 설교
+                .content-item 7월 목회 일정
+                .content-item 교회학교 및 교육
+                .content-item 특별광고
+            #footer
+                div
+                    a(href="#") 개인정보처리방침
+                    span |
+                    a(href="#") 이메일집단수집거부
+                div 인천광역시 부평구 길주로(산곡동, 기독교대한성결교회) | 전화:032-513-3434
