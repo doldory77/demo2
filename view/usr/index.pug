@@ -8,11 +8,33 @@ html(lang='ko')
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
         script.
             $(document).ready(function(){
+                var menuNo = 0;
                 $('#menu-site-map').click(function(){
                     $('#m-menu').css('margin-left', '0')
                 })
                 $('#mbl-menu-close').click(function(){
                     $('#m-menu').css('margin-left', '-60vw')
+                })
+                $('#menu > a').hover(function(){
+                    menuNo = $(this).data('mainMenuNo');
+                    $('.sub').css('display', 'none')
+                    $('.sub#sub-menu' + menuNo).css('display', 'block');
+                    $('#sub-menu').css('opacity', '0.9');
+                    $('#sub-menu').css('height', '100px');
+                }, function(){
+                    $('.sub').css('display', 'none');
+                    $('#sub-menu').css('opacity', '0');
+                    $('#sub-menu').css('height', '0px');
+                })
+                $('#sub-menu').hover(function(){
+                    $('.sub').css('display', 'none');
+                    $('.sub#sub-menu' + menuNo).css('display', 'block');
+                    $('#sub-menu').css('opacity', '0.9');
+                    $('#sub-menu').css('height', '100px');
+                }, function(){
+                    $('.sub').css('display', 'none');
+                    $('#sub-menu').css('opacity', '0');
+                    $('#sub-menu').css('height', '0px');
                 })
             })
         
@@ -21,15 +43,15 @@ html(lang='ko')
             #header
                 #logo 산곡교회
                 #menu
-                    a(href="#") 교회소개
+                    a(href="#", data-main-menu-no="1") 교회소개
                     span |
-                    a(href="#") 교회소식
+                    a(href="#", data-main-menu-no="2") 교회소식
                     span |
-                    a(href="#") 교회방송
+                    a(href="#", data-main-menu-no="3") 교회방송
                     span |
-                    a(href="#") 선교와 봉사
+                    a(href="#", data-main-menu-no="4") 선교와 봉사
                     span |
-                    a(href="#") 교회학교
+                    a(href="#", data-main-menu-no="5") 교회학교
                 #side-menu
                     a#menu-login(href="#") 로그인
                     a#menu-mbr-join(href="#") 회원가입
@@ -42,6 +64,21 @@ html(lang='ko')
                         a(href="#") 섬기는 사람들
                         a(href="#") 예배안내
                         a(href="#") 오시는 길
+                    .sub#sub-menu2
+                        a(href="#") 교회소식
+                        a(href="#") 교회행사
+                        a(href="#") 새가족소개
+                    .sub#sub-menu3
+                        a(href="#") 주일설교
+                        a(href="#") 특별영상
+                        a(href="#") 찬양대
+                    .sub#sub-menu4
+                        a(href="#") 선교사역
+                        a(href="#") 찬양대
+                    .sub#sub-menu5
+                        a(href="#") 어린이부
+                        a(href="#") 청소년부
+                        a(href="#") 청년부
 
             #m-menu
                 #m-menu-head
@@ -68,6 +105,8 @@ html(lang='ko')
 
             #main-banner
                 img(src="img/sample/img01.jpg")
+                img(src="img/sample/img02.jpg")
+                img(src="img/sample/img03.jpg")
             
             #content
                 .content-item 우리교회는?
