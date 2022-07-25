@@ -36,6 +36,11 @@ html(lang='ko')
                     $('#sub-menu').css('opacity', '0');
                     $('#sub-menu').css('height', '0px');
                 })
+
+                $('.m-main-menu > a').click(function(){
+                    $(this).children('span:eq(1)').toggleClass('icon-rotate90');
+                    $(this).siblings('.m-sub-menu').toggleClass('m-sub-menu-on');
+                })
             })
         
     body
@@ -86,22 +91,47 @@ html(lang='ko')
                     a 회원가입
                     a.material-symbols-rounded#mbl-menu-close(href="javascript:void(0)") close
                 .m-main-menu
-                    a 교회소개
+                    a(href="#")
+                        span 교회소개
+                        span.material-symbols-rounded arrow_forward_ios
                     .m-sub-menu
-                        a 인사말
-                        a 교회비전
-                        a 교회연혁
-                        a 섬기는 사람들
-                        a 예배안내
-                        a 오시는 길
+                        a(href="#") 인사말
+                        a(href="#") 교회비전
+                        a(href="#") 교회연혁
+                        a(href="#") 섬기는 사람들
+                        a(href="#") 예배안내
+                        a(href="#") 오시는 길
                 .m-main-menu
-                    a 교회소식
+                    a(href="#") 
+                        span 교회소식
+                        span.material-symbols-rounded arrow_forward_ios
+                    .m-sub-menu
+                        a(href="#") 교회소식
+                        a(href="#") 교회행사
+                        a(href="#") 새가족소개
                 .m-main-menu
-                    a 교회방송
+                    a(href="#") 
+                        span 교회방송
+                        span.material-symbols-rounded arrow_forward_ios
+                    .m-sub-menu
+                        a(href="#") 주일설교
+                        a(href="#") 특별영상
+                        a(href="#") 찬양대
                 .m-main-menu
-                    a 선교와 봉사
+                    a(href="#") 
+                        span 선교와 봉사
+                        span.material-symbols-rounded arrow_forward_ios
+                    .m-sub-menu
+                        a(href="#") 선교사역
+                        a(href="#") 찬양대
                 .m-main-menu
-                    a 교회학교
+                    a(href="#") 
+                        span 교회학교
+                        span.material-symbols-rounded arrow_forward_ios
+                    .m-sub-menu
+                        a(href="#") 어린이부
+                        a(href="#") 청소년부
+                        a(href="#") 청년부
 
             #main-banner
                 img(src="img/sample/img01.jpg")

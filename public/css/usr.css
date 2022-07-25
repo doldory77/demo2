@@ -138,7 +138,7 @@ body a, body a:hover, body a:active, body a:visited {
   width: 60vw;
   height: 100vh;
   background-color: #1185EE;
-  opacity: 0.8;
+  opacity: 1;
   margin-left: -60vw;
   transition: 1s;
 }
@@ -164,14 +164,27 @@ body a, body a:hover, body a:active, body a:visited {
   margin-left: 10px;
   border-bottom: 2px solid white;
   font-size: 1.8rem;
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
   width: 50%;
   height: 38px;
   line-height: 38px;
   padding: 5px;
 }
+#m-menu .m-main-menu > a span {
+  transition: 0.5s;
+}
+#m-menu .m-main-menu .material-symbols-rounded {
+  line-height: 38px;
+}
+#m-menu .m-sub-menu-on {
+  display: flex !important;
+}
+#m-menu .icon-rotate90 {
+  transform: rotate(0.25turn);
+}
 #m-menu .m-sub-menu {
-  display: flex;
+  display: none;
   flex-flow: column;
   margin-left: 30px;
   width: calc(50% - 15px);
