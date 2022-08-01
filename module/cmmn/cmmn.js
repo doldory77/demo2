@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const sharp = require('sharp')
 const formidable = require('formidable')
 
 const cmmnUtil = {
@@ -313,12 +314,19 @@ const cmmnUtil = {
                     try {
                         xx = await (function(){
                             return new Promise((rsl, rjt) => {
+                                makeDir(ctx.fileRealPath(global.appRoot, src_tbl_nm))
+                                // if(!fs.existsSync(ctx.fileRealPath(global.appRoot, src_tbl_nm))) {
+                                //     fs.mkdirSync(ctx.fileRealPath(global.appRoot, src_tbl_nm))
+                                // }
                                 fs.writeFile(
                                     path.join(ctx.fileRealPath(global.appRoot, src_tbl_nm), orgFiles[idx])
                                     ,rtn[1]
                                     ,'base64'
                                     ,function(err) {
                                         if (err) rjt(err)
+                                        if (!err) {
+                                            ctx.resizeImg(ctx.fileRealPath(global.appRoot, src_tbl_nm), orgFiles[idx], global.limitImgWidth)
+                                        }
                                         rsl('success')
                                     }
                                 )
@@ -336,6 +344,32 @@ const cmmnUtil = {
         // console.log('1. content ==========> ', content)
         if (callbackFun) {
             callbackFun(content, orgFiles)
+        }
+    },
+    resizeImg(dir, fileName, limitWS) {
+        let imgFile = path.join(dir, fileName)
+        let tmpImgFile = path.join(dir, 'tmp_'+fileName)
+        sharp(imgFile)
+        .metadata()
+        .then(meta => meta.width > limitWS)
+        .then(isOverSize => {
+            if (isOverSize) {
+                sharp(imgFile)
+                .resize({width:limitWS})
+                .toFile(tmpImgFile)
+                setTimeout(() => {
+                    fs.unlink(imgFile, err => {
+                        if (!err) {
+                            fs.renameSync(tmpImgFile, imgFile)
+                        }
+                    })
+                }, 200)
+            }
+        })
+    },
+    makeDir(path) {
+        if(!fs.existsSync(path)) {
+            fs.mkdirSync(path)
         }
     },
     pagingObj(pageNo = 1, totalCnt = [{total_cnt:0}]) {

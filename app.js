@@ -83,6 +83,7 @@ global.dbPool = pool
 global.format = { language: 'sql', indent: '  ' }
 global.rowCnt = 10
 global.blockCnt = 5
+global.limitImgWidth = 100
 
 // app.get('/', (req, res) => {
 //     res.render('index');
