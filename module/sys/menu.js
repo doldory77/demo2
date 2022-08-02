@@ -3,12 +3,19 @@ const router = express.Router();
 const { query } = require('../cmmn/cmmn')
 
 router.get('/menu_mng', (req, res) => {
-    processMenuMng({}, res)
+    // processMenuMng({}, res)
+    menuMng(req, res)
 })
 
 router.post('/menu_mng', (req, res) => {
-    processMenuMng(Object.assign({}, req.body), res)
+    // processMenuMng(Object.assign({}, req.body), res)
+    menuMng(req, res)
 })
+
+async function menuMng(req, res) {
+    let menus = await query('sys_menu', 'selectMenu', {})
+    res.render('sys/menu/menu_mng2', {menus})
+}
 
 async function processMenuMng(params, res) {
     console.log('params: ', params)
@@ -56,5 +63,34 @@ async function processMenuMng(params, res) {
     res.render('sys/menu/menu_mng', {parentMenu, childMenu, selectedParentMenu})
     
 }
+
+router.post('/menu_mng_insert', async (req, res) => {
+    let menuCd
+    let ordNo
+    if (req.body.lv == 1) {
+        menuCd = await query('sys_menu', 'selectBigMenuCd', {})
+        menuCd = menuCd[0].next_big_menu_cd
+        ordNo = await query('sys_menu', 'selectBigOrdNo', {})
+        ordNo = ordNo[0].next_big_ord_no
+    } else if (req.body.lv == 2) {
+        menuCd = await query('sys_menu', 'selectSmallMenuCd', {parent_menu_cd:req.body.parent_menu_cd})
+        menuCd = menuCd[0].next_small_menu_cd
+        ordNo = await query('sys_menu', 'selectSmallOrdNo', {parent_menu_cd:req.body.parent_menu_cd})
+        ordNo = ordNo[0].next_small_ord_no
+    }
+
+    if (req.body['ord_no']) {
+        ordNo = req.body['ord_no']
+    }
+    let result = await query('sys_menu', 'insertMenu', {
+        parent_menu_cd: req.body.parent_menu_cd,
+        menu_cd: menuCd,
+        menu_nm: req.body.menu_nm,
+        url: req.body.url || '',
+        use_yn: req.body.use_yn || '1',
+        ord_no: ordNo
+    })
+    res.send({result})
+})
 
 module.exports = router;

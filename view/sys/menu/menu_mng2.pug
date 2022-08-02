@@ -1,0 +1,23 @@
+doctype html 
+html(lang='ko')
+    head
+        title 메뉴관리
+        include ../cmmn.pug
+        style.
+            #box {min-width:420px;}
+            
+        script.
+            
+    body
+        include ../cmmn_menu.pug
+        .main
+            h2(class='m-title center-text') 메뉴관리
+            hr
+            #box
+                ul
+                    - for (let i=0; i<menus.length; i++)
+                        li(class=menus[i].lvl, data-menu-cd=menus[i].menu_cd) #{menus[i].menu_nm} 
+
+                
+
+                    

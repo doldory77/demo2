@@ -3,16 +3,77 @@
 <mapper namespace="sys_menu">
     
   <select id="selectMenu">
-    select *
-    from menu 
-    where 1=1
-        <if test="menu_cd != null and menu_cd != ''"> 
-        and menu_cd = #{menu_cd}
-        </if>
-        <if test="parent_menu_cd != null and parent_menu_cd != ''"> 
-        and parent_menu_cd = #{parent_menu_cd}
-        </if>
-    order by ord_no
+    SELECT
+      a.parent_menu_cd,
+      a.menu_cd,
+      a.menu_nm,
+      a.url,
+      a.use_yn,
+      a.ord_no,
+      case when a.parent_menu_cd = '0000' then 'L1'
+      ELSE 'L2' END lvl 
+    FROM
+      menu a
+    WHERE 1=1
+    <if test="use_yn != null and use_yn != ''">
+      AND a.use_yn = #{use_yn}
+    </if>
+    <if test="menu_cd != null and menu_cd != ''">
+      AND a.menu_cd = #{menu_cd}
+    </if>
+    <if test="parent_menu_cd != null and parent_menu_cd != ''"> 
+      AND a.parent_menu_cd = #{parent_menu_cd}
+    </if>
+    ORDER BY ord_no  
   </select>
+
+  <update id="updateMenu">
+    UPDATE menu
+    SET
+      menu_nm = #{menu_nm},
+      url = #{url},
+      use_yn = #{use_yn},
+      ord_no = #{ord_no}
+    WHERE
+      menu_cd = #{menu_cd}
+  </update>
+
+  <insert id="insertMenu">
+    INSERT INTO menu (
+      parent_menu_cd,
+      menu_cd,
+      menu_nm,
+      url,
+      use_yn,
+      ord_no
+    ) VALUES (
+      #{parent_menu_cd},
+      #{menu_cd},
+      #{menu_nm},
+      #{url},
+      #{use_yn},
+      #{ord_no}
+    )    
+  </insert>
   
+  <select id="selectBigOrdNo">
+    SELECT MAX(ord_no)+100 AS next_big_ord_no FROM menu WHERE parent_menu_cd = '0000'
+  </select>
+
+  <select id="selectSmallOrdNo">
+    SELECT ifnull(MAX(ord_no)+1, CAST(#{parent_menu_cd} AS UNSIGNED)+1) AS next_small_ord_no 
+    FROM menu 
+    WHERE parent_menu_cd = #{parent_menu_cd}
+  </select>
+
+  <select id="selectBigMenuCd">
+    SELECT lpad(MAX(CAST(menu_cd AS UNSIGNED)+100), 4, '0') AS next_big_menu_cd FROM menu WHERE parent_menu_cd = '0000';
+  </select>
+
+  <select id="selectSmallMenuCd">
+    SELECT lpad(ifnull(MAX(CAST(menu_cd AS UNSIGNED)+1), CAST(#{parent_menu_cd} AS UNSIGNED)+1), 4, '0') AS next_small_menu_cd 
+    FROM menu 
+    WHERE parent_menu_cd = #{parent_menu_cd};
+  </select>
+
 </mapper>
