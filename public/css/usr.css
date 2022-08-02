@@ -54,6 +54,9 @@ body a, body a:hover, body a:active, body a:visited {
   display: inline-block;
   padding: 0 5px;
 }
+#header #side-menu #menu-site-map {
+  font-size: 3.6rem;
+}
 
 #sub-menu {
   position: absolute;
@@ -102,6 +105,21 @@ body a, body a:hover, body a:active, body a:visited {
   animation-name: chngImg3;
   animation-duration: 12s;
   animation-iteration-count: infinite;
+}
+
+#main-bible-verse {
+  position: absolute;
+  font-size: 5rem;
+  top: 100px;
+  right: 100px;
+  color: orangered;
+  z-index: 1000;
+  font-family: "NanumBrushScript";
+}
+#main-bible-verse span {
+  display: block;
+  text-align: right;
+  font-size: 3rem;
 }
 
 #content {

@@ -57,6 +57,9 @@ body {
             display: inline-block;
             padding: 0 5px;
         }
+        #menu-site-map {
+            font-size: 3.6rem;
+        }
     }
 
 }
@@ -106,6 +109,20 @@ body {
             animation-duration: 12s;
             animation-iteration-count: infinite;
         }
+    }
+}
+#main-bible-verse {
+    position: absolute;
+    font-size: 5rem;
+    top: 100px;
+    right: 100px;
+    color: orangered;
+    z-index: 1000;
+    font-family: 'NanumBrushScript';
+    span {
+        display: block;
+        text-align: right;
+        font-size: 3rem;
     }
 }
 #content {
